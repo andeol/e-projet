@@ -26,22 +26,16 @@ class Projet{
 
 	private $financement;
 
-	private $maitreOeuvre;
+	private $maitriseOeuvre;
 
 	private $chefProjet;
 
 	// Functions
 
-	// Default Builder
-	function Projet(){
+	// Builder
+	function __construct(){
 
 	}
-
-	/*
-	function Projet($, $projet){
-		$this->id = 0;
-	}
-	*/
 
 	// Getters
 	function getId(){
@@ -97,7 +91,7 @@ class Projet{
 		return $this->financement;
 	}
 
-	function getMaitreOeuvre()
+	function getMaitriseOeuvre()
 	{
 		return $this->maitreOeuvre;
 	}
@@ -141,7 +135,7 @@ class Projet{
 
 	function setDuree($duree)
 	{
-		$this->duree = $duree
+		$this->duree = $duree;
 	}
 
 	function setPerspectives($perspectives)
@@ -164,15 +158,14 @@ class Projet{
 		$this->financement = $financement;
 	}
 
-	function setMaitreOeuvre($maitreOeuvre)
+	function setMaitriseOeuvre($maitreOeuvre)
 	{
 		$this->maitreOeuvre = $maitreOeuvre;
 	}
 
-	function setChefProjet($chefProjet)
+	function setChefProjet(ChefProjet $chefProjet)
 	{
 		$this->chefProjet = $chefProjet;
 	}
 }
 
-?>

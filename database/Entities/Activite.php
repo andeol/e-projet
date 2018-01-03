@@ -16,12 +16,8 @@ class Activite{
 
 	// Functions
 
-	// Default Builder
-	function Activite(){
-
-	}
-
-	function Activite($libelle, $dateDebut, $duree, $projet){
+	// Builder
+	function __construct($libelle, $dateDebut, $duree, $projet){
 		$this->libelle = $libelle;
 		$this->dateDebut = $dateDebut;
 		$this->duree = $duree;
@@ -77,5 +73,3 @@ class Activite{
 		$this->projet = $projet;
 	}
 }
-
-?>
