@@ -14,12 +14,8 @@ class ChefProjet{
 
 	// Functions
 
-	// Default Builder
-	function Objectif(){
-
-	}
-
-	function ChefProjet($nom, $prenoms, $code){
+	// Builder
+	function __construct($nom, $prenoms, $code){
 		$this->id = 0;
 		$this->nom = $nom;
 		$this->prenoms = $prenoms;
@@ -67,4 +63,3 @@ class ChefProjet{
 	}
 }
 
-?>

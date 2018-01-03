@@ -8,18 +8,14 @@ class Resultat{
 
 	private $libelle;
 
-	private $indicateurs
+	private $indicateurs;
 
 	private $projet;
 
 	// Functions
 
-	// Default Builder
-	function Resultat(){
-
-	}
-
-	function Resultat($libelle, $indicateurs, $projet){
+	// Builder
+	function __construct($libelle, $indicateurs, $projet){
 		$this->id = 0;
 		$this->libelle = $libelle;
 		$this->indicateurs = $indicateurs;
@@ -67,4 +63,3 @@ class Resultat{
 	}
 }
 
-?>

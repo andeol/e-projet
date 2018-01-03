@@ -13,11 +13,7 @@ class Objectif{
 	// Functions
 
 	// Default Builder
-	function Objectif(){
-
-	}
-
-	function Objectif($libelle, $projet){
+	function __construct($libelle, $projet){
 		$this->id = 0;
 		$this->libelle = $libelle;
 		$this->projet = $projet;
@@ -53,5 +49,3 @@ class Objectif{
 		$this->projet = $projet;
 	}
 }
-
-?>

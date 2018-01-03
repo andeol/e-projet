@@ -12,12 +12,9 @@ class Risque{
 
 	// Functions
 
-	// Default Builder
-	function Risque(){
+	// Builder
 
-	}
-
-	function Risque($libelle, $projet){
+	function __construct($libelle, $projet){
 		$this->id = 0;
 		$this->libelle = $libelle;
 		$this->projet = $projet;
@@ -54,4 +51,3 @@ class Risque{
 	}
 }
 
-?>
