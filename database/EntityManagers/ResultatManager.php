@@ -1,0 +1,50 @@
+<?php
+
+require(dirname(__DIR__)."/Entities/Resultat.php");
+
+class ResultatManager extends EntityManager
+{
+	// Properties
+	
+
+	// Functions
+
+	// Default Builder
+	function __construct($con)
+	{
+		$this->connection = $con;
+	}
+
+	// Adding an Resultat object to the database
+	function add(Resultat $resultat)
+	{
+		$queryString = "insert into Resultat values(NULL, '".$resultat->getProjet()->getId()."','".$resultat->getLibelle()."', '".$resultat->getIndicateurs()."')";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Resultat insertion failed!";
+		}
+	}
+
+	function update(Resultat $resultat)
+	{
+		
+		$queryString = "update Resultat set pro_id = '".$resultat->getProjet()->getId()."', libelle = '".$resultat->getLibelle()."', '".$resultat->getIndicateurs()."' where id = '".$resultat->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Resultat insertion failed!";
+		}
+	}
+
+	function delete(Resultat $resultat)
+	{
+		$queryString = "delete from Resultat where id='".$resultat->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Resultat deletion failed!";
+		}
+	}
+
+}
