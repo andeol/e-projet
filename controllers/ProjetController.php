@@ -20,9 +20,14 @@ class ProjetController
 	function addProject()
 	{
 		// Turning the request's parameters into variables for the objects' properties
-		$projet = new Projet();
 		$resultat = new Resultat();
 		$objectif = new Objectif();
+		$projet = new Projet();
+	}
+
+	function updateProject()
+	{
+		
 	}
 }
 

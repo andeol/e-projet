@@ -15,8 +15,8 @@ class ChefProjet{
 	// Functions
 
 	// Builder
-	function __construct($nom, $prenoms, $code){
-		$this->id = 0;
+	function __construct($id, $nom, $prenoms, $code){
+		$this->id = $id;
 		$this->nom = $nom;
 		$this->prenoms = $prenoms;
 		$this->code = $code;
