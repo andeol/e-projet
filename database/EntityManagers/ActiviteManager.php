@@ -62,4 +62,28 @@ class ActiviteManager extends EntityManager
 			}
 		}
 	}
+
+	function getByProjet($projet)
+	{
+		$activites = NULL;
+
+		$queryString = "select id, libelle, datedebut, duree from Activite where pro_id = '".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows < 1)
+				return NULL;
+			else
+			{
+				$activites = array();
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+					$activites[] = new Activite($row[0], $row[1], $row[2], $row[3], $projet);
+				}
+			}
+		}
+		return $activites;
+	}
 }

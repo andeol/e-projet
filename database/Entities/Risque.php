@@ -14,8 +14,8 @@ class Risque{
 
 	// Builder
 
-	function __construct($libelle, $projet){
-		$this->id = 0;
+	function __construct($id, $libelle, $projet){
+		$this->id = $id;
 		$this->libelle = $libelle;
 		$this->projet = $projet;
 	}

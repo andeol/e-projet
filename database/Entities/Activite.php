@@ -17,7 +17,8 @@ class Activite{
 	// Functions
 
 	// Builder
-	function __construct($libelle, $dateDebut, $duree, $projet){
+	function __construct($id, $libelle, $dateDebut, $duree, $projet){
+		$this->id = $id;
 		$this->libelle = $libelle;
 		$this->dateDebut = $dateDebut;
 		$this->duree = $duree;

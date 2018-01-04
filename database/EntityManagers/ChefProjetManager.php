@@ -47,10 +47,13 @@ class ChefProjetManager extends EntityManager
 		}
 	}
 
-	function getOneById($id)
+	function getById($id)
 	{
+		$chefProjet = NULL;
+
 		$queryString = "select id, nom, prenoms, code from ChefProjet where id = '".$id."'";
 		$result = $this->connection->query($queryString);
+
 		if (!$result)
 			echo "Reading failed!";
 		else
@@ -59,9 +62,18 @@ class ChefProjetManager extends EntityManager
 				return NULL;
 			else
 			{
-				//$activite = new Activite($result->)
+				$i = 0;
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					if ($i == 1)
+						break;
+
+					$chefProjet = new ChefProjet($row[0], $row[1], $row[2], $row[3]);
+					$i++;
+				}
 			}
 		}
+		return $chefProjet;
 	}
 
 	function getOneBy($nom, $prenoms){
@@ -91,5 +103,6 @@ class ChefProjetManager extends EntityManager
 			}
 		}
 		return $chefProjet;
+		
 	}
 }

@@ -15,8 +15,8 @@ class Log{
 	// Functions
 
 	// Builder
-	function __construct($date, $action, $projet){
-		$this->id = 0;
+	function __construct($id, $date, $action, $projet){
+		$this->id = $id;
 		$this->date = $date;
 		$this->action = $action;
 		$this->projet = $projet;
@@ -33,7 +33,7 @@ class Log{
 
 	function getAction()
 	{
-		return $this->date;
+		return $this->action;
 	}
 
 	function getProjet()

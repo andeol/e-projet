@@ -29,11 +29,12 @@ class ResultatManager extends EntityManager
 	function update(Resultat $resultat)
 	{
 		
-		$queryString = "update Resultat set pro_id = '".$resultat->getProjet()->getId()."', libelle = '".$resultat->getLibelle()."', '".$resultat->getIndicateurs()."' where id = '".$resultat->getId()."'";
+		$queryString = "update Resultat set pro_id = '".$resultat->getProjet()->getId()."', libelle = '".$resultat->getLibelle()."', indicateurs = '".$resultat->getIndicateurs()."' where id = '".$resultat->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
-			echo "Resultat insertion failed!";
+			echo "Resultat update failed!";
 		}
 	}
 
@@ -47,4 +48,27 @@ class ResultatManager extends EntityManager
 		}
 	}
 
+	function getByProjet($projet)
+	{
+		$resultats = NULL;
+
+		$queryString = "select id, libelle, indicateurs from Resultat where pro_id = '".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows < 1)
+				return NULL;
+			else
+			{
+				$resultats = array();
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+					$resultats[] = new Resultat($row[0], $row[1], $row[2], $projet);
+				}
+			}
+		}
+		return $resultats;
+	}
 }
