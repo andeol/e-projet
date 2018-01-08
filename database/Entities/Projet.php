@@ -34,7 +34,19 @@ class Projet{
 
 	// Builder
 	function __construct(){
-
+		$this->id = 0;
+		$this->code = "";
+		$this->intitule = "";
+		$this->objet = "";
+		$this->description = "";
+		$this->dateDemarrage = "";
+		$this->duree = "";
+		$this->perspectives = "";
+		$this->cout = 0;
+		$this->coucheSI = "";
+		$this->financement = "";
+		$this->maitriseOeuvre = "";
+		$this->chefProjet = "";
 	}
 
 	// Getters
@@ -48,7 +60,7 @@ class Projet{
 
 	function getIntitule()
 	{
-		return $this->inititule;
+		return $this->intitule;
 	}
 
 	function getObjet()
@@ -93,7 +105,7 @@ class Projet{
 
 	function getMaitriseOeuvre()
 	{
-		return $this->maitreOeuvre;
+		return $this->maitriseOeuvre;
 	}
 
 	function getChefProjet()
@@ -148,7 +160,7 @@ class Projet{
 		$this->cout = $cout;
 	}
 
-	function setCoucheSI()
+	function setCoucheSI($coucheSI)
 	{
 		$this->coucheSI = $coucheSI;
 	}
@@ -158,9 +170,9 @@ class Projet{
 		$this->financement = $financement;
 	}
 
-	function setMaitriseOeuvre($maitreOeuvre)
+	function setMaitriseOeuvre($maitriseOeuvre)
 	{
-		$this->maitreOeuvre = $maitreOeuvre;
+		$this->maitriseOeuvre = $maitriseOeuvre;
 	}
 
 	function setChefProjet(ChefProjet $chefProjet)

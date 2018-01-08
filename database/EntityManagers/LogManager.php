@@ -28,7 +28,8 @@ class LogManager extends EntityManager
 
 	function update(Log $log)
 	{
-		$queryString = "update Log set pro_id = '".$log->getProjet()->getId()."', date = '".$log->getDate()."', duree = '".$log->getDate()."', action = '".$log->getaction()."' where id = '".$log->getId()."'";
+		$queryString = "update Log set pro_id = '".$log->getProjet()->getId()."', date = '".$log->getDate()."', action = '".$log->getAction()."' where id = '".$log->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -46,10 +47,14 @@ class LogManager extends EntityManager
 		}
 	}
 
-	function getById($id)
+	function getByProjet($projet)
 	{
-		$queryString = "select id, libelle, dateDebut, duree from Activite where id = '".$id."'";
+		$logs = NULL;
+
+		$queryString = "select id, date, action from Log where pro_id = '".$projet->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
+
 		if (!$result)
 			echo "Reading failed!";
 		else
@@ -58,8 +63,12 @@ class LogManager extends EntityManager
 				return NULL;
 			else
 			{
-				//$activite = new Activite($result->)
+				$logs = array();
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+					$logs[] = new Log($row[0], $row[1], $row[2], $projet);
+				}
 			}
 		}
+		return $logs;
 	}
 }

@@ -18,6 +18,7 @@ class ObjectifManager extends EntityManager
 	// Adding an activity object to the database
 	function add(Objectif $objectif)
 	{
+		echo "yes";
 		$queryString = "insert into Objectif values(NULL, '".$objectif->getProjet()->getId()."','".$objectif->getLibelle()."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
@@ -46,10 +47,13 @@ class ObjectifManager extends EntityManager
 		}
 	}
 
-	function getById($id)
+	function getByProjet($projet)
 	{
-		$queryString = "select id, libelle, dateDebut, duree from Activite where id = '".$id."'";
+		$objectifs = NULL;
+
+		$queryString = "select id, libelle from Objectif where pro_id = '".$projet->getId()."'";
 		$result = $this->connection->query($queryString);
+
 		if (!$result)
 			echo "Reading failed!";
 		else
@@ -58,8 +62,12 @@ class ObjectifManager extends EntityManager
 				return NULL;
 			else
 			{
-				//$activite = new Activite($result->)
+				$objectifs = array();
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+					$objectifs[] = new Objectif($row[0], $row[1], $projet);
+				}
 			}
 		}
+		return $objectifs;
 	}
 }

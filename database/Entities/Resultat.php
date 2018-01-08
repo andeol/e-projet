@@ -15,8 +15,8 @@ class Resultat{
 	// Functions
 
 	// Builder
-	function __construct($libelle, $indicateurs, $projet){
-		$this->id = 0;
+	function __construct($id, $libelle, $indicateurs, $projet){
+		$this->id = $id;
 		$this->libelle = $libelle;
 		$this->indicateurs = $indicateurs;
 		$this->projet = $projet;

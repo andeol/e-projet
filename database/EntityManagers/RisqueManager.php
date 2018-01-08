@@ -18,7 +18,7 @@ class RisqueManager extends EntityManager
 	// Adding an Resultat object to the database
 	function add(Risque $risque)
 	{
-		$queryString = "insert into Risque values(NULL, '".$Risque->getProjet()->getId()."','".$risque->getLibelle()."')";
+		$queryString = "insert into Risque values(NULL, '".$risque->getProjet()->getId()."','".$risque->getLibelle()."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -29,11 +29,12 @@ class RisqueManager extends EntityManager
 	function update(Risque $risque)
 	{
 		
-		$queryString = "update Resultat set pro_id = '".$risque->getProjet()->getId()."','".$risque->getLibelle()."' where id = '".$risque->getId()."'";
+		$queryString = "update Risque set pro_id = '".$risque->getProjet()->getId()."', libelle = '".$risque->getLibelle()."' where id = '".$risque->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
-			echo "Risque insertion failed!";
+			echo "Risque update failed!";
 		}
 	}
 
@@ -45,6 +46,30 @@ class RisqueManager extends EntityManager
 		{
 			echo "Risque deletion failed!";
 		}
+	}
+
+	function getByProjet($projet)
+	{
+		$risque = NULL;
+
+		$queryString = "select id, libelle from Risque where pro_id = '".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows < 1)
+				return NULL;
+			else
+			{
+				$risques = array();
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+					$risques[] = new Risque($row[0], $row[1], $projet);
+				}
+			}
+		}
+		return $risques;
 	}
 
 }
