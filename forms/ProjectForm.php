@@ -1,93 +1,87 @@
-<form>
+<form method = "POST" action = 'http://<?= ROOT_DIR ?>'>
+
+	<input name = "controller" value = "projetController" hidden />
+	<input name = "action" value="addProject" hidden />
+
 	<h3 class = "font-weight-light">Infos projet<h3>
 	<hr/>
 	<div class="form-row">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Intitulé</label>
-	      	<input type="text" class="form-control" placeholder="Intitulé">
+	      	<input name = "intitule" type="text" class="form-control" placeholder="Intitulé" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Durée</label>
-	      	<input type="text" class="form-control" placeholder="Durée">
+	      	<input id = "duree" name = "duree" type="number" class="form-control" placeholder="Nombre de jours" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Maîtrise d'Oeuvre</label>
-	      	<input type="text" class="form-control" placeholder="Maîtrise d'Oeuvre">
+	      	<input name = "maitriseOeuvre" type="text" class="form-control" placeholder="Maîtrise d'Oeuvre" required>
 	    </div>
   	</div>
 
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Objet</label>
-	    	<input type="text" class="form-control" placeholder="Objet">
+	    	<input name = "objet" type="text" class="form-control" placeholder="Objet" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Date de démarrage</label>
-	      	<input type="text" class="form-control" placeholder="JJ/MM/AAAA">
+	      	<input name = "dateDemarrage" type="date" class="form-control" placeholder="JJ/MM/AAAA" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Couche SI</label>
-	      	<input type="text" class="form-control" placeholder="Couche SI">
+	      	<input name = "coucheSI" type="text" class="form-control" placeholder="Couche SI" required>
 	    </div>
   	</div>
 
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Chef Projet</label>
-	      	<select class="form-control">
-	      		<option value = "test"> test </option>
+	      	<select name = "chefProjet" class="form-control">
+	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
+	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
+	      		<?php }?>
 	      	</select>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Coût prévisionnel</label>
-	      	<input type="text" class="form-control" placeholder="Coût prévisionnel">
+	      	<input id = "cout" name = "cout" type="text" class="form-control" placeholder="Coût prévisionnel" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Source de financement</label>
-	      <input type="text" class="form-control" placeholder="Source de financement">
+	    	<div class = "input-group">
+	      		<input name = "financement" type="text" class="form-control" placeholder="Source de financement" required>
+	      		<button class = "btn btn-secondary input-group-addon"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></button>
+	      	</div>
 	    </div>
   	</div>
 
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Description</label>
-		    <textarea type="text" class="form-control" placeholder="Description"></textarea>
+		    <textarea name = "description" type="text" class="form-control" placeholder="Description" required></textarea>
 	    </div>
   	</div>
 
-  	<!--
-  	<div class="form-row mt-2">
-	    <div class="col">
-	    	<label for="" style = "font-size:.6em;"> Objectifs </label>
-	      	<div id="proj_obj" class="form-control h-100" contenteditable = "true"></div>
-	    </div>
-	    <div class="col">
-	    	<label for="" style = "font-size:.6em;"> Résultats </label>
-	      	<div id="" class="form-control h-100" contenteditable = "true"></div>
-	    </div>
-	    <div class="col">
-	    	<label for="" style = "font-size:.6em;"> Indicateurs </label>
-	      	<div id="" class="form-control h-100" contenteditable = "true"></div>
-	    </div>
-	    <div class="col">
-	    	<label for="" style = "font-size:.6em;"> Contraintes et Risques </label>
-	      	<div id="" class="form-control h-100" contenteditable = "true"></div>
-	    </div>
+  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <a id = "addDetailButton" class="btn btn-outline-primary btn-sm">Ajouter</a><h3>
+	<hr/>
+
+	<?php include_once("DetailTableProjectForm.php") ?>
+
+  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <a id = "addActiviteButton" class="btn btn-outline-primary btn-sm">Ajouter</a><h3>
+	<hr/>
+
+	<?php include_once("ActiviteTableProjectForm.php") ?>
+
+	<h3 class = "font-weight-light mt-5"> Perspectives <h3>
+	<hr/>
+	<div class="form-row mt-2 w-">
+		<textarea name = "perspectives" type="text" class="form-control" placeholder="Perspectives" required></textarea>
   	</div>
-	-->
-
-  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires<h3>
-	<hr/>
-
-	<?php include_once("ObjectifsProjectForm.php") ?>
-
-  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <button id = "addActivityButton" type="button" class="btn btn-outline-primary btn-sm" >Ajouter</button><h3>
-	<hr/>
-
-	<?php include_once("ActivitesProjectForm.php") ?>
 
 	<div class="text-center">
-  		<a class="btn btn-secondary mt-3" data-toggle="modal" data-target="#exampleModal">Enregistrer</a>
+  		<a id = "addProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Enregistrer</a>
   	</div>
 
   	<!-- Modal to confirm the record of the project into the database -->

@@ -105,4 +105,29 @@ class ChefProjetManager extends EntityManager
 		return $chefProjet;
 		
 	}
+
+	function getAll(){
+
+		$chefsProjet = NULL;
+
+		$queryString = "select id, nom, prenoms, code from ChefProjet";
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows < 1)
+				return NULL;
+			else
+			{
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					$chefsProjet[] = new ChefProjet($row[0], $row[1], $row[2], $row[3]);
+				}
+			}
+		}
+		return $chefsProjet;
+		
+	}
 }

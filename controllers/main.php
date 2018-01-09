@@ -19,11 +19,14 @@ class ControllerContainer
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 			// Depending on the state of some variables, differents part of the code will be triggered
+			$controller = $_POST['controller'];
 			$action = $_POST['action'];
-			$this->$_POST['controller']->$action();
+
+			$this->$controller->$action();
 		}
 		else if ($_SERVER['REQUEST_METHOD'] === 'GET'){
-			$this->handleGetRequest();
+			echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			//$this->handleGetRequest();
 		}
 	}
 

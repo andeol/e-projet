@@ -6,4 +6,3 @@
 	define("DB", "e-projet");
 	define("ROOT_DIR", "localhost/e-projet/");
 
-?>

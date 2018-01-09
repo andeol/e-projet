@@ -19,6 +19,7 @@ class ActiviteManager extends EntityManager
 	function add(Activite $activite)
 	{
 		$queryString = "insert into Activite values(NULL, '".$activite->getProjet()->getId()."', '".$activite->getLibelle()."','".$activite->getDateDebut()."', '".$activite->getDuree()."')";
+		//echo "     ".$queryString. "     ";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
