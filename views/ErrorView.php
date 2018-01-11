@@ -5,6 +5,6 @@
 		<title>Titre</title>
 	</head>
 	<body>
-		<?php echo $ok ?>
+		<h1> Erreur 404</h1>
 	</body>
 </html>

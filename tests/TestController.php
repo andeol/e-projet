@@ -15,6 +15,7 @@ class TestController
 
 	function init()
 	{
+		//echo "ok";
 		$this->dbClassesTestController->init();
 	}
 }

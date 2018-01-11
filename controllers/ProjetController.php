@@ -19,6 +19,12 @@ class ProjetController
 		return;
 	}
 
+	function showUpdateProjectForm()
+	{
+		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
+		return;
+	}
+
 	function addProject()
 	{
 		// Retrieving variables from posts parameters
