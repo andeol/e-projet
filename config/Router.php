@@ -8,8 +8,10 @@
 class Router
 {
 	//  Properties
-	private $routes = ["/" => "projetController/showAddProjectForm",
-		"/update" => "projetController/showUpdateProjectForm",
+	private $routes = ["/" => "projetController/addProject",
+		"/updateProject" => "projetController/updateProject",
+		"/addProject" => "projetController/addProject",
+		"/searchProject" => "projetController/searchProject",
 		"/tests" => "testController/init"];
 
 	// Functions
@@ -19,7 +21,7 @@ class Router
 
 	}
 
-	function matches(string $uri)
+	function matches($uri)
 	{
 		foreach ($this->routes as $key => $action) {
 

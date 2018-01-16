@@ -24,11 +24,17 @@ class Projet{
 
 	private $coucheSI;
 
-	private $financement;
+	private $sourceFinancement;
 
 	private $maitriseOeuvre;
 
 	private $chefProjet;
+
+	private $tauxExecution;
+
+	private $etat;
+
+	private $dateFin;
 
 	// Functions
 
@@ -44,9 +50,12 @@ class Projet{
 		$this->perspectives = "";
 		$this->cout = 0;
 		$this->coucheSI = "";
-		$this->financement = "";
+		$this->sourceFinancement = "";
 		$this->maitriseOeuvre = "";
 		$this->chefProjet = "";
+		$this->tauxExecution = 0;
+		$this->etat = 0;
+		$this->dateFin = "";
 	}
 
 	// Getters
@@ -98,9 +107,9 @@ class Projet{
 		return $this->coucheSI;
 	}
 
-	function getFinancement()
+	function getSourceFinancement()
 	{
-		return $this->financement;
+		return $this->sourceFinancement;
 	}
 
 	function getMaitriseOeuvre()
@@ -111,6 +120,21 @@ class Projet{
 	function getChefProjet()
 	{
 		return $this->chefProjet;
+	}
+
+	function getTauxExecution()
+	{
+		return $this->tauxExecution;
+	}
+
+	function getDateFin()
+	{
+		return $this->dateFin;
+	}
+
+	function getEtat()
+	{
+		return $this->etat;
 	}
 
 
@@ -160,17 +184,17 @@ class Projet{
 		$this->cout = $cout;
 	}
 
-	function setCoucheSI($coucheSI)
+	function setCoucheSI(CoucheSI $coucheSI)
 	{
 		$this->coucheSI = $coucheSI;
 	}
 
-	function setFinancement($financement)
+	function setSourceFinancement(SourceFinancement $sourceFinancement)
 	{
-		$this->financement = $financement;
+		$this->sourceFinancement = $sourceFinancement;
 	}
 
-	function setMaitriseOeuvre($maitriseOeuvre)
+	function setMaitriseOeuvre(MaitriseOeuvre $maitriseOeuvre)
 	{
 		$this->maitriseOeuvre = $maitriseOeuvre;
 	}
@@ -178,6 +202,21 @@ class Projet{
 	function setChefProjet(ChefProjet $chefProjet)
 	{
 		$this->chefProjet = $chefProjet;
+	}
+
+	function setTauxExecution($tauxExecution)
+	{
+		$this->tauxExecution = $tauxExecution;
+	}
+
+	function setEtat($etat)
+	{
+		$this->etat = $etat;
+	}
+
+	function setDateFin($dateFin)
+	{
+		$this->dateFin = $dateFin;
 	}
 }
 

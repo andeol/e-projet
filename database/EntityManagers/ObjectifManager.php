@@ -18,7 +18,6 @@ class ObjectifManager extends EntityManager
 	// Adding an activity object to the database
 	function add(Objectif $objectif)
 	{
-		echo "yes";
 		$queryString = "insert into Objectif values(NULL, '".$objectif->getProjet()->getId()."','".$objectif->getLibelle()."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)

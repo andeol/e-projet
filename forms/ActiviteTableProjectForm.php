@@ -13,7 +13,7 @@
       <th scope="row">0</th>
       <td><input id = "activite_libelle_0" type = "text" class = "form-control" required /></td>
       <td><input id = "activite_date_0" type = "date" class = "form-control" placeholder= "JJ/MM/AAAA" required/></td>
-      <td><input id = "activite_duree_0" type = "number" class = "form-control" required /></td>
+      <td><input id = "activite_duree_0" type = "number" value = '0' class = "form-control" required /></td>
     </tr>
   </tbody>
 </table>

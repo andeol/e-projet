@@ -4,6 +4,9 @@
 
 require("EntityManagers/EntityManager.php");
 require("EntityManagers/ChefProjetManager.php");
+require("EntityManagers/MaitriseOeuvreManager.php");
+require("EntityManagers/SourceFinancementManager.php");
+require("EntityManagers/CoucheSIManager.php");
 require("EntityManagers/ProjetManager.php");
 require("EntityManagers/ActiviteManager.php");
 require("EntityManagers/LogManager.php");
@@ -29,15 +32,24 @@ class ManagerContainer
 
 	public $resultatManager;
 
+	public $sourceFinancementManager;
+
+	public $maitriseOeuvreManager;
+
+	public $coucheSIManager;
+
 	// Functions
 	function __construct($connection)
 	{
 		$this->chefProjetManager = new ChefProjetManager($connection);
-		$this->projetManager = new ProjetManager($connection, $this->chefProjetManager);
+		$this->coucheSIManager = new CoucheSIManager($connection);
+		$this->sourceFinancementManager = new SourceFinancementManager($connection);
+		$this->maitriseOeuvreManager = new MaitriseOeuvreManager($connection);
+		$this->projetManager = new ProjetManager($connection, $this->chefProjetManager, $this->coucheSIManager, $this->sourceFinancementManager, $this->maitriseOeuvreManager);
 		$this->activiteManager = new ActiviteManager($connection);
 		$this->resultatManager = new ResultatManager($connection);
 		$this->objectifManager = new ObjectifManager($connection);
-		$this->logManager = new LogManager($connection);
+		$this->logManager = new LogManager($connection, $this->projetManager);
 		$this->risqueManager = new RisqueManager($connection);
 	}
 
@@ -51,37 +63,52 @@ class ManagerContainer
 
 		// object variable is an Activite instance
 		if ($object instanceof Activite){
-			$this->activiteManager->add($object);
+			return $this->activiteManager->add($object);
 		}
 
 		// object variable is Project instance
 		if ($object instanceof Projet){
-			$this->projetManager->add($object);
+			return $this->projetManager->add($object);
 		}
 
 		// object variable is Log instance
 		if ($object instanceof Log){
-			$this->logManager->add($object);
+			return $this->logManager->add($object);
 		}
 
 		// object variable is Resultat instance
 		if ($object instanceof Resultat){
-			$this->resultatManager->add($object);
+			return $this->resultatManager->add($object);
 		}
 
 		// object variable is Risque instance
 		if ($object instanceof Risque){
-			$this->risqueManager->add($object);
+			return $this->risqueManager->add($object);
 		}
 
 		// object variable is Objectif instance
 		if ($object instanceof Objectif){
-			$this->objectifManager->add($object);
+			return $this->objectifManager->add($object);
 		}
 
 		// object variable is an ChefProjet instance
 		if ($object instanceof ChefProjet){
-			$this->chefProjetManager->add($object);
+			return $this->chefProjetManager->add($object);
+		}
+
+		// object variable is an MaitriseOeuvre instance
+		if ($object instanceof MaitriseOeuvre){
+			return $this->maitriseOeuvreManager->add($object);
+		}
+
+		// object variable is an SourceFinancement instance
+		if ($object instanceof SourceFinancement){
+			return $this->SourceFinancementManager->add($object);
+		}
+
+		// object variable is an CoucheSI instance
+		if ($object instanceof CoucheSI){
+			return $this->coucheSIManager->add($object);
 		}
 	}
 
@@ -91,37 +118,52 @@ class ManagerContainer
 
 		// object variable is an Activite instance
 		if ($object instanceof Activite){
-			$this->activiteManager->update($object);
+			return $this->activiteManager->update($object);
 		}
 
 		// object variable is Project instance
 		if ($object instanceof Projet){
-			$this->projetManager->update($object);
+			return $this->projetManager->update($object);
 		}
 
 		// object variable is Log instance
 		if ($object instanceof Log){
-			$this->logManager->update($object);
+			return $this->logManager->update($object);
 		}
 
 		// object variable is Resultat instance
 		if ($object instanceof Resultat){
-			$this->resultatManager->update($object);
+			return $this->resultatManager->update($object);
 		}
 
 		// object variable is Risque instance
 		if ($object instanceof Risque){
-			$this->risqueManager->update($object);
+			return $this->risqueManager->update($object);
 		}
 
 		// object variable is Objectif instance
 		if ($object instanceof Objectif){
-			$this->objectifManager->update($object);
+			return $this->objectifManager->update($object);
 		}
 
 		// object variable is an ChefProjet instance
 		if ($object instanceof ChefProjet){
-			$this->chefProjetManager->update($object);
+			return $this->chefProjetManager->update($object);
+		}
+
+		// object variable is an MaitriseOeuvre instance
+		if ($object instanceof MaitriseOeuvre){
+			return $this->maitriseOeuvreManager->update($object);
+		}
+
+		// object variable is an SourceFinancement instance
+		if ($object instanceof SourceFinancement){
+			return $this->SourceFinancementManager->update($object);
+		}
+
+		// object variable is an CoucheSI instance
+		if ($object instanceof CoucheSI){
+			return $this->coucheSIManager->update($object);
 		}
 	}
 
@@ -162,6 +204,21 @@ class ManagerContainer
 		// object variable is an ChefProjet instance
 		if ($object instanceof ChefProjet){
 			$this->chefProjetManager->delete($object);
+		}
+
+		// object variable is an MaitriseOeuvre instance
+		if ($object instanceof MaitriseOeuvre){
+			$this->maitriseOeuvreManager->delete($object);
+		}
+
+		// object variable is an SourceFinancement instance
+		if ($object instanceof SourceFinancement){
+			$this->SourceFinancementManager->delete($object);
+		}
+
+		// object variable is an CoucheSI instance
+		if ($object instanceof CoucheSI){
+			$this->coucheSIManager->delete($object);
 		}
 	}
 }

@@ -11,145 +11,172 @@ class ProjetController
 		$this->managerContainer = $managerContainer;
 	}
 
-	function showAddProjectForm()
-	{
-		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
-
-		include_once(dirname(__DIR__)."/views/AddProjectView.php");
-		return;
-	}
-
-	function showUpdateProjectForm()
-	{
-		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
-		return;
-	}
-
 	function addProject()
 	{
-		// Retrieving variables from posts parameters
-		$intitule = $_POST['intitule'];
-		$duree = $_POST['duree'];
-		$maitriseOeuvre = $_POST['maitriseOeuvre'];
-		$objet = $_POST['objet'];
-		$dateDemarrage = $this->getRightDateFormat($_POST['dateDemarrage']);
-		$coucheSI = $_POST['coucheSI'];
-		$cout = $_POST['cout'];
-		$financement = $_POST['financement'];
-		$description = $_POST['description'];
-		$perspectives = $_POST['perspectives'];
-		$code = 'PROJ_001';
+		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-		$chefProjet = $_POST['chefProjet'];
-		$chefProjet = explode(' ', $chefProjet);
-		$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
+			// Retrieving variables from posts parameters
+			$intitule = $_POST['intitule'];
+			$duree = $_POST['duree'];
+			$maitriseOeuvre = $_POST['maitriseOeuvre'];
+			$objet = $_POST['objet'];
+			$dateDemarrage = $_POST['dateDemarrage'];
+			$coucheSI = $_POST['coucheSI'];
+			$cout = $_POST['cout'];
+			$sourceFinancement = $_POST['sourceFinancement'];
+			$description = $_POST['description'];
+			$perspectives = $_POST['perspectives'];
+			$code = $_POST['prjCode'];
+			//echo "--- ".$code." ---";
 
-		$projet = new Projet();
+			$chefProjet = $_POST['chefProjet'];
+			$chefProjet = explode(' ', $chefProjet);
+			$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
 
-		$projet->setId(0);
-		$projet->setCode($code);
-		$projet->setIntitule($intitule);
-		$projet->setObjet($objet);
-		$projet->setDescription($description);
-		$projet->setDuree($duree);
-		$projet->setDateDemarrage($dateDemarrage);
-		$projet->setCout($cout);
-		$projet->setMaitriseOeuvre($maitriseOeuvre);
-		$projet->setFinancement($financement);
-		$projet->setCoucheSI($coucheSI);
-		$projet->setPerspectives($perspectives);
-		$projet->setChefProjet($chefProjet);
+			$projet = new Projet();
 
-		$this->managerContainer->add($projet);
-		$projet->setId($this->managerContainer->projetManager->getByCode($code)->getId());
+			$projet->setId(0);
+			$projet->setCode($code);
+			$projet->setIntitule($intitule);
+			$projet->setObjet($objet);
+			$projet->setDescription($description);
+			$projet->setDuree($duree);
+			$projet->setDateDemarrage($dateDemarrage);
+			$projet->setCout($cout);
+			$projet->setPerspectives($perspectives);
+			$projet->setChefProjet($chefProjet);
 
-		$activite_libelles = explode(';', $_POST['activite_libelles']);	
-		$activite_dates = explode(';', $_POST['activite_dates']);
-		$activite_durees = explode(';', $_POST['activite_durees']);
+			$projet->setMaitriseOeuvre(new MaitriseOeuvre(0, $maitriseOeuvre));
+			$projet->setSourceFinancement(new SourceFinancement(0, $sourceFinancement));
+			$projet->setCoucheSI(new CoucheSI(0, $coucheSI));
 
-		for ($i = 0; $i < sizeof($activite_libelles); $i++){
-			$activites[] = new Activite(0, $activite_libelles[$i], $this->getRightDateFormat($activite_dates[$i]), $activite_durees[$i], $projet);
-			//echo $activites[$i]->getLibelle().' '. $activites[$i]->getDateDebut().' '.$activites[$i]->getDuree().'\n';
+			$projet = $this->managerContainer->add($projet);
+			if ($projet == NULL)
+				echo "NULLLLLLLLLLLLLLLL";
+
+			$activite_libelles = explode(';', $_POST['activite_libelles']);	
+			$activite_dates = explode(';', $_POST['activite_dates']);
+			$activite_durees = explode(';', $_POST['activite_durees']);
+
+			for ($i = 0; $i < sizeof($activite_libelles); $i++){
+				$activites[] = new Activite(0, $activite_libelles[$i], $activite_dates[$i], $activite_durees[$i], $projet);
+				//echo $activites[$i]->getLibelle().' '. $activites[$i]->getDateDebut().' '.$activites[$i]->getDuree().'\n';
+			}
+
+			$objectifs = explode(';', $_POST['objectifs']);	
+			$resultats = explode(';', $_POST['resultats']);	
+			$indicateurs = explode(';', $_POST['indicateurs']);
+			$risques = explode(';', $_POST['risques']);	
+
+			for ($i = 0; $i < sizeof($objectifs); $i++){
+				$liste_objectifs[] = new Objectif(0, $objectifs[$i], $projet);
+				//echo $liste_objectifs[$i]->getLibelle()."/";
+				$liste_resultats[] = new Resultat(0, $resultats[$i], $indicateurs[$i], $projet);
+				//echo $liste_resultats[$i]->getLibelle().':'.$liste_resultats[$i]->getIndicateurs().'/';
+				$liste_risques[] = new Risque(0, $risques[$i], $projet);
+				//echo $liste_risques[$i]->getLibelle()."/";
+			}	
+
+			$date = getdate();
+			$date = $date["year"].'-'.$date["mon"].'-'.$date["mday"].' '. $date["hours"].':'.$date["minutes"].':'.$date["seconds"];
+			$log = new Log(0, $date, "creation", $projet);
+
+			for ($i = 0; $i < sizeof($activites); $i++){
+				$this->managerContainer->add($activites[$i]);
+			}
+
+			for ($i = 0 ; $i < sizeof($liste_objectifs) ; $i++){
+				$this->managerContainer->add($liste_objectifs[$i]);
+			}
+
+			for ($i = 0 ; $i < sizeof($liste_resultats) ; $i++){
+				$this->managerContainer->add($liste_resultats[$i]);
+			}	
+
+			for ($i = 0 ; $i < sizeof($liste_risques) ; $i++){
+				$this->managerContainer->add($liste_risques[$i]);
+			}
+
+			if ($this->managerContainer->logManager->add($log) != NULL)
+				$message = "Projet enregistré avec succès ! ";
+			else
+				$message = "Une erreur est survenue lors de l'enregistrement ! ";
+			
 		}
 
-		$objectifs = explode(';', $_POST['objectifs']);	
-		$resultats = explode(';', $_POST['resultats']);	
-		$indicateurs = explode(';', $_POST['indicateurs']);
-		$risques = explode(';', $_POST['risques']);	
-
-		for ($i = 0; $i < sizeof($objectifs); $i++){
-			$liste_objectifs[] = new Objectif(0, $objectifs[$i], $projet);
-			//echo $liste_objectifs[$i]->getLibelle()."/";
-			$liste_resultats[] = new Resultat(0, $resultats[$i], $indicateurs[$i], $projet);
-			//echo $liste_resultats[$i]->getLibelle().':'.$liste_resultats[$i]->getIndicateurs().'/';
-			$liste_risques[] = new Risque(0, $risques[$i], $projet);
-			//echo $liste_risques[$i]->getLibelle()."/";
-		}	
-
-		$date = getdate();
-		$date = $date["year"].'-'.$date["mon"].'-'.$date["mday"].' '. $date["hours"].':'.$date["minutes"].':'.$date["seconds"];
-		$log = new Log(0, $date, "creation", $projet);
-
-		for ($i = 0; $i < sizeof($activites); $i++){
-			$this->managerContainer->add($activites[$i]);
-		}
-
-		for ($i = 0 ; $i < sizeof($liste_objectifs) ; $i++){
-			$this->managerContainer->add($liste_objectifs[$i]);
-		}
-
-		for ($i = 0 ; $i < sizeof($liste_resultats) ; $i++){
-			$this->managerContainer->add($liste_resultats[$i]);
-		}	
-
-		for ($i = 0 ; $i < sizeof($liste_risques) ; $i++){
-			$this->managerContainer->add($liste_risques[$i]);
-		}
-
-		$this->managerContainer->logManager->add($log);
-
-		// si tout se passe bien
-		$message = "Projet enregistré avec succès ! ";
+		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
+		$sourcesFinancement = $this->managerContainer->sourceFinancementManager->getAll();
+		$couchesSI = $this->managerContainer->coucheSIManager->getAll();
+		$maitrisesOeuvre = $this->managerContainer->maitriseOeuvreManager->getAll();
+		$action = "ajouter";
+		$codeProjet = $this->managerContainer->projetManager->getNextCode();
 
 		include_once(dirname(__DIR__)."/views/AddProjectView.php");
-		return;
 		
 	}
 
 	function updateProject()
 	{
-		// Retrieving variables from posts parameters
-		$intitule = $_POST['intitule'];
-		$duree = $_POST['duree'];
-		$maitriseOeuvre = $_POST['maitriseOeuvre'];
-		$objet = $_POST['objet'];
-		$dateDemarrage = $_POST['dateDemarrage'];
-		$coucheSI = $_POST['coucheSI'];
-		$cout = $_POST['cout'];
-		$financement = $_POST['financement'];
-		$description = $_POST['description'];
-		//$perspectives = $_POST['perspectives'];
-		//$code = $_POST['code'];
+		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
+		$projets = $this->managerContainer->projetManager->getAll();
+		$action = "modifier";
 
-		$chefProjet = $_POST['chefProjet'];
-		$chefProjet = explode(' ', $chefProjet);
-		$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
+		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-		$projet = new Projet();
+			// Retrieving variables from posts parameters
+			$intitule = $_POST['intitule'];
+			$duree = $_POST['duree'];
+			$maitriseOeuvre = $_POST['maitriseOeuvre'];
+			$objet = $_POST['objet'];
+			$dateDemarrage = $_POST['dateDemarrage'];
+			$coucheSI = $_POST['coucheSI'];
+			$cout = $_POST['cout'];
+			$financement = $_POST['financement'];
+			$description = $_POST['description'];
+			//$perspectives = $_POST['perspectives'];
+			//$code = $_POST['code'];
 
-		$activites_libelle = explode(';', $_POST['activite_libelle']);		
-		$activites_date = explode(';', $_POST['activite_date']);
-		$activites_duree = explode(';', $_POST['activite_duree']);
+			$chefProjet = $_POST['chefProjet'];
+			$chefProjet = explode(' ', $chefProjet);
+			$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
 
-		for ($i = 0; $i < sizeof($activite_libelle); $i++){
-			$this->managerContainer->activiteManager->add(new Activite(0, $activite_libelle[$i], $activite_date[$i], $activite_duree[$i], $projet));
+			$projet = new Projet();
+
+			$activites_libelle = explode(';', $_POST['activite_libelle']);		
+			$activites_date = explode(';', $_POST['activite_date']);
+			$activites_duree = explode(';', $_POST['activite_duree']);
+
+			for ($i = 0; $i < sizeof($activite_libelle); $i++){
+				$this->managerContainer->activiteManager->add(new Activite(0, $activite_libelle[$i], $activite_date[$i], $activite_duree[$i], $projet));
+			}
+
 		}
+
+		$codeProjet = "PRJ-001";
+		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
 	}
 
 	function getRightDateFormat($value)
 	{
 		$value = explode("/", $value);
 		return $value[2].'-'.$value[1].'-'.$value[0];
+	}
+
+	function searchProject()
+	{
+
+		// Getting parameters sent
+		$code = $_GET['searchProjCode'];
+		$chefProjet = $_GET['searchChefProjet'];
+		$dateDemarrage = $_GET['searchDateDemarrage'];
+
+		$chefProjet = explode(' ', $chefProjet);
+		$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
+
+		// Searching the specified project
+		$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
+
+		echo json_encode($response);
 	}
 }
 

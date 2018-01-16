@@ -33,12 +33,15 @@ $(document).ready(function(){
 	      <th scope="row">'+(task_index+1)+'</th>\
 	      <td><input id = "activite_libelle_'+(task_index+1)+'" type = "text" class = "form-control" required /></td>\
 	      <td><input id = "activite_date_'+(task_index+1)+'" type = "date" class = "form-control" placeholder= "JJ/MM/AAAA" required/></td>\
-	      <td><input id = "activite_duree_'+(task_index+1)+'" type = "number" class = "form-control" required /></td>\
+	      <td><input id = "activite_duree_'+(task_index+1)+'" type = "number" value = 0 class = "form-control" required /></td>\
 	    </tr>');
 		task_index++;
 	});	
 
-	$('#addProjectButton').click(function(){
+	$('#addProjectButton').click(function(e){
+		
+		e.preventDefault();
+
 		//gathering all the details and tasks for sending them to the server
 		$('#hidden_objectifs').val('');
 		$('#hidden_resultats').val('');
@@ -78,6 +81,162 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#addCSIModalButton').click(function(e){
+
+		e.preventDefault();
+
+		if ($('#coucheSIModalLibelle').val() == ""){
+			$('#cSIModalBody').addClass('has-error');
+			$('#coucheSIModalLibelle').focus();
+			return;
+		}
+
+		$('#coucheSiInput').append('<option value = "'+ $('#coucheSIModalLibelle').val() +'">\
+		 '+ $('#coucheSIModalLibelle').val() +' \
+		 </option>');
+
+		
+		$('#cSIModalBody').prepend('<div class="alert alert-success alert-dismissible fade show" style = "font-size:0.6em;" role="alert"> \
+			  <strong> Couche SI ajoutée \
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> \
+			    <span aria-hidden="true">&times;</span> \
+			  </button> \
+			</div>');
+		
+		$('#coucheSIModalLibelle').val("");
+	});
+
+	$('#coucheSIModalLibelle').keypress(function(){
+		if ($('#cSIModalBody').hasClass('has-error')){
+			$('#cSIModalBody').removeClass('has-error');
+		}
+	});
+
+	$('#addMoModalButton').click(function(e){
+
+		e.preventDefault();
+
+		if ($('#moModalLibelle').val() == ""){
+			$('#moModalBody').addClass('has-error');
+			$('#moModalLibelle').focus();
+			return;
+		}
+
+		$('#moInput').append('<option value = "'+ $('#moModalLibelle').val() +'">\
+		 '+ $('#moModalLibelle').val() +' \
+		 </option>');
+
+		
+		$('#moModalBody').prepend('<div class="alert alert-success alert-dismissible fade show" style = "font-size:0.6em;" role="alert"> \
+			  <strong> Maitrise d\'Oeuvre ajoutée \
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> \
+			    <span aria-hidden="true">&times;</span> \
+			  </button> \
+			</div>');
+		
+		$('#moModalLibelle').val("");
+	});
+
+	$('#moModalLibelle').keypress(function(){
+		if ($('#moModalBody').hasClass('has-error')){
+			$('#moModalBody').removeClass('has-error');
+		}
+	});
+
+	$('#addSrcFinModalButton').click(function(e){
+
+		e.preventDefault();
+
+		if ($('#srcFinModalLibelle').val() == ""){
+			$('#srcFinModalBody').addClass('has-error');
+			$('#srcFinModalLibelle').focus();
+			return;
+		}
+
+		$('#srcFinInput').append('<option value = "'+ $('#srcFinModalLibelle').val() +'">\
+		 '+ $('#srcFinModalLibelle').val() +' \
+		 </option>');
+
+		
+		$('#srcFinModalBody').prepend('<div class="alert alert-success alert-dismissible fade show" style = "font-size:0.6em;" role="alert"> \
+			  <strong> Source de financement ajoutée \
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> \
+			    <span aria-hidden="true">&times;</span> \
+			  </button> \
+			</div>');
+		
+		$('#srcFinModalLibelle').val("");
+	});
+
+	$('#srcFinModalLibelle').keypress(function(){
+		if ($('#srcFinModalBody').hasClass('has-error')){
+			$('#srcFinModalBody').removeClass('has-error');
+		}
+	});
+
+
+	// Launching the search for a project that fits the criteria
+	$('#searchProjectButton').click(function(e){
+		e.preventDefault();
+
+		//alert('http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val());
+
+		// an ajax request
+		$.ajax({
+
+			url			: 'http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val(), 
+			type 		: "GET", 
+			dataType	: "json",
+
+			success 	: function(response, status){
+							if (response != null)
+								handleSearchProjectResponse(response);
+			},
+
+			error 		: function(response, status, error){
+							alert("error");
+			},
+
+			complete	: function(response, status){
+							//alert("complete");
+			}
+		});
+	});
+
+	var handleSearchProjectResponse = function(response){
+
+		switch (response.length){
+			case 0:
+				//show a message to the user
+				alert("No project corresponding to the criteria!");
+				break;
+
+			case 1:
+				// fill the form fields with the data of the found project
+				fillUpdateFields(response[0]);
+				break;
+
+			default:
+				// show a table featuring all the projects corresponding to the criteria
+				showCorrespProjects();
+		}
+
+	};
+
+	var fillUpdateFields = function(project){
+
+		$('#codeProjetInput').val();
+
+	};
+
+	var showCorrespProjects = function(projects){
+
+		for (var i = 0; i < projects.length; i++){
+
+		}
+
+	};
+
 	/*
 	$('.date_input').blur(function(){
 		checkDateFormat($('#modal_activite_date').val());
@@ -127,24 +286,6 @@ $(document).ready(function(){
 		if(key != 47 && key != 8 && isNaN(String.fromCharCode(key))){
            	e.preventDefault();
         }
-	});
-
-	var checkDateFormat = function(value){
-
-		if (!/\d{2}\/\d{2}\/\d{4}/i.test(value) ){
-			if (!$('#div_modal_activite_date').hasClass('has-error')){
-				$('#div_modal_activite_date').addClass('has-error');
-			}
-		}
-		else{
-			if ($('#div_modal_activite_date').hasClass('has-error')){
-				$('#div_modal_activite_date').removeClass('has-error');
-			}
-		}
-	}
-
-	$('#modal_activite_date').blur(function(){
-		checkDateFormat($('#modal_activite_date').val());
 	});
 
 	// validating the activity provided

@@ -81,6 +81,7 @@ class ChefProjetManager extends EntityManager
 		$chefProjet = NULL;
 
 		$queryString = "select id, nom, prenoms, code from ChefProjet where nom = '".$nom."' and prenoms = '".$prenoms."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 
 		if (!$result)
@@ -127,7 +128,6 @@ class ChefProjetManager extends EntityManager
 				}
 			}
 		}
-		return $chefsProjet;
-		
+		return $chefsProjet;	
 	}
 }

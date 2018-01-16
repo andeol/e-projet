@@ -20,6 +20,8 @@
 				</h2>
 			</div>
 
+			<?php include_once(dirname(__DIR__)."/views/SearchProjectView.php"); ?>
+
 			<?php
 				if (isset($message)){
 					echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -44,9 +46,9 @@
 
 	</script>
 
-	<script src="http://<?php echo ROOT_DIR ?>/resources/js/jquery.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>/resources/Bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>/resources/Bootstrap/js/bootstrap.min.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>/resources/js/projectFormJS.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>resources/js/jquery.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>resources/js/projectFormJS.js"></script>
 	</body>
 </html>

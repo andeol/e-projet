@@ -10,9 +10,10 @@ class LogManager extends EntityManager
 	// Functions
 
 	// Default Builder
-	function __construct($con)
+	function __construct($con, ProjetManager $projetManager)
 	{
 		$this->connection = $con;
+		$this->projetManager = $projetManager;
 	}
 
 	// Adding an activity object to the database
@@ -24,6 +25,7 @@ class LogManager extends EntityManager
 		{
 			echo "Log insertion failed!";
 		}
+		return $this->getBy($log->getProjet(), $log->getDate(), $log->getAction());
 	}
 
 	function update(Log $log)
@@ -70,5 +72,25 @@ class LogManager extends EntityManager
 			}
 		}
 		return $logs;
+	}
+
+	function getBy(Projet $projet, $date, $action)
+	{
+		$log = NULL;
+		$queryString = "select id, date, action from Log where date = '".$date."', action = '".$action."' and pro_id = '".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows >= 1)
+			{
+				if ($row = $result->fetch_array(MYSQLI_NUM)){
+					$log = new Log($row[0], $row[1], $row[2], $projet);
+				}
+			}
+		}
+		return $log;
 	}
 }
