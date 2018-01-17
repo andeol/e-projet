@@ -259,4 +259,16 @@ class ProjetManager extends EntityManager
 		}
 		return $projets;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from Projet";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all projects!";
+			return false;
+		}
+		return true;
+	}
 }

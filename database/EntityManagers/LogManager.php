@@ -93,4 +93,16 @@ class LogManager extends EntityManager
 		}
 		return $log;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from Log";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all projects' logs!";
+			return false;
+		}
+		return true;
+	}
 }

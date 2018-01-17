@@ -72,4 +72,16 @@ class RisqueManager extends EntityManager
 		return $risques;
 	}
 
+	function deleteAll()
+	{
+		$queryString = "delete from Risque";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all project risks!";
+			return false;
+		}
+		return true;
+	}
+
 }

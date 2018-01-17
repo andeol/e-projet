@@ -12,6 +12,7 @@ class Router
 		"/updateProject" => "projetController/updateProject",
 		"/addProject" => "projetController/addProject",
 		"/searchProject" => "projetController/searchProject",
+		"/purgeDb" => "projetController/purgeDb",
 		"/tests" => "testController/init"];
 
 	// Functions

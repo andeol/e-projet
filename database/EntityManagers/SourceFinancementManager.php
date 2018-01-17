@@ -113,4 +113,17 @@ class SourceFinancementManager extends EntityManager
 		}
 		return $sourceFinancement;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from SourceFinancement";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all project finance sources!";
+			return false;
+		}
+		return true;
+	}
+
 }

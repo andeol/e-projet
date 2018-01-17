@@ -1,5 +1,6 @@
-<form class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>addProject'>
+<form class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>updateProject'>
 
+	<input name = "projetId" value = "<?= $projet->getId() ?>" hidden>
 	<h3 class = "font-weight-light">Infos projet<h3>
 	<hr/>
 	<div class="form-row">
@@ -126,7 +127,7 @@
   	</div>
 
 	<div class="text-center">
-  		<button id = "addProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Enregistrer</button>
+  		<button id = "updateProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Modifier</button>
   	</div>
 
   	<!-- Modals -->
@@ -142,7 +143,7 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        Confirmez-vous l'enregistrement de ce projet?
+	        Confirmez-vous la modification de ce projet?
 	      </div>
 	      <div class="modal-footer">
 	        <button class="btn btn-success">Oui</button>

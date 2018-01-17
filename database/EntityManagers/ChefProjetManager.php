@@ -130,4 +130,16 @@ class ChefProjetManager extends EntityManager
 		}
 		return $chefsProjet;	
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from ChefProjet";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all project leaders!";
+			return false;
+		}
+		return true;
+	}
 }

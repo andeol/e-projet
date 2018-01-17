@@ -69,4 +69,16 @@ class ObjectifManager extends EntityManager
 		}
 		return $objectifs;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from Objectif";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all the goals!";
+			return false;
+		}
+		return true;
+	}
 }

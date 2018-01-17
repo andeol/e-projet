@@ -117,5 +117,17 @@ class CoucheSIManager extends EntityManager
 		}
 		return $coucheSI;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from CoucheSI";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all the SI layers!";
+			return false;
+		}
+		return true;
+	}
 }
 

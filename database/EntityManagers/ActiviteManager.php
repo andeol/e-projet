@@ -87,4 +87,16 @@ class ActiviteManager extends EntityManager
 		}
 		return $activites;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from Activite";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all the tasks!";
+			return false;
+		}
+		return true;
+	}
 }

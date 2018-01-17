@@ -9,13 +9,14 @@
   </thead>
   <tbody id = "table_detail_body">
 
-    <?php 
+    <?php
+
       for($i = 0; $i < sizeof($objectifs); $i++) {
         echo '<tr>
-        <td><textarea id = "objectif_'.$i++.'" type = "text" class = "form-control" required >'.$objectifs[$i]->getLibelle().'</textarea></td>
-        <td><textarea id = "resultat_'.$i++.'" type = "text" class = "form-control" required >'.$resultats[$i]->getLibelle().'</textarea></td>
-        <td><textarea id = "indicateur_'.$i++.'" type = "text" class = "form-control" required >'.$resultats[$i]->getIndicateurs().'</textarea></td>
-        <td><textarea id = "risque_'.$i++.'" type = "text" class = "form-control" required >'.$risques[$i]->getLibelle().'</textarea></td>
+        <td><textarea id = "objectif_'.($i+1).'" type = "text" class = "form-control" required >'.$objectifs[$i]->getLibelle().'</textarea></td>
+        <td><textarea id = "resultat_'.($i+1).'" type = "text" class = "form-control" required >'.$resultats[$i]->getLibelle().'</textarea></td>
+        <td><textarea id = "indicateur_'.($i+1).'" type = "text" class = "form-control" required >'.$resultats[$i]->getIndicateurs().'</textarea></td>
+        <td><textarea id = "risque_'.($i+1).'" type = "text" class = "form-control" required >'.$risques[$i]->getLibelle().'</textarea></td>
       </tr>';
       }
     ?>

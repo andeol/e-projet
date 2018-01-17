@@ -241,5 +241,27 @@ class ManagerContainer
 	{
 		return $this->activiteManager->getByProjet($projet);
 	}
+
+	function purgeDb()
+	{
+		$result = true;
+
+		$result = $result && $this->resultatManager->deleteAll();
+		$result = $result && $this->activiteManager->deleteAll();
+		$result = $result && $this->objectifManager->deleteAll();
+		$result = $result && $this->risqueManager->deleteAll();
+		$result = $result && $this->logManager->deleteAll();
+		$result = $result && $this->projetManager->deleteAll();
+		//$result = $result && $this->managerContainer->chefProjetManager->deleteAll();
+		//$result = $result && $this->managerContainer->coucheSIManager->deleteAll();
+		//$result = $result && $this->managerContainer->sourceFinancementManager->deleteAll();
+		//$result = $result && $this->managerContainer->maitriseOeuvreManager->deleteAll();
+
+		if (!$result)
+			echo "An error occured when purging the database!";
+		else
+			echo "Database purged!";
+
+	}
 }
 

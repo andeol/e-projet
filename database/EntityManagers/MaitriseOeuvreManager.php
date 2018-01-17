@@ -113,4 +113,17 @@ class MaitriseOeuvreManager extends EntityManager
 		}
 		return $maitriseOeuvre;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from MaitriseOeuvre";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all project executants!";
+			return false;
+		}
+		return true;
+	}
+
 }

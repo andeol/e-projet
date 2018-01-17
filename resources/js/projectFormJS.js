@@ -83,6 +83,49 @@ $(document).ready(function(){
 			$('#hidden_activite_durees').val($('#hidden_activite_durees').val()+((i != 0) ? ';' : '')+duree);
 		}
 	});
+
+	$('#updateProjectButton').click(function(e){
+		
+		e.preventDefault();
+
+		//gathering all the details and tasks for sending them to the server
+		$('#hidden_objectifs').val('');
+		$('#hidden_resultats').val('');
+		$('#hidden_indicateurs').val('');
+		$('#hidden_risques').val('');
+
+		$('#hidden_activite_libelles').val('');
+		$('#hidden_activite_dates').val('');
+		$('#hidden_activite_durees').val('');
+
+		//gathering all details
+		for (var i = 0; i < (detail_index+1); i++)
+		{
+			var objectif = $('#objectif_'+i).val();
+			$('#hidden_objectifs').val($('#hidden_objectifs').val()+((i != 0) ? ';' : '')+objectif);
+
+			var resultat = $('#resultat_'+i).val();
+			$('#hidden_resultats').val($('#hidden_resultats').val()+((i != 0) ? ';' : '')+resultat);
+
+			var indicateur = $('#indicateur_'+i).val();
+			$('#hidden_indicateurs').val($('#hidden_indicateurs').val()+((i != 0) ? ';' : '')+indicateur);
+
+			var risque = $('#risque_'+i).val();
+			$('#hidden_risques').val($('#hidden_risques').val()+((i != 0) ? ';' : '')+risque);
+		}
+
+		for (var i = 0; i < (task_index+1); i++)
+		{
+			var libelle = $('#activite_libelle_'+i).val();
+			$('#hidden_activite_libelles').val($('#hidden_activite_libelles').val()+((i != 0) ? ';' : '')+libelle);
+
+			var date = $('#activite_date_'+i).val();
+			$('#hidden_activite_dates').val($('#hidden_activite_dates').val()+((i != 0) ? ';' : '')+date);
+
+			var duree = $('#activite_duree_'+i).val();
+			$('#hidden_activite_durees').val($('#hidden_activite_durees').val()+((i != 0) ? ';' : '')+duree);
+		}
+	});
 	
 	$('#addCSIModalButton').click(function(e){
 
@@ -182,7 +225,7 @@ $(document).ready(function(){
 	$('#searchProjectButton').click(function(e){
 		e.preventDefault();
 
-		//alert('http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val());
+		alert('http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val());
 
 		// an ajax request
 		$.ajax({
@@ -192,8 +235,9 @@ $(document).ready(function(){
 			dataType	: "json",
 
 			success 	: function(response, status){
-							if (response != null)
+							if (response != null){
 								handleSearchProjectResponse(response);
+							}
 							else
 								alert("No project found ! ");
 			},
@@ -203,7 +247,7 @@ $(document).ready(function(){
 			},
 
 			complete	: function(response, status){
-							//alert("complete");
+							alert("complete");
 			}
 
 		});

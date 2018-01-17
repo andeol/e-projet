@@ -71,4 +71,16 @@ class ResultatManager extends EntityManager
 		}
 		return $resultats;
 	}
+
+	function deleteAll()
+	{
+		$queryString = "delete from Resultat";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Error when deleting all project achievements!";
+			return false;
+		}
+		return true;
+	}
 }
