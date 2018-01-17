@@ -2,6 +2,9 @@ $(document).ready(function(){
 
 	var task_index = 0;
 	var detail_index = 0;
+	var correspProjectsIndex = 1;
+	var show_per_page = 7;
+	var current_page = 0;
 
 	//Preventing the user to insert non numeric values in some picked fields
 	$('#duree').keypress(function(e){
@@ -191,6 +194,8 @@ $(document).ready(function(){
 			success 	: function(response, status){
 							if (response != null)
 								handleSearchProjectResponse(response);
+							else
+								alert("No project found ! ");
 			},
 
 			error 		: function(response, status, error){
@@ -200,15 +205,15 @@ $(document).ready(function(){
 			complete	: function(response, status){
 							//alert("complete");
 			}
+
 		});
 	});
 
 	var handleSearchProjectResponse = function(response){
-
 		switch (response.length){
 			case 0:
 				//show a message to the user
-				alert("No project corresponding to the criteria!");
+				alert("No project found ! ");
 				break;
 
 			case 1:
@@ -218,142 +223,87 @@ $(document).ready(function(){
 
 			default:
 				// show a table featuring all the projects corresponding to the criteria
-				showCorrespProjects();
+				showCorrespProjects(response);
 		}
 
 	};
 
 	var fillUpdateFields = function(project){
 
-		$('#codeProjetInput').val();
+		$('#codeProjetInput').val(project);
 
 	};
 
 	var showCorrespProjects = function(projects){
 
+		// i set the content of the table body to empty content
+		//$('#correspProjectsTableBody').val();
+		//alert(projects[0]);
+
+		// first filling the table with the response of the ajax request
 		for (var i = 0; i < projects.length; i++){
-
+			$('#correspProjectsTableBody').append('<tr>\
+			      <th scope="row"><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+projects[0][0]+'">'+correspProjectsIndex+'</a></th>\
+			      <td><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+projects[0][0]+'">'+projects[i][3]+'</a></td>\
+			      <td>'+projects[i][4]+'</td>\
+			      <td>'+projects[i][5]+'</td>\
+			      <td>'+projects[i][6]+'</td>\
+			      <td>'+projects[i][7]+'</td>\
+			    </tr>');
+			correspProjectsIndex++;
 		}
 
+		// and after that, showing the result
+		//$('#showCorrespProjectsModal').modal('show');
 	};
 
 	/*
-	$('.date_input').blur(function(){
-		checkDateFormat($('#modal_activite_date').val());
-	});
+	function set_display(first, last) {
+		$('#content').children().css('display', 'none');
+		$('#content').children().slice(first, last).css('display',	'block');
+	}
 
-	var checkDateFormat = function(value){
+	function previous(){
+		if($('.active').prev('.page_link').length)
+			go_to_page(current_page - 1);
+	}
 
-		if (!/\d{2}\/\d{2}\/\d{4}/i.test(value) ){
-			if (!$('#div_modal_activite_date').hasClass('has-error')){
-				$('#div_modal_activite_date').addClass('has-error');
-			}
-		}
-		else{
-			if ($('#div_modal_activite_date').hasClass('has-error')){
-				$('#div_modal_activite_date').removeClass('has-error');
-			}
-		}
-	};
-	*/
-
-	/*
-	$('#modal_activite_libelle').keypress(function(){
-		if ($('#div_modal_activite_libelle').hasClass('has-error')){
-			$('#div_modal_activite_libelle').removeClass('has-error');
-		}
-	});
+	function next(){
+		if($('.active').next('.page_link').length)
+			go_to_page(current_page + 1);
+	}
 	
-	$('#modal_activite_duree').keypress(function(e){
-
-		if ($('#div_modal_activite_duree').hasClass('has-error')){
-			$('#div_modal_activite_duree').removeClass('has-error');
-		}
-
-		var key = e.which || e.keyCode;
-		if(key == 48 || (key != 8 && isNaN(String.fromCharCode(key)))){
-           	e.preventDefault();
-        }
+	function go_to_page(page_num){
+		current_page = page_num;
+		start_from = current_page * show_per_page;
+		end_on = start_from + show_per_page;
+		set_display(start_from, end_on);
+		$('.active').removeClass('active');
+		$('#id' + page_num).addClass('active');
+	}
+	$(document).ready(function() {
+	var number_of_pages =
+	Math.ceil($('#content').children().size() / show_per_page);
+	var nav = '<ul class="pagination"><li><ahref="javascript:previous();"><<</a>';
+	var i = -1;
+	while(number_of_pages > ++i){
+	nav += '<li class="page_link'
+	if(!i) nav += ' active';
+	nav += '" id="id' + i +'">';
+	nav += '<a href="javascript:go_to_page(' + i +')">'+ (i + 1)
+	+'</a>';
+	}
+	nav += '<li><a href="javascript:next();">>></a></ul>';
+	$('#page_navigation').html(nav);
+	set_display(0, show_per_page);
 	});
 
-	$('#modal_activite_date').keypress(function(e){
+		// Once the project to get updated has been selected, we fill the form fields with its data
+		$('#selectProjectModalButton').click(function(){
 
-		if ($('#div_modal_activite_date').hasClass('has-error')){
-			$('#div_modal_activite_date').removeClass('has-error');
-		}
-
-		var key = e.which || e.keyCode;
-		if(key != 47 && key != 8 && isNaN(String.fromCharCode(key))){
-           	e.preventDefault();
-        }
-	});
-
-	// validating the activity provided
-	$('#addModalActiviteButton').click(function(e){
-
-		e.preventDefault();
-
-		// checking if the 'libelle' field input of the activity'modal is valid
-		if ($('#modal_activite_libelle').val() == '' && !$('#div_modal_activite_libelle').hasClass('has-error')){
-			$('#div_modal_activite_libelle').addClass('has-error');
-			$('#modal_activite_libelle').focus();
-			return;
-		}
-
-		// checking if the 'date' field input of the activity'modal is valid
-		if ($('#modal_activite_date').val() == '' && !$('#div_modal_activite_date').hasClass('has-error')){
-			$('#div_modal_activite_date').addClass('has-error');
-			$('#modal_activite_date').focus();
-			return;
-		}
-
-		if ($('#div_modal_activite_date').hasClass('has-error')){
-			$('#modal_activite_date').focus();
-			return;
-		}
-
-		// checking if the 'duree' field input of the activity'modal is valid
-		if ($('#modal_activite_duree').val() == ''){
-			$('#div_modal_activite_duree').addClass('has-error');
-			$('#modal_activite_duree').focus();
-			return;
-		}
-
-		// Once, all the checks have been performed, we add the task to the table
-		$('#table_activite_body').append('<tr id = "task_tr'+task_index+'">\
-			<th scope="row">'+(task_index+1)+'</th>\
-	    	<td>'+$('#modal_activite_libelle').val()+'</td>\
-	    	<td>'+$('#modal_activite_date').val()+'</td>\
-	    	<td>'+$('#modal_activite_duree').val()+'</td>\
-	    	<td>\
-		      	<a id = "task_edit_button_'+task_index+'" class = "task_edit_button btn" href="#"><img style = "width:17px; height=17px;"src = "http://'+parameters.ROOT_DIR+'/resources/images/glyphicons/glyphicons-31-pencil.png" ></a>\
-		        <a id = "task_delete_button_'+task_index+'" class = "task_delete_button btn" href="#"><img style = "width:17px; height=17px;"src = "http://'+parameters.ROOT_DIR+'/resources/images/glyphicons/glyphicons-193-remove-sign.png" ></a>\
-		    </td>\
-	    </tr>');
-
-	    // reseting the fields
-	    $('#modal_activite_duree').val('');
-	    $('#modal_activite_date').val('');
-	    $('#modal_activite_libelle').val('');
-
-	    // noticing to the user the addition of the current task
-	    $('#add_activite_modal_body').prepend('<div style = "font-size:0.6em;" class="alert alert-info alert-dismissible fade show" role="alert">\
-	          Activité ajoutée\
-	          <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
-	            <span aria-hidden="true">&times;</span>\
-	          </button>\
-	        </div>');
-
-	    // incrementing some variables
-	    task_index++;
-
-	});
-
-	$('.task_delete_button').click(function(e){
-		alert("ok");
-		e.preventDefault();
-		//$(this).parent().parent().remove();
-	});
+			fillUpdateFields(correspProjects[selectedProjectIndex]);
+			$('#showCorrespProjectsModal').modal('hide');
+		});
 	*/
 
 });

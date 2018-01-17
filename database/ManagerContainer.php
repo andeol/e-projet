@@ -221,5 +221,25 @@ class ManagerContainer
 			$this->coucheSIManager->delete($object);
 		}
 	}
+
+	function getResultatsByProjet(Projet $projet)
+	{
+		return $this->resultatManager->getByProjet($projet);
+	}
+
+	function getObjectifsByProjet(Projet $projet)
+	{
+		return $this->objectifManager->getByProjet($projet);
+	}
+
+	function getRisquesByProjet(Projet $projet)
+	{
+		return $this->risqueManager->getByProjet($projet);
+	}
+
+	function getActivitesByProjet($projet)
+	{
+		return $this->activiteManager->getByProjet($projet);
+	}
 }
 

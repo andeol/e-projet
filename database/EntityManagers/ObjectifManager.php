@@ -46,7 +46,7 @@ class ObjectifManager extends EntityManager
 		}
 	}
 
-	function getByProjet($projet)
+	function getByProjet(Projet $projet)
 	{
 		$objectifs = NULL;
 

@@ -31,7 +31,7 @@
 				}
 			?>
 			<!-- Including the form -->
-			<?php include_once(dirname(__DIR__)."/forms/ProjectForm.php"); ?>
+			<?php include_once(dirname(__DIR__)."/forms/AddProjectForm.php"); ?>
 
 		</div>
 

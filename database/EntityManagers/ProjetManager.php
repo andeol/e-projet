@@ -71,12 +71,53 @@ class ProjetManager extends EntityManager
 			echo "Projet deletion failed!";
 		}
 	}
-
+	
 	function getByCode($code)
 	{
 		$projet = NULL;
 
 		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, Che_id, tauxExecution, etat, dateFin from Projet where code = '".$code."' ";
+		//echo $queryString;
+
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows >= 1)
+			{
+				if ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					$projet = new Projet();
+					$projet->setId($row[0]);
+					$projet->setCode($row[1]);
+					$projet->setIntitule($row[2]);
+					$projet->setObjet($row[3]);
+					$projet->setDescription($row[4]);
+					$projet->setDuree($row[5]);
+					$projet->setDateDemarrage($row[6]);
+					$projet->setCout($row[7]);
+					$projet->setMaitriseOeuvre($this->maitriseOeuvreManager->getById($row[8]));
+					$projet->setSourceFinancement($this->sourceFinancementManager->getById($row[9]));
+					$projet->setCoucheSI($this->coucheSIManager->getById($row[10]));
+					$projet->setPerspectives($row[11]);
+					$projet->setChefProjet($this->chefProjetManager->getById($row[12]));
+					$projet->setTauxExecution($row[13]);
+					$projet->setEtat($row[14]);
+					$projet->setDateFin($row[15]);
+				}
+			}
+		}
+
+		return $projet;
+	}
+	
+	function getById($id)
+	{
+		$projet = NULL;
+
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, Che_id, tauxExecution, etat, dateFin from Projet where id = '".$id."' ";
 		//echo $queryString;
 
 		$result = $this->connection->query($queryString);
@@ -178,7 +219,7 @@ class ProjetManager extends EntityManager
 	{
 		$projets = NULL;
 
-		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where code = '".$code."' and date(dateDemarrage) = '".$dateDemarrage."' and che_id = '".$chefProjet->getId()."'";
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where code = '".$code."' and dateDemarrage = '".$dateDemarrage."' and che_id = '".$chefProjet->getId()."'";
 		//echo $queryString;
 		$result = $this->connection->query($queryString);
 

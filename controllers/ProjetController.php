@@ -27,7 +27,6 @@ class ProjetController
 			$description = $_POST['description'];
 			$perspectives = $_POST['perspectives'];
 			$code = $_POST['prjCode'];
-			//echo "--- ".$code." ---";
 
 			$chefProjet = $_POST['chefProjet'];
 			$chefProjet = explode(' ', $chefProjet);
@@ -51,8 +50,6 @@ class ProjetController
 			$projet->setCoucheSI(new CoucheSI(0, $coucheSI));
 
 			$projet = $this->managerContainer->add($projet);
-			if ($projet == NULL)
-				echo "NULLLLLLLLLLLLLLLL";
 
 			$activite_libelles = explode(';', $_POST['activite_libelles']);	
 			$activite_dates = explode(';', $_POST['activite_dates']);
@@ -108,7 +105,6 @@ class ProjetController
 		$sourcesFinancement = $this->managerContainer->sourceFinancementManager->getAll();
 		$couchesSI = $this->managerContainer->coucheSIManager->getAll();
 		$maitrisesOeuvre = $this->managerContainer->maitriseOeuvreManager->getAll();
-		$action = "ajouter";
 		$codeProjet = $this->managerContainer->projetManager->getNextCode();
 
 		include_once(dirname(__DIR__)."/views/AddProjectView.php");
@@ -117,11 +113,30 @@ class ProjetController
 
 	function updateProject()
 	{
+		// i retrieve the id of thr project to be updated and from it, get the whole project object
 		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
-		$projets = $this->managerContainer->projetManager->getAll();
-		$action = "modifier";
+		$sourcesFinancement = $this->managerContainer->sourceFinancementManager->getAll();
+		$couchesSI = $this->managerContainer->coucheSIManager->getAll();
+		$maitrisesOeuvre = $this->managerContainer->maitriseOeuvreManager->getAll();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+		if ($_SERVER['REQUEST_METHOD'] === 'GET'){
+
+			$projectId = $_GET['projectId'];
+
+			$projet = $this->managerContainer->projetManager->getById($projectId);
+			//echo $projet->getDescription();
+
+			// After getting the whole project object, we do the same with all the stuff like "objectifs", "resultats" etc.
+			$objectifs = $this->managerContainer->getObjectifsByProjet($projet);
+			$resultats = $this->managerContainer->getResultatsByProjet($projet);
+			$risques = $this->managerContainer->getRisquesByProjet($projet);
+			$activites = $this->managerContainer->getActivitesByProjet($projet);
+
+			/*
+			$projets = $this->managerContainer->projetManager->getAll();
+			*/
+		}
+		else if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 			// Retrieving variables from posts parameters
 			$intitule = $_POST['intitule'];
@@ -151,32 +166,41 @@ class ProjetController
 			}
 
 		}
-
-		$codeProjet = "PRJ-001";
 		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
 	}
 
+	/*
 	function getRightDateFormat($value)
 	{
 		$value = explode("/", $value);
 		return $value[2].'-'.$value[1].'-'.$value[0];
 	}
+	*/
 
 	function searchProject()
 	{
+		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+		{    
+			// Getting parameters sent
+			$code = $_GET['searchProjCode'];
+			$chefProjet = $_GET['searchChefProjet'];
+			$dateDemarrage = $_GET['searchDateDemarrage'];
 
-		// Getting parameters sent
-		$code = $_GET['searchProjCode'];
-		$chefProjet = $_GET['searchChefProjet'];
-		$dateDemarrage = $_GET['searchDateDemarrage'];
+			$chefProjet = explode(' ', $chefProjet);
+			$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
 
-		$chefProjet = explode(' ', $chefProjet);
-		$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
+			// Searching the specified project
+			$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
 
-		// Searching the specified project
-		$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
+			echo json_encode($response);
+		}
+		else{
 
-		echo json_encode($response);
+			$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
+			$projets = $this->managerContainer->projetManager->getAll();
+			include_once(dirname(__DIR__)."/views/SearchProjectView.php");
+			
+		}
 	}
 }
 

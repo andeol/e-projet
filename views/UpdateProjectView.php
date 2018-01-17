@@ -20,8 +20,6 @@
 				</h2>
 			</div>
 
-			<?php include_once(dirname(__DIR__)."/views/SearchProjectView.php"); ?>
-
 			<?php
 				if (isset($message)){
 					echo '<div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -33,7 +31,7 @@
 				}
 			?>
 			<!-- Including the form -->
-			<?php include_once(dirname(__DIR__)."/forms/ProjectForm.php"); ?>
+			<?php include_once(dirname(__DIR__)."/forms/UpdateProjectForm.php"); ?>
 
 		</div>
 
