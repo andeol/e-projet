@@ -46,6 +46,18 @@ class ObjectifManager extends EntityManager
 		}
 	}
 
+	function deleteByProjet(Projet $projet)
+	{
+		$queryString = "delete from Objectif where pro_id='".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Objectif deletion failed!";
+			return false;
+		}
+		return true;
+	}
+
 	function getByProjet(Projet $projet)
 	{
 		$objectifs = NULL;

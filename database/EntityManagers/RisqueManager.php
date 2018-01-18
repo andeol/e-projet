@@ -48,6 +48,18 @@ class RisqueManager extends EntityManager
 		}
 	}
 
+	function deleteByProjet(Projet $projet)
+	{
+		$queryString = "delete from Risque where pro_id='".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Risque deletion failed!";
+			return false;
+		}
+		return true;
+	}
+
 	function getByProjet($projet)
 	{
 		$risque = NULL;

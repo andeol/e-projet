@@ -48,6 +48,18 @@ class ResultatManager extends EntityManager
 		}
 	}
 
+	function deleteByProjet(Projet $projet)
+	{
+		$queryString = "delete from Resultat where pro_id='".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Resultat deletion failed!";
+			return false;
+		}
+		return true;
+	}
+
 	function getByProjet($projet)
 	{
 		$resultats = NULL;

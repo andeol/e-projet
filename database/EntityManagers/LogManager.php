@@ -77,7 +77,8 @@ class LogManager extends EntityManager
 	function getBy(Projet $projet, $date, $action)
 	{
 		$log = NULL;
-		$queryString = "select id, date, action from Log where date = '".$date."', action = '".$action."' and pro_id = '".$projet->getId()."'";
+		$queryString = "select id, date, action from Log where date = '".$date."' and action = '".$action."' and pro_id = '".$projet->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 
 		if (!$result)

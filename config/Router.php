@@ -13,6 +13,7 @@ class Router
 		"/addProject" => "projetController/addProject",
 		"/searchProject" => "projetController/searchProject",
 		"/purgeDb" => "projetController/purgeDb",
+		"/checkCPCode" => "projetController/checkCPCode",
 		"/tests" => "testController/init"];
 
 	// Functions

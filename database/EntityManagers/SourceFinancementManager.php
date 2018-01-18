@@ -18,7 +18,7 @@ class SourceFinancementManager extends EntityManager
 	// Adding an activity object to the database
 	function add(SourceFinancement $sourceFinancement)
 	{
-		$record = $this->getBy($sourceFinancement->getLibelle());
+		$record = $this->getByLibelle($sourceFinancement->getLibelle());
 		if ($record == NULL){
 
 			$queryString = "insert into SourceFinancement values(NULL,'".$sourceFinancement->getLibelle()."')";
@@ -74,7 +74,7 @@ class SourceFinancementManager extends EntityManager
 		return $sourcesFinancement;
 	}
 
-	function getBy($libelle)
+	function getByLibelle($libelle)
 	{
 		$sourceFinancement = NULL;
 		$queryString = "select id, libelle from SourceFinancement where libelle = '".$libelle."'";

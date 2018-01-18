@@ -42,6 +42,8 @@ class ProjetManager extends EntityManager
 			."', '".$projet->getTauxExecution()."', '".$projet->getEtat()
 			."', '".$projet->getDateFin()."' )";
 
+		//echo $queryString;
+
 		$result = $this->connection->query($queryString);
 
 		if (!$result)
@@ -54,11 +56,12 @@ class ProjetManager extends EntityManager
 
 	function update(Projet $projet)
 	{
-		$queryString = "update Projet set che_id = '".$projet->getChefProjet()->getId()."', code = '".$projet->getCode()."', intitule = '".$this->connection->real_escape_string($projet->getIntitule())."', objet = '".$this->connection->real_escape_string($projet->getObjet())."', description = '".$this->connection->real_escape_string($projet->getDescription())."', duree = '".$projet->getDuree()."', dateDemarrage = '".$projet->getDateDemarrage()."', cout = '".$projet->getCout()."', mo_id = '".$projet->getMaitriseOeuvre()->getId()."', srcFin = '".$projet->getSourceFinancement()->getId()."', coucheSI = '".$projet->getCoucheSI()->getid()."', perspectives = '".$this->connection->real_escape_string($projet->getPerspectives())."', tauxExecution = '".$projet->getTauxExecution()."', etat = '".$projet->getEtat()."', dateFin = '".$projet->getDateFin()."'  where id = '".$projet->getId()."'";
+		$queryString = "update Projet set che_id = '".$projet->getChefProjet()->getId()."', code = '".$projet->getCode()."', intitule = '".$this->connection->real_escape_string($projet->getIntitule())."', objet = '".$this->connection->real_escape_string($projet->getObjet())."', description = '".$this->connection->real_escape_string($projet->getDescription())."', duree = '".$projet->getDuree()."', dateDemarrage = '".$projet->getDateDemarrage()."', cout = '".$projet->getCout()."', mo_id = '".$projet->getMaitriseOeuvre()->getId()."', srcFin_id = '".$projet->getSourceFinancement()->getId()."', cSI_id = '".$projet->getCoucheSI()->getid()."', perspectives = '".$this->connection->real_escape_string($projet->getPerspectives())."', tauxExecution = '".$projet->getTauxExecution()."', etat = '".$projet->getEtat()."', dateFin = '".$projet->getDateFin()."'  where id = '".$projet->getId()."'";
+		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
-			echo "Projet insertion failed!";
+			echo "Projet update failed!";
 		}
 	}
 
@@ -215,11 +218,21 @@ class ProjetManager extends EntityManager
 		return $nextCode;
 	}
 
-	function getBy($code, $dateDemarrage, $chefProjet, $format)
+	function getBy($code, $dateDemarrage, $chefProjet, $sourceFinancement, $format)
 	{
 		$projets = NULL;
 
-		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where code = '".$code."' and dateDemarrage = '".$dateDemarrage."' and che_id = '".$chefProjet->getId()."'";
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where code = '".$code."'";
+
+		if ($chefProjet != "none")
+			$queryString .= "and che_id = '".$chefProjet->getId()."'";
+
+		if ($dateDemarrage != '')
+			$queryString .= "and dateDemarrage = '".$dateDemarrage."'";
+
+		if ($sourceFinancement != "none")
+			$queryString .= "and sourceFinancement = '".$sourceFinancement."'";
+
 		//echo $queryString;
 		$result = $this->connection->query($queryString);
 

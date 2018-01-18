@@ -5,7 +5,7 @@
 	<div class="form-row">
 		<div class = "col-md-4">
 			<label for="" style = "font-size:.6em;"> Code du projet </label>
-			<input id = "codeProjetInput" name = "prjCode" type="text" class="form-control" style = "background-color:white;" value = "<?= $codeProjet ?>" readonly required>
+			<input id = "codeProjetInput" name = "prjcde" type="text" class="form-control" style = "background-color:white;" value = "<?= $codeProjet ?>" readonly required>
 		</div>
 
 		<div class="col-md-4">

@@ -18,7 +18,7 @@ class CoucheSIManager extends EntityManager
 	// Adding an activity object to the database
 	function add(CoucheSI $coucheSI)
 	{
-		$record = $this->getBy($coucheSI->getLibelle());
+		$record = $this->getByLibelle($coucheSI->getLibelle());
 		
 		if ($record == NULL){
 			$queryString = "insert into CoucheSI values(NULL,'".$coucheSI->getLibelle()."')";
@@ -76,7 +76,7 @@ class CoucheSIManager extends EntityManager
 		return $couchesSI;
 	}
 
-	function getBy($libelle)
+	function getByLibelle($libelle)
 	{
 		$coucheSI = NULL;
 		$queryString = "select id, libelle from CoucheSI where libelle = '".$libelle."'";

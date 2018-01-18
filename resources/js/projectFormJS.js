@@ -2,24 +2,26 @@ $(document).ready(function(){
 
 	var task_index = 0;
 	var detail_index = 0;
-	var correspProjectsIndex = 1;
 	var show_per_page = 7;
 	var current_page = 0;
 
 	//Preventing the user to insert non numeric values in some picked fields
+
+	/*
 	$('#duree').keypress(function(e){
 		var key = e.which || e.keyCode;
-		if(key != 8 && isNaN(String.fromCharCode(key)) /*&& key != 44*/){
+		if(key != 8 && isNaN(String.fromCharCode(key))){
            	e.preventDefault();
         }
 	});
 
 	$('#cout').keypress(function(e){
 		var key = e.which || e.keyCode;
-		if(key != 8 && isNaN(String.fromCharCode(key)) /*&& key != 44*/){
+		if(key != 8 && isNaN(String.fromCharCode(key))){
            	e.preventDefault();
         }
 	});
+	*/
 
 	$('#addDetailButton').click(function(){
 		$('#table_detail_body').append('<tr>\
@@ -221,25 +223,25 @@ $(document).ready(function(){
 	});
 
 
-	// Launching the search for a project that fits the criteria
-	$('#searchProjectButton').click(function(e){
+	// launching an ajax request to check the project leader code given
+	$('#getCPCodeModalButton').click(function(e){
 		e.preventDefault();
 
-		alert('http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val());
+		//alert('http://'+parameters.ROOT_DIR+"checkCPCode?chefProjetCode="+$('#getCPCodeModalInput').val()+"&projetId="+$('#projetId').val());
 
 		// an ajax request
 		$.ajax({
 
-			url			: 'http://'+parameters.ROOT_DIR+"searchProject?searchProjCode="+$('#searchProjCode').val()+"&searchChefProjet="+$('#searchChefProjet').val()+"&searchDateDemarrage="+$('#searchDateDemarrage').val(), 
+			url			: 'http://'+parameters.ROOT_DIR+"checkCPCode?chefProjetCode="+$('#getCPCodeModalInput').val()+"&projetId="+$('#projetId').val(), 
 			type 		: "GET", 
 			dataType	: "json",
 
 			success 	: function(response, status){
 							if (response != null){
-								handleSearchProjectResponse(response);
+								handleCPCodeCheckResponse(response);
 							}
 							else
-								alert("No project found ! ");
+								alert("An error occured when checking the code ! Please retry later!");
 			},
 
 			error 		: function(response, status, error){
@@ -247,58 +249,34 @@ $(document).ready(function(){
 			},
 
 			complete	: function(response, status){
-							alert("complete");
+							//alert("complete");
 			}
 
 		});
 	});
 
-	var handleSearchProjectResponse = function(response){
-		switch (response.length){
-			case 0:
-				//show a message to the user
-				alert("No project found ! ");
-				break;
+	var handleCPCodeCheckResponse = function(response){
+		if (response == 0)
+			alert("Code erroné");
+		else{
+			$('#getCPCodeModal').modal('hide');
 
-			case 1:
-				// fill the form fields with the data of the found project
-				fillUpdateFields(response[0]);
-				break;
-
-			default:
-				// show a table featuring all the projects corresponding to the criteria
-				showCorrespProjects(response);
+			// enabling all the input
+			$('#codeProjetInput').prop('readonly', false);
+			$('#intituleInput').prop('readonly', false);
+			$('#objetInput').prop('readonly', false);
+			$('#coutInput').prop('readonly', false);
+			$('#chefProjetInput').prop('readonly', false);
+			$('#dateDemarrageInput').prop('readonly', false);
+			$('#dureeInput').prop('readonly', false);
+			$('#dateFinInput').prop('readonly', false);
+			$('#coucheSiInput').prop('readonly', false);
+			$('#moInput').prop('readonly', false);
+			$('#srcFinInput').prop('readonly', false);
+			$('#descriptionInput').prop('readonly', false);
+			$('#perspectivesInput').prop('readonly', false);
+			$('#updateProjectButton').prop('disabled', false);
 		}
-
-	};
-
-	var fillUpdateFields = function(project){
-
-		$('#codeProjetInput').val(project);
-
-	};
-
-	var showCorrespProjects = function(projects){
-
-		// i set the content of the table body to empty content
-		//$('#correspProjectsTableBody').val();
-		//alert(projects[0]);
-
-		// first filling the table with the response of the ajax request
-		for (var i = 0; i < projects.length; i++){
-			$('#correspProjectsTableBody').append('<tr>\
-			      <th scope="row"><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+projects[0][0]+'">'+correspProjectsIndex+'</a></th>\
-			      <td><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+projects[0][0]+'">'+projects[i][3]+'</a></td>\
-			      <td>'+projects[i][4]+'</td>\
-			      <td>'+projects[i][5]+'</td>\
-			      <td>'+projects[i][6]+'</td>\
-			      <td>'+projects[i][7]+'</td>\
-			    </tr>');
-			correspProjectsIndex++;
-		}
-
-		// and after that, showing the result
-		//$('#showCorrespProjectsModal').modal('show');
 	};
 
 	/*

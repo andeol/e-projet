@@ -47,6 +47,18 @@ class ActiviteManager extends EntityManager
 		}
 	}
 
+	function deleteByProjet(Projet $projet)
+	{
+		$queryString = "delete from Activite where pro_id='".$projet->getId()."'";
+		$result = $this->connection->query($queryString);
+		if (!$result)
+		{
+			echo "Activite deletion failed!";
+			return false;
+		}
+		return true;
+	}
+
 	function getById($id)
 	{
 		$queryString = "select id, libelle, dateDebut, duree from Activite where id = '".$id."'";

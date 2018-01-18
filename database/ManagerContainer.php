@@ -242,6 +242,26 @@ class ManagerContainer
 		return $this->activiteManager->getByProjet($projet);
 	}
 
+	function deleteResultatsByProjet(Projet $projet)
+	{
+		return $this->resultatManager->deleteByProjet($projet);
+	}
+
+	function deleteObjectifsByProjet(Projet $projet)
+	{
+		return $this->objectifManager->deleteByProjet($projet);
+	}
+
+	function deleteRisquesByProjet(Projet $projet)
+	{
+		return $this->risqueManager->deleteByProjet($projet);
+	}
+
+	function deleteActivitesByProjet($projet)
+	{
+		return $this->activiteManager->deleteByProjet($projet);
+	}
+
 	function purgeDb()
 	{
 		$result = true;
@@ -261,7 +281,6 @@ class ManagerContainer
 			echo "An error occured when purging the database!";
 		else
 			echo "Database purged!";
-
 	}
 }
 

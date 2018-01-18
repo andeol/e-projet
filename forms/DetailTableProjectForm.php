@@ -18,8 +18,8 @@
 </table>
 
 <input id = "hidden_objectifs" type = "text" name = "objectifs" hidden />
-<input id = "hidden_resultats" type = "text" name = "resultats" hidden />
-<input id = "hidden_indicateurs" type = "text" name = "indicateurs" hidden />
+<input id = "hidden_resultats" type = "text" name = "resultats" hidden/>
+<input id = "hidden_indicateurs" type = "text" name = "indicateurs" hidden/>
 <input id = "hidden_risques" type = "text" name = "risques" hidden />
 
 

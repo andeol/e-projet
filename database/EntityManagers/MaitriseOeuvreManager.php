@@ -18,7 +18,7 @@ class MaitriseOeuvreManager extends EntityManager
 	// Adding an activity object to the database
 	function add(MaitriseOeuvre $maitriseOeuvre)
 	{
-		$record = $this->getBy($maitriseOeuvre->getLibelle());
+		$record = $this->getByLibelle($maitriseOeuvre->getLibelle());
 		if ($record == NULL ){
 
 			$queryString = "insert into MaitriseOeuvre values(NULL,'".$maitriseOeuvre->getLibelle()."')";
@@ -76,7 +76,7 @@ class MaitriseOeuvreManager extends EntityManager
 		return $maitrisesOeuvre;
 	}
 
-	function getBy($libelle)
+	function getByLibelle($libelle)
 	{
 		$maitriseOeuvre = NULL;
 		$queryString = "select id, libelle from MaitriseOeuvre where libelle = '".$libelle."'";

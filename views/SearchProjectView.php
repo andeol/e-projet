@@ -28,22 +28,49 @@
 				<div class="col">
 					<label for="" style = "font-size:.6em;"> Code du projet </label>
 					<select id = "searchProjCode" name = "searchProjCode" class="form-control">
-				      		<?php foreach ($projets as $projet) { ?>
-				      			<option value = "<?= $projet->getCode() ?>"> <?= $projet->getCode() ?></option>
-				      		<?php }?>
+						<option value = "none" selected> Sélectionner code </option>
+			      		<?php foreach ($projets as $projet) { ?>
+			      			<option value = "<?= $projet->getCode() ?>"> <?= $projet->getCode() ?></option>
+			      		<?php }?>
 				    </select>
 				</div>
 
 				<div class = "col">
 					<label for="" style = "font-size:.6em;"> Chef projet </label>
 					<select id = "searchChefProjet" name = "searchChefProjet" class="form-control">
-				      		<?php foreach ($chefsProjet as $chefProjet) { ?>
-				      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
-				      		<?php }?>
+						<option value = "none" selected> Sélectionner chef projet </option>
+			      		<?php foreach ($chefsProjet as $chefProjet) { ?>
+			      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
+			      		<?php }?>
 				    </select>
 				</div>
 				<div class = "col">
 					<label for="" style = "font-size:.6em;"> Date de démarrage </label>
+					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
+				</div>
+			</div>
+
+			<div class = "row">
+
+				<div class="col">
+			    	<label for="" style = "font-size:.6em;">Source de financement</label>
+			    	<div class = "input-group">
+			      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control"> 
+			      			<option value = "none" selected> Sélectionner Source Financement </option>
+				      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
+				      			<option value = "<?= $sourceFinancement->getLibelle() ?>"> <?= $sourceFinancement->getLibelle() ?> </option>
+				      		<?php }?>
+				      	</select>
+			      	</div>
+			    </div>
+
+			    <div class = "col">
+					<label for="" style = "font-size:.6em;"> Début Période </label>
+					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
+				</div>
+
+				<div class = "col">
+					<label for="" style = "font-size:.6em;"> Fin Période </label>
 					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
 				</div>
 			</div>
@@ -63,6 +90,7 @@
 			      <th scope="col">Objet</th>
 			      <th scope="col">Description</th>
 			      <th scope="col">Durée</th>
+			      <th scope="col">Actions</th>
 			    </tr>
 			  </thead>
 			  <tbody id = "correspProjectsTableBody">
@@ -104,6 +132,6 @@
 	<script src="http://<?php echo ROOT_DIR ?>resources/js/jquery.js"></script>
 	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.min.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>resources/js/projectFormJS.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>resources/js/searchProject.js"></script>
 	</body>
 </html>

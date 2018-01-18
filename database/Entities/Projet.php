@@ -74,7 +74,7 @@ class Projet{
 
 	function getObjet()
 	{
-		$this->objet;
+		return $this->objet;
 	}
 
 	function getDescription()

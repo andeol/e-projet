@@ -1,32 +1,32 @@
 <form class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>updateProject'>
 
-	<input name = "projetId" value = "<?= $projet->getId() ?>" hidden>
-	<h3 class = "font-weight-light">Infos projet<h3>
+	<input id = "projetId"  name = "projetId" value = "<?= $projet->getId() ?>" hidden>
+	<h3 class = "font-weight-light"> Infos projet <a id = "checkCPCodeButton" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#getCPCodeModal">Modifier</a> <a id = "addDetailButton" class="btn btn-outline-primary btn-sm">Imprimer</a> <h3>
 	<hr/>
 	<div class="form-row">
 		<div class = "col-md-4">
 			<label for="" style = "font-size:.6em;"> Code du projet </label>
-			<input id = "codeProjetInput" name = "prjCode" type="text" class="form-control" style = "background-color:white;" value = "<?= $projectId ?>" readonly required>
+			<input id = "codeProjetInput" name = "prjcde" type="text" class="form-control" value = "<?php if (isset($projectId)) echo $projectId; ?>" readonly>
 		</div>
 
 		<div class="col-md-4">
 	    	<label for="" style = "font-size:.6em;"> Intitulé</label>
-	      	<input name = "intitule" type="text" class="form-control" placeholder="Intitulé" value = "<?= $projet->getIntitule() ?>" required>
+	      	<input id = "intituleInput" name = "intitule" type="text" class="form-control" placeholder="Intitulé" value = "<?php if (isset($projet)) echo $projet->getIntitule(); ?>" readonly required>
 	    </div>
 
 	</div>
 	<div class="form-row">
 		<div class="col">
 	    	<label for="" style = "font-size:.6em;">Objet</label>
-	    	<input name = "objet" type="text" class="form-control" placeholder="Objet" value = "<?= $projet->getObjet() ?>" required>
+	    	<input id = "objetInput" name = "objet" type="text" class="form-control" placeholder="Objet" value = "<?php if (isset($projet)) echo $projet->getObjet(); ?>" readonly required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Coût prévisionnel</label>
-	      	<input id = "cout" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" value = "<?= $projet->getCout() ?>" required>
+	      	<input id = "coutInput" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" value = "<?php if (isset($projet)) echo $projet->getCout(); ?>" readonly required>
 	    </div>
 	     <div class="col">
 	    	<label for="" style = "font-size:.6em;">Chef Projet</label>
-	      	<select name = "chefProjet" class="form-control">
+	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control">
 	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
 	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>" 
 	      				<?php if ($chefProjet->getId() == $projet->getChefProjet()->getId())
@@ -40,15 +40,15 @@
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Date de démarrage</label>
-	      	<input name = "dateDemarrage" type="date" class="form-control" value = "<?= $projet->getDateDemarrage() ?>" required>
+	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" value = "<?php if (isset($projet)) echo $projet->getDateDemarrage(); ?>" readonly required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Durée</label>
-	      	<input id = "duree" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" value = "<?= $projet->getDuree() ?>" required>
+	      	<input id = "dureeInput" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" value = "<?php if (isset($projet)) echo $projet->getDuree(); ?>" readonly required>
 	    </div>
 	    <div class="col-md-4">
 	    	<label for="" style = "font-size:.6em;"> Date de fin</label>
-	      	<input name = "dateFin" type="date" class="form-control" style = "background-color:white;" value = "<?= $projet->getDateFin() ?>" readonly>
+	      	<input id = "dateFinInput" name = "dateFin" type="date" class="form-control"  value = "<?php if (isset($projet)) echo $projet->getDateFin(); ?>" readonly>
 	    </div>
   	</div>
 
@@ -88,7 +88,7 @@
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Source de financement</label>
 	    	<div class = "input-group">
-	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control"> 
+	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" > 
 		      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
 		      			<option value = "<?= $sourceFinancement->getLibelle() ?>" 
 		      			<?php 
@@ -106,16 +106,16 @@
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Description</label>
-		    <textarea name = "description" type="text" class="form-control" placeholder="Description" required> <?= $projet->getDescription() ?> </textarea>
+		    <textarea id = "descriptionInput" name = "description" type="text" class="form-control" placeholder="Description" readonly required> <?php if (isset($projet)) echo $projet->getDescription(); ?> </textarea>
 	    </div>
   	</div>
 
-  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <a id = "addDetailButton" class="btn btn-outline-primary btn-sm">Ajouter</a><h3>
+  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <button id = "addDetailButton" class="btn btn-outline-primary btn-sm" disabled >Ajouter</button><h3>
 	<hr/>
 
 	<?php include_once("DetailTableProjectForm2.php") ?>
 
-  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <a id = "addActiviteButton" class="btn btn-outline-primary btn-sm">Ajouter</a><h3>
+  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <button id = "addActiviteButton" class="btn btn-outline-primary btn-sm" disabled >Ajouter</button><h3>
 	<hr/>
 
 	<?php include_once("ActiviteTableProjectForm2.php") ?>
@@ -123,11 +123,11 @@
 	<h3 class = "font-weight-light mt-5"> Perspectives <h3>
 	<hr/>
 	<div class="form-row mt-2 w-">
-		<textarea name = "perspectives" type="text" class="form-control" placeholder="Perspectives" required> <?= $projet->getPerspectives() ?> </textarea>
+		<textarea id = "perspectivesInput" name = "perspectives" type="text" class="form-control" placeholder="Perspectives" readonly required> <?php if (isset($projet)) echo $projet->getPerspectives(); ?> </textarea>
   	</div>
 
 	<div class="text-center">
-  		<button id = "updateProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal">Modifier</button>
+  		<button id = "updateProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal" disabled>Sauvegarder</button>
   	</div>
 
   	<!-- Modals -->
@@ -218,6 +218,30 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button id = "addSrcFinModalButton" class="btn btn-success">Ajouter</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade font-weight-light" id="getCPCodeModal" tabindex="-1" role="dialog" aria-labelledby="getCPCodeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="getCPCodeModalLabel">Vérification du code du chef projet</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+
+	      <div id = "getCPCodeModalBody" class="modal-body">
+
+			<div class = "">
+				<label for="" style = "font-size:.6em;"> Code du Chef Projet </label>
+				<input id = "getCPCodeModalInput" type="text" class="form-control">
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button id = "getCPCodeModalButton" class="btn btn-success">Vérifier</button>
 	      </div>
 	    </div>
 	  </div>
