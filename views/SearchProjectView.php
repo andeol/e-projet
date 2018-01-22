@@ -27,7 +27,7 @@
 
 				<div class="col">
 					<label for="" style = "font-size:.6em;"> Code du projet </label>
-					<select id = "searchProjCode" name = "searchProjCode" class="form-control">
+					<select id = "searchProjCode" class="form-control">
 						<option value = "none" selected> Sélectionner code </option>
 			      		<?php foreach ($projets as $projet) { ?>
 			      			<option value = "<?= $projet->getCode() ?>"> <?= $projet->getCode() ?></option>
@@ -44,14 +44,35 @@
 			      		<?php }?>
 				    </select>
 				</div>
+			</div>
+
+			<div class = "row">
+
+			    <div class = "col">
+					<label for="" style = "font-size:.6em;"> Début Période </label>
+					<input id = "searchDebutPeriode" type = "date" class = "form-control" >
+				</div>
+
 				<div class = "col">
-					<label for="" style = "font-size:.6em;"> Date de démarrage </label>
-					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
+					<label for="" style = "font-size:.6em;"> Fin Période </label>
+					<input id = "searchFinPeriode" type = "date" class = "form-control" >
 				</div>
 			</div>
 
 			<div class = "row">
 
+			    <div class = "col">
+					<label for="" style = "font-size:.6em;"> Coût minimum </label>
+					<input id = "searchMinCost" type = "number" value = 0 class = "form-control" >
+				</div>
+
+				<div class = "col">
+					<label for="" style = "font-size:.6em;"> Coût maximum </label>
+					<input id = "searchMaxCost" type = "number" value = 0 class = "form-control" >
+				</div>
+			</div>
+
+			<div class = "row">
 				<div class="col">
 			    	<label for="" style = "font-size:.6em;">Source de financement</label>
 			    	<div class = "input-group">
@@ -63,16 +84,6 @@
 				      	</select>
 			      	</div>
 			    </div>
-
-			    <div class = "col">
-					<label for="" style = "font-size:.6em;"> Début Période </label>
-					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
-				</div>
-
-				<div class = "col">
-					<label for="" style = "font-size:.6em;"> Fin Période </label>
-					<input id = "searchDateDemarrage" type = "date" name = "searchDateDemarrage" class = "form-control" >
-				</div>
 			</div>
 
 			<div class = "row mt-3 ml-1">
@@ -98,23 +109,8 @@
 			  </tbody>
 			</table>
 
-			<nav aria-label="Page navigation example" style = "font-size:0.6em;">
-			  <ul class="pagination justify-content-center">
-			    <li class="page-item">
-			      <a class="page-link" href="#" aria-label="Previous">
-			        <span aria-hidden="true">&laquo;</span>
-			        <span class="sr-only">Previous</span>
-			      </a>
-			    </li>
-			    <li class="page-item"><a class="page-link" href="#">1</a></li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			    <li class="page-item">
-			      <a class="page-link" href="#" aria-label="Next">
-			        <span aria-hidden="true">&raquo;</span>
-			        <span class="sr-only">Next</span>
-			      </a>
-			    </li>
+			<nav id = "projectsPageNav" aria-label="Page navigation example" style = "font-size:0.6em; visibility: hidden;" >
+			  <ul id = "projectsPageNavContentHolder" class="pagination justify-content-center">
 			  </ul>
 			</nav>
 

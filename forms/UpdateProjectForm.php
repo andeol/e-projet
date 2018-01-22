@@ -26,7 +26,7 @@
 	    </div>
 	     <div class="col">
 	    	<label for="" style = "font-size:.6em;">Chef Projet</label>
-	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control">
+	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control" disabled>
 	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
 	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>" 
 	      				<?php if ($chefProjet->getId() == $projet->getChefProjet()->getId())
@@ -56,7 +56,7 @@
   		<div class="col">
 	    	<label for="" style = "font-size:.6em;">Couche SI</label>
 	    	<div class = "input-group">
-		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control"> 
+		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control" disabled> 
 		      		<?php foreach ($couchesSI as $coucheSI) { ?>
 		      			<option value = "<?= $coucheSI->getLibelle() ?>" 
 		      				<?php 
@@ -66,13 +66,13 @@
 		      				?>> <?= $coucheSI->getLibelle() ?> </option>
 		      		<?php }?>
 		      	</select>
-		      	<a id = "addCoucheSIButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addCoucheSIModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
+		      	<a id = "addCoucheSIButton" class = "btn btn-secondary input-group-addon disabled" data-toggle="modal" data-target="#addCoucheSIModal" disabled><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
 		    </div>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Maîtrise d'Oeuvre</label>
 	    	<div class = "input-group">
-		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control"> 
+		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control" disabled> 
 		      		<?php foreach ($maitrisesOeuvre as $maitriseOeuvre) { ?>
 		      			<option value = "<?= $maitriseOeuvre->getLibelle() ?>" 
 		      				<?php 
@@ -82,13 +82,13 @@
 		      				?> > <?= $maitriseOeuvre->getLibelle() ?> </option>
 		      		<?php }?>
 		      	</select>
-		      	<a id = "addMaitriseOeuvreButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addMaitriseOeuvreModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
+		      	<a id = "addMaitriseOeuvreButton" class = "btn btn-secondary input-group-addon disabled" data-toggle="modal" data-target="#addMaitriseOeuvreModal" disabled><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
 		    </div>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Source de financement</label>
 	    	<div class = "input-group">
-	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" > 
+	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" disabled> 
 		      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
 		      			<option value = "<?= $sourceFinancement->getLibelle() ?>" 
 		      			<?php 
@@ -98,7 +98,7 @@
 		      			?> > <?= $sourceFinancement->getLibelle() ?> </option>
 		      		<?php }?>
 		      	</select>
-	      		<a id ="addSrcFinButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addSrcFinModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
+	      		<a id ="addSrcFinButton" class = "btn btn-secondary input-group-addon disabled" data-toggle="modal" data-target="#addSrcFinModal" disabled><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
 	      	</div>
 	    </div>
   	</div>

@@ -23,6 +23,10 @@ $(document).ready(function(){
 	});
 	*/
 
+	$('#validSavingButton').click(function(e){
+		$('#exampleModal').modal('hide');
+	});
+
 	$('#addDetailButton').click(function(){
 		$('#table_detail_body').append('<tr>\
 	      <td><textarea id = "objectif_'+(detail_index+1)+'" class = "form-control" required ></textarea></td>\
@@ -266,16 +270,22 @@ $(document).ready(function(){
 			$('#intituleInput').prop('readonly', false);
 			$('#objetInput').prop('readonly', false);
 			$('#coutInput').prop('readonly', false);
-			$('#chefProjetInput').prop('readonly', false);
+			$('#chefProjetInput').prop('disabled', false);
 			$('#dateDemarrageInput').prop('readonly', false);
 			$('#dureeInput').prop('readonly', false);
 			$('#dateFinInput').prop('readonly', false);
-			$('#coucheSiInput').prop('readonly', false);
-			$('#moInput').prop('readonly', false);
-			$('#srcFinInput').prop('readonly', false);
+			$('#coucheSiInput').prop('disabled', false);
+			$('#moInput').prop('disabled', false);
+			$('#srcFinInput').prop('disabled', false);
 			$('#descriptionInput').prop('readonly', false);
 			$('#perspectivesInput').prop('readonly', false);
 			$('#updateProjectButton').prop('disabled', false);
+			$('#addCoucheSIButton').removeClass('disabled');
+			$('#addMaitriseOeuvreButton').removeClass('disabled');
+			$('#addSrcFinButton').removeClass('disabled');
+
+			//enabling project's task input
+			//for 
 		}
 	};
 

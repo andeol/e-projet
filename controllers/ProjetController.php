@@ -257,10 +257,9 @@ class ProjetController
 			// Getting parameters sent
 			$code = $_GET['searchProjCode'];
 			$chefProjet = $_GET['searchChefProjet'];
-			$dateDemarrage = $_GET['searchDateDemarrage'];
 			$sourceFinancement = $_GET['sourceFinancement'];
-			//$debutPeriode = ;
-			//$fiPériode = ;
+			$periodes = array($_GET['searchDebutPeriode'],$_GET['searchFinPeriode']);
+			$costs = array($_GET['searchMinCost'], $_GET['searchMaxCost']);
 
 			if ($chefProjet != "none"){
 				$chefProjet = explode(' ', $chefProjet);
@@ -269,7 +268,7 @@ class ProjetController
 
 			// Searching the specified project
 			//$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
-			$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, $sourceFinancement, "table");
+			$response = $this->managerContainer->projetManager->getBy($code, $chefProjet, $sourceFinancement, $periodes, $costs, "table");
 			echo json_encode($response);
 		}
 		else{
@@ -297,6 +296,12 @@ class ProjetController
 			echo 1;
 		else
 			echo 0;
+	}
+
+	function getDateFrFormat($date)
+	{
+		$date = explode('-', $$date);
+		return $date[0].'/'.$date[1].'/'.$date[0];
 	}
 }
 

@@ -127,7 +127,7 @@
 	        Confirmez-vous l'enregistrement de ce projet?
 	      </div>
 	      <div class="modal-footer">
-	        <button class="btn btn-success">Oui</button>
+	        <button id = "validSavingButton" class="btn btn-success">Oui</button>
 	      </div>
 	    </div>
 	  </div>

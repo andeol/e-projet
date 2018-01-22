@@ -218,22 +218,76 @@ class ProjetManager extends EntityManager
 		return $nextCode;
 	}
 
-	function getBy($code, $dateDemarrage, $chefProjet, $sourceFinancement, $format)
+	function getBy($code, $chefProjet, $sourceFinancement, $periodes, $costs, $format)
 	{
 		$projets = NULL;
 
-		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where code = '".$code."'";
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet";
 
-		if ($chefProjet != "none")
-			$queryString .= "and che_id = '".$chefProjet->getId()."'";
+		if ($code != "none"){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where code = '".$code."'";
+			else
+				$queryString .= " and code = '".$code."'";
+		}
 
-		if ($dateDemarrage != '')
-			$queryString .= "and dateDemarrage = '".$dateDemarrage."'";
+		if ($chefProjet != "none"){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where che_id = '".$chefProjet->getId()."'";
+			else
+				$queryString .= "and che_id = '".$chefProjet->getId()."'";
+		}
 
-		if ($sourceFinancement != "none")
-			$queryString .= "and sourceFinancement = '".$sourceFinancement."'";
+		if ($sourceFinancement != "none"){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where sourceFinancement = '".$sourceFinancement."'";
+			else
+				$queryString .= "and sourceFinancement = '".$sourceFinancement."'";
+		}
+
+		// time criteria
+		if ($periodes[0] != '' && $periodes[1] != ''){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage between ".$periodes[0]." and ".$periodes[1];
+			else
+				$queryString .= " and dateDemarrage between ".$periodes[0]." and ".$periodes[1];
+		}
+		else if ($periodes[0] == '' && $periodes[1] != ''){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage <= ".$periodes[1];
+			else
+				$queryString .= " and dateDemarrage <= ".$periodes[1];
+		}
+		else if ($periodes[1] == '' && $periodes[0] != ''){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage >= ".$periodes[0];
+			else
+				$queryString .= " and dateDemarrage >= ".$periodes[0];
+		}
+
+		// cost criteria
+		if ($costs[0] != '0' && $costs[1] != '0'){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage between ".$costs[0]." and ".$costs[1];
+			else
+				$queryString .= " and dateDemarrage between ".$costs[0]." and ".$costs[1];
+		}
+		else if ($costs[0] == '0' && $costs[1] != '0'){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage <= ".$costs[1];
+			else
+				$queryString .= " and dateDemarrage <= ".$costs[1];
+		}
+		else if ($costs[1] == '0' && $costs[0] != '0'){
+			if (strpos($queryString, "where") === false)
+				$queryString .= " where dateDemarrage >= ".$costs[0];
+			else
+				$queryString .= " and dateDemarrage >= ".$costs[0];
+		}
+
 
 		//echo $queryString;
+
 		$result = $this->connection->query($queryString);
 
 		if (!$result)
