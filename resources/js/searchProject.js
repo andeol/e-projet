@@ -72,11 +72,10 @@ $(document).ready(function(){
 			//alert(nbPages);
 			$('#correspProjectsTableBody').append('<tr>\
 			      <th scope="row">'+correspProjectsIndex+'</th>\
-			      <td>'+correspProjects[correspProjectsIndex][1]+'</td>\
 			      <td>'+correspProjects[correspProjectsIndex][2]+'</td>\
-			      <td>'+correspProjects[correspProjectsIndex][3]+'</td>\
 			      <td>'+correspProjects[correspProjectsIndex][4]+'</td>\
 			      <td>'+correspProjects[correspProjectsIndex][5]+'</td>\
+			      <td>'+getDateFrFormat(correspProjects[correspProjectsIndex][6])+'</td>\
 			      <td><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+correspProjects[0][0]+'">Afficher</a></td>\
 			    </tr>');
 			correspProjectsIndex++;
@@ -195,6 +194,26 @@ $(document).ready(function(){
 			$('a#nextPageLink').css('visibility', 'visible');
 
 		formerPageIndex = pageIndex;
+	});
+
+	// Javascript equivalent of the php function "getDateFrFormat" designed in config/Functions.php
+	var getDateFrFormat = function(date){
+		date = date.split("-");
+		return date[2]+"/"+date[1]+"/"+date[0];
+	};
+
+	// Resetting all the search fields everytime the button is clicked
+	$('#resetFieldsButton').click(function(e){
+
+		$('#searchProjCode option:first').prop('selected', 'true');
+		$('#searchChefProjet option:first').prop('selected', 'true');
+		$('#srcFinInput option:first').prop('selected', 'true');
+
+		$('#searchMinCost').val(0);
+		$('#searchMaxCost').val(0);
+		$('#searchDebutPeriode').val('');
+		$('#searchFinPeriode').val('');
+		
 	});
 
 });

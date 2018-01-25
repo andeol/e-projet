@@ -1,6 +1,9 @@
 <?php
 
-//require("");
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProjetController
 {
@@ -16,6 +19,7 @@ class ProjetController
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
+
 			// Retrieving variables from posts parameters
 			$intitule = $_POST['intitule'];
 			$duree = $_POST['duree'];
@@ -28,11 +32,20 @@ class ProjetController
 			$description = $_POST['description'];
 			$perspectives = $_POST['perspectives'];
 			$code = $_POST['prjcde'];
+			$codeChefProjet = $_POST['codeChefProjet'];
+			$dateFin = $_POST['dateFin'];
+
 			//echo "code : ".$code;
 
 			$chefProjet = $_POST['chefProjet'];
 			$chefProjet = explode(' ', $chefProjet);
 			$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
+
+			if ($codeChefProjet != $chefProjet->getCode()){
+				$message = "Code du chef Projet erroné ! ";
+				include_once(dirname(__DIR__)."/views/AddProjectView.php");
+				return;
+			}
 
 			$projet = new Projet();
 
@@ -46,6 +59,7 @@ class ProjetController
 			$projet->setCout($cout);
 			$projet->setPerspectives($perspectives);
 			$projet->setChefProjet($chefProjet);
+			$projet->setDateFin($dateFin);
 
 			$projet->setMaitriseOeuvre(new MaitriseOeuvre(0, $maitriseOeuvre));
 			$projet->setSourceFinancement(new SourceFinancement(0, $sourceFinancement));
@@ -280,6 +294,35 @@ class ProjetController
 		}
 	}
 
+	function printProject()
+	{
+		require(dirname(__DIR__).'/vendor/Fpdf/fpdf.php');
+
+		// Retrieves the project id and gets the whole project object from it
+		$project = $this->managerContainer->projetManager->getById($_GET['idProject']);
+		$assi_logo = "http://".ROOT_DIR."/resources/images/glyphicons/glyphicons-191-plus-sign.png";
+
+		$pdf = new FPDF();
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(0, 0, ' Id : '.$project->getId());
+		$pdf->Cell(0, 0, ' Objet : '.$project->getObjet());
+		$pdf->Cell(0, 0, ' Intitulé : '.$project->getIntitule());
+		$pdf->Cell(0, 0, ' Coût prévisionnel : '.$project->getCout());
+		$pdf->Cell(0, 0, ' Chef Projet : '.$project->getChefProjet()->getNom()." ".$project->getChefProjet()->getPrenoms());
+		$pdf->Cell(0, 0, ' Date de démarrage : '.$project->getDateDemarrage());
+		$pdf->Cell(0, 0, ' Date de fin : '.$project->getDateFin());
+		$pdf->Cell(0, 0, ' Durée : '.$project->getDuree());
+		$pdf->Cell(0, 0, ' Source de financement : '.$project->getSourceFinancement()->getLibelle());
+		$pdf->Cell(0, 0, ' Maitrise d\'oeuvre : '.$project->getMaitriseOeuvre()->getLibelle());
+		$pdf->Cell(0, 0, ' Couche SI : '.$project->getCoucheSI()->getLibelle());
+		$pdf->Cell(0, 0, ' Descritpion : '.$project->getDescription());
+		$pdf->Cell(0, 0, ' Perspsectives : '.$project->getPerspectives());
+		$pdf->Cell(0, 0, '  : '.$project->getObjet());
+		
+		$pdf->Output();	
+	}
+
 	function purgeDb()
 	{
 		$this->managerContainer->purgeDb();
@@ -298,10 +341,16 @@ class ProjetController
 			echo 0;
 	}
 
-	function getDateFrFormat($date)
+	function generateExcel()
 	{
-		$date = explode('-', $$date);
-		return $date[0].'/'.$date[1].'/'.$date[0];
+		
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setCellValue('A1', 'Hello World !');
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('hello world.xlsx');
+
 	}
 }
 

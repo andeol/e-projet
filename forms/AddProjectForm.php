@@ -1,7 +1,11 @@
-<form class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>addProject'>
+<form id ="addProjectForm" class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>addProject'>
 
 	<h3 class = "font-weight-light">Infos projet<h3>
 	<hr/>
+
+	<!-- hidden fields -->
+	<!--<input id = "codeChefProjetInput" name = "codeChefProjet" hidden>-->
+
 	<div class="form-row">
 		<div class = "col-md-4">
 			<label for="" style = "font-size:.6em;"> Code du projet </label>
@@ -21,11 +25,12 @@
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Coût prévisionnel</label>
-	      	<input id = "cout" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" required>
+	      	<input id = "coutInput" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" required>
 	    </div>
-	     <div class="col">
+	     <div id = "divChefProjetInput" class="col">
 	    	<label for="" style = "font-size:.6em;">Chef Projet</label>
-	      	<select name = "chefProjet" class="form-control">
+	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control" required>
+	      		<option value = "" selected> Sélectionner Chef Projet </option>
 	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
 	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
 	      		<?php }?>
@@ -34,25 +39,26 @@
   	</div>
 
   	<div class="form-row mt-2">
-	    <div class="col">
+	    <div id = "divDateDemarrageInput" class="col">
 	    	<label for="" style = "font-size:.6em;">Date de démarrage</label>
-	      	<input name = "dateDemarrage" type="date" class="form-control" placeholder="JJ/MM/AAAA" required>
+	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" placeholder="JJ/MM/AAAA" required>
+	    </div>
+	    <div id = "divDateFinInput" class="col-md-4">
+	    	<label for="" style = "font-size:.6em;"> Date de fin </label>
+	      	<input id = "dateFinInput" name = "dateFin" type="date" class="form-control" style = "background-color:white;" placeholder="Date de fin" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" style = "font-size:.6em;">Durée</label>
-	      	<input id = "duree" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" required>
-	    </div>
-	    <div class="col-md-4">
-	    	<label for="" style = "font-size:.6em;"> Date de fin</label>
-	      	<input name = "dateFin" type="date" class="form-control" style = "background-color:white;" placeholder="Date de fin" readonly>
+	      	<input id = "dureeInput" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" readonly>
 	    </div>
   	</div>
 
   	<div class="form-row mt-2">
-  		<div class="col">
+  		<div id = "divCoucheSiInput" class="col">
 	    	<label for="" style = "font-size:.6em;">Couche SI</label>
 	    	<div class = "input-group">
-		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control"> 
+		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control" required> 
+		      		<option value = "" selected> Sélectionner Couche SI </option>
 		      		<?php foreach ($couchesSI as $coucheSI) { ?>
 		      			<option value = "<?= $coucheSI->getLibelle() ?>"> <?= $coucheSI->getLibelle() ?> </option>
 		      		<?php }?>
@@ -60,10 +66,11 @@
 		      	<a id = "addCoucheSIButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addCoucheSIModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
 		    </div>
 	    </div>
-	    <div class="col">
+	    <div id = "divMoInput" class="col">
 	    	<label for="" style = "font-size:.6em;">Maîtrise d'Oeuvre</label>
-	    	<div class = "input-group">
-		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control"> 
+	    	<div  class = "input-group">
+		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control" required>
+		      		<option value = "" selected > Sélectionner Maitrise d'Oeuvre </option> 
 		      		<?php foreach ($maitrisesOeuvre as $maitriseOeuvre) { ?>
 		      			<option value = "<?= $maitriseOeuvre->getLibelle() ?>"> <?= $maitriseOeuvre->getLibelle() ?> </option>
 		      		<?php }?>
@@ -71,10 +78,11 @@
 		      	<a id = "addMaitriseOeuvreButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addMaitriseOeuvreModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
 		    </div>
 	    </div>
-	    <div class="col">
+	    <div id = "divSrcFinInput" class="col">
 	    	<label for="" style = "font-size:.6em;">Source de financement</label>
 	    	<div class = "input-group">
-	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control"> 
+	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" required> 
+	      			<option value = "" selected> Sélectionner Source de Financement </option>
 		      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
 		      			<option value = "<?= $sourceFinancement->getLibelle() ?>"> <?= $sourceFinancement->getLibelle() ?> </option>
 		      		<?php }?>
@@ -123,8 +131,9 @@
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
-	      <div class="modal-body">
-	        Confirmez-vous l'enregistrement de ce projet?
+	      <div class="modal-body" style = "font-size:.6em;">
+	        <label for ="codeChefProjetModalInput">Confirmez cet enregistrement en entrant votre code de chef projet </label>
+	        <input class = "form-control mt-2" id = "codeChefProjetModalInput" name = "codeChefProjet" placeholder = "Code" required>
 	      </div>
 	      <div class="modal-footer">
 	        <button id = "validSavingButton" class="btn btn-success">Oui</button>

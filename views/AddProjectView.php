@@ -5,7 +5,7 @@
 		<title>e-Projet</title>
 
 		<!-- CSS Scripts -->
-		<link href="http://<?= ROOT_DIR ?>resources/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://<?= ROOT_DIR ?>vendor/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="http://<?= ROOT_DIR ?>resources/css/ProjetViewStyle.css" />
 
 	</head>
@@ -44,9 +44,9 @@
 
 	</script>
 
-	<script src="http://<?php echo ROOT_DIR ?>resources/js/jquery.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/JQuery/jquery.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/Bootstrap/js/bootstrap.min.js"></script>
 	<script src="http://<?php echo ROOT_DIR ?>resources/js/projectFormJS.js"></script>
 	</body>
 </html>

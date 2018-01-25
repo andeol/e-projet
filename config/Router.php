@@ -14,6 +14,8 @@ class Router
 		"/searchProject" => "projetController/searchProject",
 		"/purgeDb" => "projetController/purgeDb",
 		"/checkCPCode" => "projetController/checkCPCode",
+		"/printProject" => "projetController/printProject",
+		"/generateExcel" => "projetController/generateExcel",
 		"/tests" => "testController/init"];
 
 	// Functions

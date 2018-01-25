@@ -5,7 +5,7 @@
 		<title>e-Projet</title>
 
 		<!-- CSS Scripts -->
-		<link href="http://<?= ROOT_DIR ?>resources/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://<?= ROOT_DIR ?>vendor/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="http://<?= ROOT_DIR ?>resources/css/ProjetViewStyle.css" />
 
 	</head>
@@ -87,7 +87,8 @@
 			</div>
 
 			<div class = "row mt-3 ml-1">
-				<button id = "searchProjectButton" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#searchProjectModal">Rechercher</button>
+				<button id = "searchProjectButton" class="btn btn-primary btn-sm col-sm-2">Rechercher</button>
+				<button id = "resetFieldsButton" class="btn btn-primary btn-sm offset-sm-8 col-sm-2">Reinitialiser</button>
 			</div>
 
 			<h3 class = "font-weight-light mt-5"> Résultats <h3>
@@ -96,11 +97,10 @@
 			  <thead>
 			    <tr>
 			      <th scope="col">#</th>
-			      <th scope="col">Code</th>
 			      <th scope="col">Intitulé</th>
-			      <th scope="col">Objet</th>
 			      <th scope="col">Description</th>
 			      <th scope="col">Durée</th>
+			      <th scope="col">Date de démarrage</th>
 			      <th scope="col">Actions</th>
 			    </tr>
 			  </thead>
@@ -125,9 +125,9 @@
 
 	</script>
 
-	<script src="http://<?php echo ROOT_DIR ?>resources/js/jquery.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="http://<?php echo ROOT_DIR ?>resources/Bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/JQuery/jquery.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/Bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="http://<?php echo ROOT_DIR ?>vendor/Bootstrap/js/bootstrap.min.js"></script>
 	<script src="http://<?php echo ROOT_DIR ?>resources/js/searchProject.js"></script>
 	</body>
 </html>

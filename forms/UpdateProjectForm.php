@@ -1,7 +1,9 @@
 <form class = "mt-3" method = "POST" action = 'http://<?= ROOT_DIR ?>updateProject'>
 
 	<input id = "projetId"  name = "projetId" value = "<?= $projet->getId() ?>" hidden>
-	<h3 class = "font-weight-light"> Infos projet <a id = "checkCPCodeButton" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#getCPCodeModal">Modifier</a> <a id = "addDetailButton" class="btn btn-outline-primary btn-sm">Imprimer</a> <h3>
+	<h3 class = "font-weight-light"> Infos projet 
+		<a id = "checkCPCodeButton" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#getCPCodeModal">Modifier</a> 
+		<a id = "printProjButton" href = "http://<?= ROOT_DIR ?>printProject?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Imprimer</a> <h3>
 	<hr/>
 	<div class="form-row">
 		<div class = "col-md-4">
@@ -110,12 +112,12 @@
 	    </div>
   	</div>
 
-  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <button id = "addDetailButton" class="btn btn-outline-primary btn-sm" disabled >Ajouter</button><h3>
+  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <a id = "addDetailButton" class="btn btn-outline-primary btn-sm disabled" >Ajouter</a><h3>
 	<hr/>
 
 	<?php include_once("DetailTableProjectForm2.php") ?>
 
-  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <button id = "addActiviteButton" class="btn btn-outline-primary btn-sm" disabled >Ajouter</button><h3>
+  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <a id = "addActiviteButton" class="btn btn-outline-primary btn-sm disabled" disabled >Ajouter</a><h3>
 	<hr/>
 
 	<?php include_once("ActiviteTableProjectForm2.php") ?>

@@ -1,10 +1,11 @@
 <table class="table font-weight-light" style = "font-size:.6em;">
   <thead>
     <tr>
-      <th scope="col" style="width: 25%;">Objectifs </th>
-      <th scope="col" style="width: 25%;">Résultats </th>
-      <th scope="col" style="width: 25%;">Indicateurs </th>
-      <th scope="col" style="width: 25%;">Contraintes </th>
+      <th scope="col" >Objectifs </th>
+      <th scope="col" >Résultats </th>
+      <th scope="col" >Indicateurs </th>
+      <th scope="col" >Contraintes </th>
+      <th scope="col" ></th>
     </tr>
   </thead>
   <tbody id = "table_detail_body">
@@ -13,6 +14,7 @@
       <td><textarea id = "resultat_0" type = "text" class = "form-control" required ></textarea></td>
       <td><textarea id = "indicateur_0" type = "text" class = "form-control" required ></textarea></td>
       <td><textarea id = "risque_0" type = "text" class = "form-control" required ></textarea></td>
+      <td></td>
     </tr>
   </tbody>
 </table>

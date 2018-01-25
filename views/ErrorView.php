@@ -5,7 +5,7 @@
 		<title>e-Projet</title>
 
 		<!-- CSS Scripts -->
-		<link href="http://<?= ROOT_DIR ?>resources/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://<?= ROOT_DIR ?>vendor/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="http://<?= ROOT_DIR ?>resources/css/ProjetViewStyle.css" />
 
 	</head>

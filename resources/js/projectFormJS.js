@@ -7,24 +7,39 @@ $(document).ready(function(){
 
 	//Preventing the user to insert non numeric values in some picked fields
 
-	/*
-	$('#duree').keypress(function(e){
+	
+	$('#dureeInput').keypress(function(e){
 		var key = e.which || e.keyCode;
 		if(key != 8 && isNaN(String.fromCharCode(key))){
            	e.preventDefault();
         }
 	});
 
-	$('#cout').keypress(function(e){
+	$('#coutInput').keypress(function(e){
 		var key = e.which || e.keyCode;
 		if(key != 8 && isNaN(String.fromCharCode(key))){
            	e.preventDefault();
         }
 	});
-	*/
+	
+	$('#codeChefProjetModalInput').keypress(function(e){
+		if ($('#exampleModal .modal-body').hasClass('has-error')){
+			$('#exampleModal .modal-body').removeClass('has-error');
+		}
+	});
 
 	$('#validSavingButton').click(function(e){
+		//e.preventDefault();
+
+		/*
+		// checking if the code has been provided
+		if ($('#codeChefProjetModalInput').val() == ''){
+			$('#exampleModal .modal-body').addClass('has-error');
+			return false;
+		}*/
+
 		$('#exampleModal').modal('hide');
+		
 	});
 
 	$('#addDetailButton').click(function(){
@@ -33,9 +48,54 @@ $(document).ready(function(){
 	      <td><textarea id = "resultat_'+(detail_index+1)+'" class = "form-control" required ></textarea></td>\
 	      <td><textarea id = "indicateur_'+(detail_index+1)+'" class = "form-control" required ></textarea></td>\
 	      <td><textarea id = "risque_'+(detail_index+1)+'" class = "form-control" required ></textarea></td>\
+	      <td><button id = "delete_detail_button_'+(detail_index+1)+'" class = "btn delete_button"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://'+parameters.ROOT_DIR+'/resources/images/glyphicons/glyphicons-193-remove-sign.png"/></button></td>\
 	    </tr>');
 	    detail_index++;
 	});	
+
+	// After addind a new task, someone would like to get back before the addition
+	$('#table_detail_body').on('click', 'button.delete_button', function(e){
+		e.preventDefault();
+		$(this).parent().parent().remove();
+		task_index--;
+
+		var i = 0;
+		$('#table_detail_body').children('tr').each(function(){
+			var j = 0;
+		    $(this).children().each(function(){
+		    	switch(j){
+		   			case 0:
+		   				$(this).children('textarea').prop("id", "objectif_"+i)
+		   				break;
+		   			case 1:
+		   				$(this).children('textarea').prop("id", "resultat_"+i);
+		   				break;
+		   			case 2:
+		   				$(this).children('textarea').prop("id", "indicateur_"+i);
+		   				break;
+		   			case 3:
+		   				$(this).children('textarea').prop("id", "risque_"+i);
+		   				break;
+		   			case 4:
+		   				$(this).children('button').prop("id", "delete_detail_button_"+i);
+		   				break;
+		   			default:
+		   				//nothing to do here  yet
+		   				$(this);
+		    	}
+		    	j++;
+		    });
+		    i++;
+		});
+	});
+
+	// After addind a new detail on the project, someone would like to get back before the addition
+	$('#table_detail_body').on('click', 'button.delete_button', function(e){
+		e.preventDefault();
+		$(this).parent().parent().remove();
+		detail_index--;
+
+	});
 
 	$('#addActiviteButton').click(function(){
 		$('#table_activite_body').append('<tr>\
@@ -43,9 +103,46 @@ $(document).ready(function(){
 	      <td><input id = "activite_libelle_'+(task_index+1)+'" type = "text" class = "form-control" required /></td>\
 	      <td><input id = "activite_date_'+(task_index+1)+'" type = "date" class = "form-control" placeholder= "JJ/MM/AAAA" required/></td>\
 	      <td><input id = "activite_duree_'+(task_index+1)+'" type = "number" value = 0 class = "form-control" required /></td>\
+	      <td><button id = "delete_task_button_'+(task_index+1)+'" class = "btn delete_button"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://'+parameters.ROOT_DIR+'/resources/images/glyphicons/glyphicons-193-remove-sign.png"/></button></td>\
 	    </tr>');
 		task_index++;
 	});	
+
+	// After addind a new task, someone would like to get back before the addition
+	$('#table_activite_body').on('click', 'button.delete_button', function(e){
+		e.preventDefault();
+		$(this).parent().parent().remove();
+		task_index--;
+
+		var i = 0;
+		$('#table_activite_body').children('tr').each(function(){
+			var j = 0;
+		    $(this).children().each(function(){
+		    	switch(j){
+		   			case 0:
+		   				$(this).text(i);
+		   				break;
+		   			case 1:
+		   				$(this).children('input').prop("id", "activite_libelle_"+i);
+		   				break;
+		   			case 2:
+		   				$(this).children('input').prop("id", "activite_date_"+i);
+		   				break;
+		   			case 3:
+		   				$(this).children('input').prop("id", "activite_duree_"+i);
+		   				break;
+		   			case 4:
+		   				$(this).children('button').prop("id", "delete_task_button_"+i);
+		   				break;
+		   			default:
+		   				//nothing to do here  yet
+		   				$(this);
+		    	}
+		    	j++;
+		    });
+		    i++;
+		});
+	});
 
 	$('#addProjectButton').click(function(e){
 		
@@ -285,57 +382,131 @@ $(document).ready(function(){
 			$('#addSrcFinButton').removeClass('disabled');
 
 			//enabling project's task input
-			//for 
+			$('#activite_libelle_0').prop('readonly', false);
+			$('#activite_date_0').prop('readonly', false);
+			$('#activite_duree_0').prop('readonly', false);
+			$('#addActiviteButton').removeClass('disabled');
+
+			// enabling detail fields
+			$('#objectif_0').prop('readonly', false);
+			$('#resultat_0').prop('readonly', false);
+			$('#indicateur_0').prop('readonly', false);
+			$('#risque_0').prop('readonly', false);
+			$('#addDetailButton').removeClass('disabled');
 		}
 	};
 
 	/*
-	function set_display(first, last) {
-		$('#content').children().css('display', 'none');
-		$('#content').children().slice(first, last).css('display',	'block');
-	}
+	$('#addProjectForm').onsubmit(function(e)){
 
-	function previous(){
-		if($('.active').prev('.page_link').length)
-			go_to_page(current_page - 1);
-	}
-
-	function next(){
-		if($('.active').next('.page_link').length)
-			go_to_page(current_page + 1);
+		if ($('#codeChefProjetModalInput').val() == ''){
+			return false;
+		}
 	}
 	
-	function go_to_page(page_num){
-		current_page = page_num;
-		start_from = current_page * show_per_page;
-		end_on = start_from + show_per_page;
-		set_display(start_from, end_on);
-		$('.active').removeClass('active');
-		$('#id' + page_num).addClass('active');
-	}
-	$(document).ready(function() {
-	var number_of_pages =
-	Math.ceil($('#content').children().size() / show_per_page);
-	var nav = '<ul class="pagination"><li><ahref="javascript:previous();"><<</a>';
-	var i = -1;
-	while(number_of_pages > ++i){
-	nav += '<li class="page_link'
-	if(!i) nav += ' active';
-	nav += '" id="id' + i +'">';
-	nav += '<a href="javascript:go_to_page(' + i +')">'+ (i + 1)
-	+'</a>';
-	}
-	nav += '<li><a href="javascript:next();">>></a></ul>';
-	$('#page_navigation').html(nav);
-	set_display(0, show_per_page);
+
+	// Handle the code of the project leader in an hidden fields
+	$('#codeChefProjetModalInput').keypress(function(e){
+		$('#codeChefProjetInput').val($('#codeChefProjetInput').val());
+	});
+	*/
+
+	var dateDiff = function(date1, date2){
+
+	    var diff = {}                           // Initialisation du retour
+	    var tmp = date2 - date1;
+	 
+	    tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
+	    diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+	 
+	    tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
+	    diff.min = tmp % 60;                    // Extraction du nombre de minutes
+	 
+	    tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
+	    diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+	     
+	    tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
+	    diff.day = tmp;
+	     
+	    return diff.day;
+
+	};
+
+	$('#dateDemarrageInput').on('change',function(e){
+		//alert($('#dateFinInput').val());
+		var today = new Date();
+		if (new Date($(this).val()) < today){
+			$(this).val('');
+			$('#divDateDemarrageInput').addClass('has-error');
+			return;
+		}
+
+		if ($('#divDateDemarrageInput').hasClass('has-error'))
+			$('#divDateDemarrageInput').removeClass('has-error');
+
+		var dateFin = $('#dateFinInput').val();
+		if (dateFin != ''){
+			if (new Date($(this).val()) >= new Date(dateFin)){
+				$(this).val('');
+				$('#divDateDemarrageInput').addClass('has-error');
+				return;
+			}
+			$('#dureeInput').val(dateDiff(new Date($(this).val()), new Date(dateFin)));
+		}
 	});
 
-		// Once the project to get updated has been selected, we fill the form fields with its data
-		$('#selectProjectModalButton').click(function(){
+	$('#dateFinInput').on('change',function(e){
+		//alert($('#dateDemarrageInput').val());
 
-			fillUpdateFields(correspProjects[selectedProjectIndex]);
-			$('#showCorrespProjectsModal').modal('hide');
-		});
-	*/
+		if ($('#divDateFinInput').hasClass('has-error'))
+			$('#divDateFinInput').removeClass('has-error');
+
+		var dateDemarrage = $('#dateDemarrageInput').val();
+
+		if (dateDemarrage != ''){
+			if (new Date($(this).val()) <= new Date(dateDemarrage)){
+				$(this).val('');
+				$('#divDateFinInput').addClass('has-error');
+				return;
+			}
+			$('#dureeInput').val(dateDiff(new Date(dateDemarrage), new Date($(this).val())));
+		}
+	});
+
+	// checking that the date for starting a task is between the opening date and ending date of the project
+	$('#table_activite_body').on('change', 'input[type=date]', function(e){
+
+		if ($('#dateDemarrageInput').val() == ''){
+			alert("La date de démarrage et celle de fin du projet doit être renseignée en premier ! ");
+			if (!$('#divDateDemarrageInput').hasClass('has-error')){
+				$('#divDateDemarrageInput').addClass('has-error');
+			}
+			$('#divDateDemarrageInput').focus();
+			$(this).val('');
+			return;
+		}
+
+		if ($('#dateFinInput').val() == ''){
+			alert("La date de fin du projet doit être renseignée en premier ! ");
+			if (!$('#divDateFinInput').hasClass('has-error')){
+				$('#divDateFinInput').addClass('has-error');
+			}
+			$('#divDateFinInput').focus();
+			$(this).val('');
+			return;
+		}
+
+		if (new Date($('#dateDemarrageInput').val()) > new Date($(this).val())){
+			alert('La date d\'activité est inférieure à la date de démarrage du projet!');
+			$(this).val('');
+			return;
+		}
+		if (new Date($('#dateFinInput').val()) < new Date($(this).val())){
+			alert('La date d\'activité est supérieure à la date de fin du projet!');
+			$(this).val('');
+			return;
+		}
+		
+	});	
 
 });
