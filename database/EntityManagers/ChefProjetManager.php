@@ -18,7 +18,7 @@ class ChefProjetManager extends EntityManager
 	// Adding an activity object to the database
 	function add(ChefProjet $chefProjet)
 	{
-		$queryString = "insert into ChefProjet values(NULL, '".$chefProjet->getNom()."','".$chefProjet->getPrenoms()."', '".$chefProjet->getCode()."')";
+		$queryString = "insert into ChefProjet values(NULL, '".$this->connection->real_escape_string($chefProjet->getNom())."','".$this->connection->real_escape_string($chefProjet->getPrenoms())."', '".$this->connection->real_escape_string($chefProjet->getCode())."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -29,7 +29,7 @@ class ChefProjetManager extends EntityManager
 	function update(ChefProjet $chefProjet)
 	{
 		//echo "ok";
-		$queryString = "update ChefProjet set nom = '".$chefProjet->getNom()."', prenoms = '".$chefProjet->getPrenoms()."', code = '".$chefProjet->getCode()."' where id = '".$chefProjet->getId()."'";
+		$queryString = "update ChefProjet set nom = '".$this->connection->real_escape_string($chefProjet->getNom())."', prenoms = '".$this->connection->real_escape_string($chefProjet->getPrenoms())."', code = '".$this->connection->real_escape_string($chefProjet->getCode())."' where id = '".$chefProjet->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

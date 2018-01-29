@@ -18,7 +18,7 @@ class ResultatManager extends EntityManager
 	// Adding an Resultat object to the database
 	function add(Resultat $resultat)
 	{
-		$queryString = "insert into Resultat values(NULL, '".$resultat->getProjet()->getId()."','".$resultat->getLibelle()."', '".$resultat->getIndicateurs()."')";
+		$queryString = "insert into Resultat values(NULL, '".$resultat->getProjet()->getId()."','".$this->connection->real_escape_string($resultat->getLibelle())."', '".$this->connection->real_escape_string($resultat->getIndicateurs())."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -29,7 +29,7 @@ class ResultatManager extends EntityManager
 	function update(Resultat $resultat)
 	{
 		
-		$queryString = "update Resultat set pro_id = '".$resultat->getProjet()->getId()."', libelle = '".$resultat->getLibelle()."', indicateurs = '".$resultat->getIndicateurs()."' where id = '".$resultat->getId()."'";
+		$queryString = "update Resultat set pro_id = '".$resultat->getProjet()->getId()."', libelle = '".$this->connection->real_escape_string($resultat->getLibelle())."', indicateurs = '".$this->connection->real_escape_string($resultat->getIndicateurs())."' where id = '".$resultat->getId()."'";
 		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)

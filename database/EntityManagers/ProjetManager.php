@@ -42,8 +42,6 @@ class ProjetManager extends EntityManager
 			."', '".$projet->getTauxExecution()."', '".$projet->getEtat()
 			."', '".$projet->getDateFin()."' )";
 
-		//echo $queryString;
-
 		$result = $this->connection->query($queryString);
 
 		if (!$result)

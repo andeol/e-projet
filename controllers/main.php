@@ -1,9 +1,11 @@
 <?php
 
+require(dirname(__DIR__).'/vendor/Fpdf/fpdf.php');
 require("ProjetController.php");
 require(dirname(__DIR__)."/database/ManagerContainer.php");
 require(dirname(__DIR__)."/tests/TestController.php");
 require(dirname(__DIR__)."/config/Router.php");
+require(dirname(__DIR__)."/config/Functions.php");
 
 class ControllerContainer
 {

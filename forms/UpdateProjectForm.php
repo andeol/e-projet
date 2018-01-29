@@ -3,31 +3,34 @@
 	<input id = "projetId"  name = "projetId" value = "<?= $projet->getId() ?>" hidden>
 	<h3 class = "font-weight-light"> Infos projet 
 		<a id = "checkCPCodeButton" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#getCPCodeModal">Modifier</a> 
-		<a id = "printProjButton" href = "http://<?= ROOT_DIR ?>printProject?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Imprimer</a> <h3>
+		<a id = "printProjButton" href = "http://<?= ROOT_DIR ?>printPDF?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Imprimer</a> 
+		<a id = "printExcelButton" href = "http://<?= ROOT_DIR ?>printExcel?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Excel</a> 
+	</h3>
+
 	<hr/>
 	<div class="form-row">
 		<div class = "col-md-4">
-			<label for="" style = "font-size:.6em;"> Code du projet </label>
+			<label for="" > Code du projet </label>
 			<input id = "codeProjetInput" name = "prjcde" type="text" class="form-control" value = "<?php if (isset($projectId)) echo $projectId; ?>" readonly>
 		</div>
 
 		<div class="col-md-4">
-	    	<label for="" style = "font-size:.6em;"> Intitulé</label>
+	    	<label for="" > Intitulé</label>
 	      	<input id = "intituleInput" name = "intitule" type="text" class="form-control" placeholder="Intitulé" value = "<?php if (isset($projet)) echo $projet->getIntitule(); ?>" readonly required>
 	    </div>
 
 	</div>
 	<div class="form-row">
 		<div class="col">
-	    	<label for="" style = "font-size:.6em;">Objet</label>
+	    	<label for="" >Objet</label>
 	    	<input id = "objetInput" name = "objet" type="text" class="form-control" placeholder="Objet" value = "<?php if (isset($projet)) echo $projet->getObjet(); ?>" readonly required>
 	    </div>
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Coût prévisionnel</label>
+	    	<label for="" >Coût prévisionnel</label>
 	      	<input id = "coutInput" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" value = "<?php if (isset($projet)) echo $projet->getCout(); ?>" readonly required>
 	    </div>
 	     <div class="col">
-	    	<label for="" style = "font-size:.6em;">Chef Projet</label>
+	    	<label for="" >Chef Projet</label>
 	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control" disabled>
 	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
 	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>" 
@@ -41,22 +44,22 @@
 
   	<div class="form-row mt-2">
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Date de démarrage</label>
+	    	<label for="" >Date de démarrage</label>
 	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" value = "<?php if (isset($projet)) echo $projet->getDateDemarrage(); ?>" readonly required>
 	    </div>
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Durée</label>
+	    	<label for="" >Durée</label>
 	      	<input id = "dureeInput" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" value = "<?php if (isset($projet)) echo $projet->getDuree(); ?>" readonly required>
 	    </div>
 	    <div class="col-md-4">
-	    	<label for="" style = "font-size:.6em;"> Date de fin</label>
+	    	<label for="" > Date de fin</label>
 	      	<input id = "dateFinInput" name = "dateFin" type="date" class="form-control"  value = "<?php if (isset($projet)) echo $projet->getDateFin(); ?>" readonly>
 	    </div>
   	</div>
 
   	<div class="form-row mt-2">
   		<div class="col">
-	    	<label for="" style = "font-size:.6em;">Couche SI</label>
+	    	<label for="" >Couche SI</label>
 	    	<div class = "input-group">
 		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control" disabled> 
 		      		<?php foreach ($couchesSI as $coucheSI) { ?>
@@ -72,7 +75,7 @@
 		    </div>
 	    </div>
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Maîtrise d'Oeuvre</label>
+	    	<label for="" >Maîtrise d'Oeuvre</label>
 	    	<div class = "input-group">
 		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control" disabled> 
 		      		<?php foreach ($maitrisesOeuvre as $maitriseOeuvre) { ?>
@@ -88,7 +91,7 @@
 		    </div>
 	    </div>
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Source de financement</label>
+	    	<label for="" >Source de financement</label>
 	    	<div class = "input-group">
 	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" disabled> 
 		      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
@@ -107,17 +110,17 @@
 
   	<div class="form-row mt-2">
 	    <div class="col">
-	    	<label for="" style = "font-size:.6em;">Description</label>
+	    	<label for="" >Description</label>
 		    <textarea id = "descriptionInput" name = "description" type="text" class="form-control" placeholder="Description" readonly required> <?php if (isset($projet)) echo $projet->getDescription(); ?> </textarea>
 	    </div>
   	</div>
 
-  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <a id = "addDetailButton" class="btn btn-outline-primary btn-sm disabled" >Ajouter</a><h3>
+  	<h3 class = "font-weight-light mt-5"> Infos supplémentaires <a id = "addDetailButton" class="btn btn-outline-primary btn-sm disabled" >Ajouter</a></h3>
 	<hr/>
 
 	<?php include_once("DetailTableProjectForm2.php") ?>
 
-  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <a id = "addActiviteButton" class="btn btn-outline-primary btn-sm disabled" disabled >Ajouter</a><h3>
+  	<h3 class = "font-weight-light mt-5"> Planning prévisionnel <a id = "addActiviteButton" class="btn btn-outline-primary btn-sm disabled" disabled >Ajouter</a></h3>
 	<hr/>
 
 	<?php include_once("ActiviteTableProjectForm2.php") ?>
@@ -168,7 +171,7 @@
 	      <div id = "cSIModalBody" class="modal-body">
 
 			<div class = "">
-				<label for="" style = "font-size:.6em;"> Libellé </label>
+				<label for="" > Libellé </label>
 				<input id = "coucheSIModalLibelle" name = "code_projet" type="text" class="form-control">
 			</div>
 	      </div>
@@ -191,7 +194,7 @@
 	      </div>
 	      <div id = "moModalBody" class="modal-body">
 			<div class = "">
-				<label for="" style = "font-size:.6em;"> Libellé </label>
+				<label for="" > Libellé </label>
 				<input id = "moModalLibelle" name = "code_projet" type="text" class="form-control">
 			</div>
 	      </div>
@@ -214,7 +217,7 @@
 	      </div>
 	      <div id = "srcFinModalBody" class="modal-body">
 			<div class = "">
-				<label for="" style = "font-size:.6em;"> Libellé </label>
+				<label for="" > Libellé </label>
 				<input id = "srcFinModalLibelle" name = "code_projet" type="text" class="form-control" >
 			</div>
 	      </div>
@@ -238,7 +241,7 @@
 	      <div id = "getCPCodeModalBody" class="modal-body">
 
 			<div class = "">
-				<label for="" style = "font-size:.6em;"> Code du Chef Projet </label>
+				<label for="" > Code du Chef Projet </label>
 				<input id = "getCPCodeModalInput" type="text" class="form-control">
 			</div>
 	      </div>

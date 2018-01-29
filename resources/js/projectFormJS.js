@@ -102,7 +102,7 @@ $(document).ready(function(){
 	      <th scope="row">'+(task_index+1)+'</th>\
 	      <td><input id = "activite_libelle_'+(task_index+1)+'" type = "text" class = "form-control" required /></td>\
 	      <td><input id = "activite_date_'+(task_index+1)+'" type = "date" class = "form-control" placeholder= "JJ/MM/AAAA" required/></td>\
-	      <td><input id = "activite_duree_'+(task_index+1)+'" type = "number" value = 0 class = "form-control" required /></td>\
+	      <td><input id = "activite_duree_'+(task_index+1)+'" type = "number" value = "0" min = "0" class = "form-control" required /></td>\
 	      <td><button id = "delete_task_button_'+(task_index+1)+'" class = "btn delete_button"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://'+parameters.ROOT_DIR+'/resources/images/glyphicons/glyphicons-193-remove-sign.png"/></button></td>\
 	    </tr>');
 		task_index++;
@@ -413,6 +413,8 @@ $(document).ready(function(){
 
 	var dateDiff = function(date1, date2){
 
+		//alert(date1+" / "+date2);
+
 	    var diff = {}                           // Initialisation du retour
 	    var tmp = date2 - date1;
 	 
@@ -506,7 +508,40 @@ $(document).ready(function(){
 			$(this).val('');
 			return;
 		}
+
+		// Setting the max value of the duration field just besides this one on the form
+		var dureeInput = $(this).parent().next().children();
+		dureeInput.prop("max",dateDiff(new Date($(this).val()), new Date($('#dateFinInput').val())));
 		
 	});	
+
+	// Prevent the duration of a task from exceeding the duration of the whole project
+	$('#table_activite_body').on('change', 'input[type=number]', function(e){
+		
+		
+		if ($('#dateFinInput').val() == ''){
+
+			$(this).val(0);
+
+			alert("Le champ date fin est vide. Veuillez le remplir avant de continuer!");
+			if (!$('#divDateFinInput').hasClass('has-error')){
+				$('#divDateFinInput').addClass('has-error');
+				$('#dateFinInput').focus();
+			}
+			return;
+		}
+
+		
+		var duree_parent = $(this).parent();
+		var date_parent = duree_parent.prev();
+		var dateDebut = date_parent.children();
+		if (dateDebut.val() == ''){
+			$(this).val(0);
+			alert("Le champ date de début de l'activité est vide. Veuillez le remplir avant de continuer!");
+			dateDebut.focus();
+			return;
+		}
+
+	});
 
 });

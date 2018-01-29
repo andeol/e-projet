@@ -18,7 +18,7 @@ class RisqueManager extends EntityManager
 	// Adding an Resultat object to the database
 	function add(Risque $risque)
 	{
-		$queryString = "insert into Risque values(NULL, '".$risque->getProjet()->getId()."','".$risque->getLibelle()."')";
+		$queryString = "insert into Risque values(NULL, '".$risque->getProjet()->getId()."','".$this->connection->real_escape_string($risque->getLibelle())."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -29,7 +29,7 @@ class RisqueManager extends EntityManager
 	function update(Risque $risque)
 	{
 		
-		$queryString = "update Risque set pro_id = '".$risque->getProjet()->getId()."', libelle = '".$risque->getLibelle()."' where id = '".$risque->getId()."'";
+		$queryString = "update Risque set pro_id = '".$risque->getProjet()->getId()."', libelle = '".$this->connection->real_escape_string($risque->getLibelle())."' where id = '".$risque->getId()."'";
 		//echo $queryString;
 		$result = $this->connection->query($queryString);
 		if (!$result)

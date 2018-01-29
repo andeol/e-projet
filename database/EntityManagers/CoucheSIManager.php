@@ -21,7 +21,7 @@ class CoucheSIManager extends EntityManager
 		$record = $this->getByLibelle($coucheSI->getLibelle());
 		
 		if ($record == NULL){
-			$queryString = "insert into CoucheSI values(NULL,'".$coucheSI->getLibelle()."')";
+			$queryString = "insert into CoucheSI values(NULL,'".$this->connection->real_escape_string($coucheSI->getLibelle())."')";
 			$result = $this->connection->query($queryString);
 			if (!$result)
 			{
@@ -34,7 +34,7 @@ class CoucheSIManager extends EntityManager
 
 	function update(CoucheSI $coucheSI)
 	{
-		$queryString = "update CoucheSI set libelle = '".$coucheSI->getLibelle()."' where id = '".$coucheSI->getId()."'";
+		$queryString = "update CoucheSI set libelle = '".$this->connection->real_escape_string($coucheSI->getLibelle())."' where id = '".$coucheSI->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

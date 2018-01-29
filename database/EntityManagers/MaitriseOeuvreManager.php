@@ -21,7 +21,7 @@ class MaitriseOeuvreManager extends EntityManager
 		$record = $this->getByLibelle($maitriseOeuvre->getLibelle());
 		if ($record == NULL ){
 
-			$queryString = "insert into MaitriseOeuvre values(NULL,'".$maitriseOeuvre->getLibelle()."')";
+			$queryString = "insert into MaitriseOeuvre values(NULL,'".$this->connection->real_escape_string($maitriseOeuvre->getLibelle())."')";
 			$result = $this->connection->query($queryString);
 			if (!$result)
 			{
@@ -34,7 +34,7 @@ class MaitriseOeuvreManager extends EntityManager
 
 	function update(MaitriseOeuvre $maitriseOeuvre)
 	{
-		$queryString = "update MaitriseOeuvre set libelle = '".$maitriseOeuvre->getLibelle()."' where id = '".$maitriseOeuvre->getId()."'";
+		$queryString = "update MaitriseOeuvre set libelle = '".$this->connection->real_escape_string($maitriseOeuvre->getLibelle())."' where id = '".$maitriseOeuvre->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

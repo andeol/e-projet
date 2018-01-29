@@ -21,7 +21,7 @@ class SourceFinancementManager extends EntityManager
 		$record = $this->getByLibelle($sourceFinancement->getLibelle());
 		if ($record == NULL){
 
-			$queryString = "insert into SourceFinancement values(NULL,'".$sourceFinancement->getLibelle()."')";
+			$queryString = "insert into SourceFinancement values(NULL,'".$this->connection->real_escape_string($sourceFinancement->getLibelle())."')";
 			$result = $this->connection->query($queryString);
 			if (!$result)
 			{
@@ -34,7 +34,7 @@ class SourceFinancementManager extends EntityManager
 
 	function update(SourceFinancement $sourceFinancement)
 	{
-		$queryString = "update SourceFinancement set libelle = '".$sourceFinancement->getLibelle()."' where id = '".$sourceFinancement->getId()."'";
+		$queryString = "update SourceFinancement set libelle = '".$this->connection->real_escape_string($sourceFinancement->getLibelle())."' where id = '".$sourceFinancement->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

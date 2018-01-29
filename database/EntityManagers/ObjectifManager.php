@@ -18,7 +18,7 @@ class ObjectifManager extends EntityManager
 	// Adding an activity object to the database
 	function add(Objectif $objectif)
 	{
-		$queryString = "insert into Objectif values(NULL, '".$objectif->getProjet()->getId()."','".$objectif->getLibelle()."')";
+		$queryString = "insert into Objectif values(NULL, '".$objectif->getProjet()->getId()."','".$this->connection->real_escape_string($objectif->getLibelle())."')";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{
@@ -28,7 +28,7 @@ class ObjectifManager extends EntityManager
 
 	function update(Objectif $objectif)
 	{
-		$queryString = "update Objectif set libelle = '".$objectif->getLibelle()."', pro_id = '".$objectif->getProjet()->getId()."' where id = '".$objectif->getId()."'";
+		$queryString = "update Objectif set libelle = '".$this->connection->real_escape_string($objectif->getLibelle())."', pro_id = '".$objectif->getProjet()->getId()."' where id = '".$objectif->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

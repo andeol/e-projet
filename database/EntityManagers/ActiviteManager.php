@@ -18,7 +18,7 @@ class ActiviteManager extends EntityManager
 	// Adding an activity object to the database
 	function add(Activite $activite)
 	{
-		$queryString = "insert into Activite values(NULL, '".$activite->getProjet()->getId()."', '".$activite->getLibelle()."','".$activite->getDateDebut()."', '".$activite->getDuree()."')";
+		$queryString = "insert into Activite values(NULL, '".$activite->getProjet()->getId()."', '".$this->connection->real_escape_string($activite->getLibelle())."','".$activite->getDateDebut()."', '".$activite->getDuree()."')";
 		//echo "     ".$queryString. "     ";
 		$result = $this->connection->query($queryString);
 		if (!$result)
@@ -29,7 +29,7 @@ class ActiviteManager extends EntityManager
 
 	function update(Activite $activite)
 	{
-		$queryString = "update Activite set pro_id = '".$activite->getProjet()->getId()."', libelle = '".$activite->getLibelle()."', dateDebut = '".$activite->getDateDebut()."', duree = '".$activite->getDuree()."' where id = '".$activite->getId()."'";
+		$queryString = "update Activite set pro_id = '".$activite->getProjet()->getId()."', libelle = '".$this->connection->real_escape_string($activite->getLibelle())."', dateDebut = '".$activite->getDateDebut()."', duree = '".$activite->getDuree()."' where id = '".$activite->getId()."'";
 		$result = $this->connection->query($queryString);
 		if (!$result)
 		{

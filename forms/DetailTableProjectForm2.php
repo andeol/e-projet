@@ -1,4 +1,4 @@
-<table class="table font-weight-light" style = "font-size:.6em;">
+<table class="table font-weight-light">
   <thead>
     <tr>
       <th scope="col" style="width: 25%;">Objectifs </th>
