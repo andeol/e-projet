@@ -268,8 +268,9 @@ class ProjetController
 			}
 
 			// Searching the specified project
-			//$response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
+			// $response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
 			$response = $this->managerContainer->projetManager->getBy($code, $chefProjet, $sourceFinancement, $periodes, $costs, "table");
+			
 			echo json_encode($response);
 		}
 		else{
@@ -297,26 +298,29 @@ class ProjetController
 		$pdf->SetFont('Arial','B',16);
 
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Intitulé : '.$project->getIntitule()),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Durée : '.$project->getDuree().' jours'),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Maîtrise d\'oeuvre : '.$project->getMaitriseOeuvre()->getLibelle()),0,0);
+		$pdf->SetFillColor(0,255,0);
+		$pdf->Cell(100, 10,  utf8_decode(' Intitulé : '.$project->getIntitule()),0,0,'L',true);
+		$pdf->Cell(100, 10,  utf8_decode(' Durée : '.$project->getDuree().' jours'),0,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Maîtrise d\'oeuvre : '.$project->getMaitriseOeuvre()->getLibelle()),0,0,'L',true);
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Objet : '.$project->getObjet()),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Date de démarrage : '.getDateFrFormat($project->getDateDemarrage())),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Couche du SI : '.$project->getCoucheSI()->getLibelle()),0,0);
+		$pdf->Cell(100, 10,  utf8_decode(' Objet : '.$project->getObjet()), 0, 0, 'L', true);
+		$pdf->Cell(100, 10,  utf8_decode(' Date de démarrage : '.getDateFrFormat($project->getDateDemarrage())),0,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Couche du SI : '.$project->getCoucheSI()->getLibelle()),0,0,'L',true);
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Chef Projet : '.$project->getChefProjet()->getNom()." ".$project->getChefProjet()->getPrenoms()),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Coût prévisionnel : '.$project->getCout()),0,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Source de Financement : '.$project->getSourceFinancement()->getLibelle()),0,0);
+		$pdf->Cell(100, 10,  utf8_decode(' Chef Projet : '.$project->getChefProjet()->getNom()." ".$project->getChefProjet()->getPrenoms()),0,0,'L',true);
+		$pdf->Cell(100, 10,  utf8_decode(' Coût prévisionnel : '.$project->getCout()),0,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Source de Financement : '.$project->getSourceFinancement()->getLibelle()),0,0,'L',true);
 		$pdf->Ln();
 		$pdf->Cell(100, 10,  utf8_decode(' Description : '.$project->getDescription()),0,0);
 		$pdf->Ln();
-
+		$pdf->Cell(100, 10,  '',0,2);
 		$detailsTableHeaders = array("Objectifs",  utf8_decode("Résultats"), "Indicateurs", "Contraintes");
 		$pdf->printDetailsTable($detailsTableHeaders, $this->loadDetailsTableData($project));
-
 		$pdf->Ln();
 		$pdf->Cell(100, 10,  '',0,2);
+		$pdf->cell(100, 10, 'Planning Provisionnel',0,2);
+		$tasksTableHeaders = array("Planning Previsionnel", utf8_decode("Planning Previsionnel"));
+
 		
 		$tasksTableHeaders = array( utf8_decode("Activités"),  utf8_decode("Date de début"),  utf8_decode("Durée(jour)"));
 		$pdf->printTasksTable($tasksTableHeaders, $this->loadTasksTableData($project));
@@ -370,16 +374,22 @@ class ProjetController
 			echo 0;
 	}
 
+	/**
+	*	Generates a xlsx file readable by Microsoft Excel Software and its pairs
+	*/
+
 	function printExcel()
 	{
 
 		$project = $this->managerContainer->projetManager->getById($_GET['idProject']);
 		if ($project == NULL){
-			echo "Wrong project ID";
+			//echo "Wrong project ID";
 			return;
 		}
+		
 		$spreadsheet = new Spreadsheet();
 
+		
 		// Setting spreadsheet properties
 		$spreadsheet->getProperties()->setCreator('ASSI')
 		->setLastModifiedBy('Your Name')
@@ -388,10 +398,14 @@ class ProjetController
 		->setDescription('Generating the excel file using phpspreadsheet library.')
 		->setKeywords('php excel file IO');
 		$spreadsheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(40);
+		$spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+		$spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(50);
+		$spreadsheet->getActiveSheet()->getStyle('B1')
+    ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
 		$sheet = $spreadsheet->getActiveSheet();
 
-		$spreadsheet->getActiveSheet()->getStyle('A7:D7')->getFill()
+		$spreadsheet->getActiveSheet()->getStyle('A8:D8')->getFill()
 		    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 		    ->getStartColor()->setARGB('00FEFF01');
 
@@ -399,22 +413,22 @@ class ProjetController
 		    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 		    ->getStartColor()->setARGB('0074D73E');
 
-
-		/*
-		$richText = new \PhpOffice\PhpSpreadsheet\RichText();
-		$richText->createText('This invoice is ');
-		$payable = $richText->createTextRun('payable within thirty days after the end of the month');
-		$payable->getFont()->setBold(true);
-		$payable->getFont()->setItalic(true);
-		$payable->getFont()->setColor( new \PhpOffice\PhpSpreadsheet\Style\Color( \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN ) );
-		$richText->createText(', unless specified otherwise on the invoice.');
-		$spreadsheet->getActiveSheet()->getCell('A18')->setValue($richText);
-		*/
-
-
+		
 		//Merging cells
-		$sheet->mergeCells('A1:D1');
-		$sheet->setCellValue('A1', "Fiche Projet ". $project->getCode());
+		$drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$drawing->setName('Logo');
+		$drawing->setDescription('Logo');
+		$drawing->setPath(dirname(__DIR__)."/resources/images/logo_assi.png");
+		$drawing->setHeight(60);
+		$drawing->setWorksheet($spreadsheet->getActiveSheet());
+		$drawing->setCoordinates('A1');
+		$drawing->setOffsetX(110);
+		//$drawing->setRotation(25);
+		//$drawing->getShadow()->setVisible(true);
+		//$drawing->getShadow()->setDirection(45);
+
+		$sheet->mergeCells('B1:D1');
+		$sheet->setCellValue('B1', "Fiche Projet ". $project->getCode());
 		$sheet->mergeCells('A2:D2');
 		$sheet->mergeCells('A3:B3');
 		$sheet->setCellValue('A3', 'Intitulé : '.$project->getIntitule());
@@ -433,17 +447,18 @@ class ProjetController
 		$sheet->setCellValue('D5', 'Source de Finacement : '.$project->getSourceFinancement()->getLibelle());
 		$sheet->mergeCells('A6:D6');
 		$sheet->setCellValue('A6', 'Description : '.$project->getDescription());
-		$sheet->setCellValue('A7', 'Les objectifs du projet');
-		$sheet->setCellValue('B7', 'Les résultats du projet');
-		$sheet->setCellValue('C7', 'Les indicateurs du projet');
-		$sheet->setCellValue('D7', 'Les contraintes et risques du projet');
+		$sheet->mergeCells('A7:D7');
+		$sheet->setCellValue('A8', 'Les objectifs du projet');
+		$sheet->setCellValue('B8', 'Les résultats du projet');
+		$sheet->setCellValue('C8', 'Les indicateurs du projet');
+		$sheet->setCellValue('D8', 'Les contraintes et risques du projet');
 
 		$objectifs = $this->managerContainer->getObjectifsByProjet($project);
 		$resultats = $this->managerContainer->getResultatsByProjet($project);
 		$risques = $this->managerContainer->getRisquesByProjet($project);
 		$activites = $this->managerContainer->getActivitesByProjet($project);
 
-		$i = 8;
+		$i = 9;
 		for ($j = 0; $j < sizeof($objectifs); $j++) {
 			$sheet->setCellValue('A'.$i, $objectifs[$j]->getLibelle());
 			$sheet->setCellValue('B'.$i, $resultats[$j]->getLibelle());
@@ -452,6 +467,9 @@ class ProjetController
 			$i++;
 		}
 
+		$sheet->mergeCells('A'.$i.':D'.$i);
+
+		$i++;
 		$sheet->mergeCells('A'.$i.':D'.$i);
 		$spreadsheet->getActiveSheet()->getStyle('A'.$i.':D'.$i)->getFill()
 		    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
@@ -478,26 +496,16 @@ class ProjetController
 		$sheet->mergeCells('A'.$i.':D'.$i);
 		$sheet->setCellValue('A'.$i, 'Perspectives : '.$project->getPerspectives());
 		
-
 		/*
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="01-simple.xlsx"');
+		header('Content-Type: application/vnd.ms-excel; charset=UTF-8;');
+		header('Content-Disposition: attachment;filename="01-simple.xls"');
 		header('Cache-Control: max-age=0');
-		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
 		$writer->save('php://output');
-		exit;
-		*/
+		*/		
 
-		// redirect output to client browser
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="myfile.xlsx"');
-		header('Cache-Control: max-age=0');
-
-		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-		$writer->save('php://output');
-
-		//$writer = new Xlsx($spreadsheet);
-		//$writer->save('hello world.xlsx');
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('Fiche_Projet.xlsx');
 
 	}
 }

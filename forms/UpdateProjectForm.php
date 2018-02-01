@@ -11,7 +11,7 @@
 	<div class="form-row">
 		<div class = "col-md-4">
 			<label for="" > Code du projet </label>
-			<input id = "codeProjetInput" name = "prjcde" type="text" class="form-control" value = "<?php if (isset($projectId)) echo $projectId; ?>" readonly>
+			<input id = "codeProjetInput" name = "prjcde" type="text" class="form-control" value = "<?php if (isset($projet)) echo $projet->getCode(); ?>" readonly>
 		</div>
 
 		<div class="col-md-4">

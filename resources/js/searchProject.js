@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 	var correspProjectsIndex = 1;
-	var nbProjectsPerPage = 1;
+	var nbProjectsPerPage = 5;
 	var correspProjects;
 	var limitIndex = 0;
 	var nbPages = 0;
@@ -11,7 +11,7 @@ $(document).ready(function(){
 	// Launching the search for a project that fits the criteria
 	$('#searchProjectButton').click(function(e){
 		e.preventDefault();
-
+		
 		/*
 		alert('http://'+parameters.ROOT_DIR+"searchProject?ajax=true&searchProjCode="
 							+$('#searchProjCode').val()+"&searchChefProjet="
@@ -19,8 +19,8 @@ $(document).ready(function(){
 							+$('#srcFinInput').val()+"&searchDebutPeriode="
 							+$('#searchDebutPeriode').val()+"&searchFinPeriode="
 							+$('#searchFinPeriode').val()+"&searchMinCost="
-							+$('#searchMinCost').val()+"&searchMaxCost="
-							+$('#searchMaxCost').val());
+							+($('#searchMinCost').val() == '' ? "0" : $('#searchMinCost').val())+"&searchMaxCost="
+							+($('#searchMaxCost').val() == '' ? "0" : $('#searchMinCost').val()));
 		*/
 
 		// an ajax request
@@ -76,7 +76,7 @@ $(document).ready(function(){
 			      <td>'+correspProjects[correspProjectsIndex][4]+'</td>\
 			      <td>'+correspProjects[correspProjectsIndex][5]+'</td>\
 			      <td>'+getDateFrFormat(correspProjects[correspProjectsIndex][6])+'</td>\
-			      <td><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+correspProjects[0][0]+'">Afficher</a></td>\
+			      <td><a href="http://'+parameters.ROOT_DIR+'updateProject?projectId='+correspProjects[correspProjectsIndex][0]+'">Afficher</a></td>\
 			    </tr>');
 			correspProjectsIndex++;
 		}
@@ -84,7 +84,6 @@ $(document).ready(function(){
 	};
 
 	var handleSearchProjectResponse = function(response){
-		//alert('yes')
 		switch (response.length){
 			case 0:
 				//show a message to the user

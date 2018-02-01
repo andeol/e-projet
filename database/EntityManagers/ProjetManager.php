@@ -283,7 +283,6 @@ class ProjetManager extends EntityManager
 				$queryString .= " and dateDemarrage >= ".$costs[0];
 		}
 
-
 		//echo $queryString;
 
 		$result = $this->connection->query($queryString);

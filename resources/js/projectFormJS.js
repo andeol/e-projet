@@ -437,10 +437,10 @@ $(document).ready(function(){
 	$('#dateDemarrageInput').on('change',function(e){
 		//alert($('#dateFinInput').val());
 		var today = new Date();
-		if (new Date($(this).val()) < today){
-			$(this).val('');
-			$('#divDateDemarrageInput').addClass('has-error');
-			return;
+		if (new Date($(this).val()) < today && dateDiff(new Date($(this).val()), today) != 0){
+				$(this).val('');
+				$('#divDateDemarrageInput').addClass('has-error');
+				return;
 		}
 
 		if ($('#divDateDemarrageInput').hasClass('has-error'))

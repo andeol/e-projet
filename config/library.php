@@ -21,7 +21,7 @@
 		    // Move to the right
 		    $this->Cell(80);
 		    // Title
-		    $this->Cell(30,10,'Fiche Projet '.$this->project->getId(),0,0,'C');
+		    $this->Cell(30,10,'Fiche Projet '.$this->project->getCode(),0,0,'C');
 		    // Line break
 		    $this->Ln(20);
 		}
@@ -64,8 +64,8 @@
 		    {
 		        $this->Cell($w[0],6,$row[0],'LR',0,'L',$fill);
 		        $this->Cell($w[1],6,$row[1],'LR',0,'L',$fill);
-		        $this->Cell($w[2],6,$row[2],'LR',0,'R',$fill);
-		        $this->Cell($w[3],6,$row[3],'LR',0,'R',$fill);
+		        $this->Cell($w[2],6,$row[2],'LR',0,'L',$fill);
+		        $this->Cell($w[3],6,$row[3],'LR',0,'L',$fill);
 		        $this->Ln();
 		        $fill = !$fill;
 		    }
@@ -78,13 +78,13 @@
 		function printTasksTable($header, $data)
 		{
 		    // Colors, line width and bold font
-		    $this->SetFillColor(128,128,255);
+		    $this->SetFillColor(0,0,200);
 		    $this->SetTextColor(255);
 		    $this->SetDrawColor(128,0,0);
 		    $this->SetLineWidth(.3);
 		    $this->SetFont('','B');
 		    // Header
-		    $w = array(90, 90, 90);
+		    $w = array(90, 90, 100);
 		    for($i=0;$i<count($header);$i++)
 		        $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
 		    $this->Ln();
