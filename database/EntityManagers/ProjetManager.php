@@ -42,6 +42,8 @@ class ProjetManager extends EntityManager
 			."', '".$projet->getTauxExecution()."', '".$projet->getEtat()
 			."', '".$projet->getDateFin()."' )";
 
+		//echo $queryString;
+
 		$result = $this->connection->query($queryString);
 
 		if (!$result)
@@ -318,6 +320,129 @@ class ProjetManager extends EntityManager
 					else{
 						$projets[] = $row;
 					}
+				}
+			}
+		}
+		return $projets;
+	}
+
+	function getDoneProjects()
+	{
+		$projets = NULL;
+
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where dateFin < '".date("Y-m-d")."' and tauxExecution = 100";
+		//echo $queryString;
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows >= 1)
+			{
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					$projet = new Projet();
+					$projet->setId($row[0]);
+					$projet->setCode($row[1]);
+					$projet->setIntitule($row[2]);
+					$projet->setObjet($row[3]);
+					$projet->setDescription($row[4]);
+					$projet->setDuree($row[5]);
+					$projet->setDateDemarrage($row[6]);
+					$projet->setCout($row[7]);
+					$projet->setMaitriseOeuvre($this->maitriseOeuvreManager->getById($row[8]));
+					$projet->setSourceFinancement($this->sourceFinancementManager->getById($row[9]));
+					$projet->setCoucheSI($this->coucheSIManager->getById($row[10]));
+					$projet->setPerspectives($row[11]);
+					$projet->setChefProjet($this->chefProjetManager->getById($row[12]));
+					$projet->setTauxExecution($row[13]);
+					$projet->setEtat($row[14]);
+					$projet->setDateFin($row[15]);
+
+					$projets[] = $projet;
+				}
+			}
+		}
+		//return $projets;
+	}
+
+	function getLateProjects()
+	{
+		$projets = NULL;
+
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where dateFin < '".date("Y-m-d")."' and tauxExecution < 100";
+		//echo $queryString;
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows >= 1)
+			{
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					$projet = new Projet();
+					$projet->setId($row[0]);
+					$projet->setCode($row[1]);
+					$projet->setIntitule($row[2]);
+					$projet->setObjet($row[3]);
+					$projet->setDescription($row[4]);
+					$projet->setDuree($row[5]);
+					$projet->setDateDemarrage($row[6]);
+					$projet->setCout($row[7]);
+					$projet->setMaitriseOeuvre($this->maitriseOeuvreManager->getById($row[8]));
+					$projet->setSourceFinancement($this->sourceFinancementManager->getById($row[9]));
+					$projet->setCoucheSI($this->coucheSIManager->getById($row[10]));
+					$projet->setPerspectives($row[11]);
+					$projet->setChefProjet($this->chefProjetManager->getById($row[12]));
+					$projet->setTauxExecution($row[13]);
+					$projet->setEtat($row[14]);
+					$projet->setDateFin($row[15]);
+
+					$projets[] = $projet;
+				}
+			}
+		}
+		return $projets;
+	}
+
+	function getByChefProjet(ChefProjet $chefProjet)
+	{
+		$projets = NULL;
+
+		$queryString = "select id, code, intitule, objet, description, duree, dateDemarrage, cout, mo_id, srcFin_id, cSI_id, perspectives, che_id , tauxExecution, etat, dateFin from Projet where che_id = '".$chefProjet->getId()."'";
+		//echo $queryString;
+		$result = $this->connection->query($queryString);
+
+		if (!$result)
+			echo "Reading failed!";
+		else
+		{
+			if ($result->num_rows >= 1)
+			{
+				while ($row = $result->fetch_array(MYSQLI_NUM)){
+
+					$projet = new Projet();
+					$projet->setId($row[0]);
+					$projet->setCode($row[1]);
+					$projet->setIntitule($row[2]);
+					$projet->setObjet($row[3]);
+					$projet->setDescription($row[4]);
+					$projet->setDuree($row[5]);
+					$projet->setDateDemarrage($row[6]);
+					$projet->setCout($row[7]);
+					$projet->setMaitriseOeuvre($this->maitriseOeuvreManager->getById($row[8]));
+					$projet->setSourceFinancement($this->sourceFinancementManager->getById($row[9]));
+					$projet->setCoucheSI($this->coucheSIManager->getById($row[10]));
+					$projet->setPerspectives($row[11]);
+					$projet->setChefProjet($this->chefProjetManager->getById($row[12]));
+					$projet->setTauxExecution($row[13]);
+					$projet->setEtat($row[14]);
+					$projet->setDateFin($row[15]);
+
+					$projets[] = $projet;
 				}
 			}
 		}

@@ -141,6 +141,12 @@ class ProjetController
 			$projectId = $_GET['projectId'];
 
 			$projet = $this->managerContainer->projetManager->getById($projectId);
+
+			if ($projet == NULL){
+				echo "Wrong project id";
+				return;
+			}
+
 		}
 		else if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -243,11 +249,12 @@ class ProjetController
 		}
 
 		// After getting the whole project object, we do the same with all the stuff like "objectifs", "resultats" etc.
-		$objectifs = $this->managerContainer->getObjectifsByProjet($projet);
-		$resultats = $this->managerContainer->getResultatsByProjet($projet);
-		$risques = $this->managerContainer->getRisquesByProjet($projet);
-		$activites = $this->managerContainer->getActivitesByProjet($projet);
-
+		if ($projet == NULL){
+			$objectifs = $this->managerContainer->getObjectifsByProjet($projet);
+			$resultats = $this->managerContainer->getResultatsByProjet($projet);
+			$risques = $this->managerContainer->getRisquesByProjet($projet);
+			$activites = $this->managerContainer->getActivitesByProjet($projet);
+		}
 		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
 	}
 
@@ -291,7 +298,6 @@ class ProjetController
 		}
 
 		// Retrieves the project id and gets the whole project object from it
-
 		$pdf = new PDF('L');
 		$pdf->setProject($project);
 		$pdf->AddPage();
@@ -319,8 +325,6 @@ class ProjetController
 		$pdf->Ln();
 		$pdf->Cell(100, 10,  '',0,2);
 		$pdf->cell(100, 10, 'Planning Provisionnel',0,2);
-		$tasksTableHeaders = array("Planning Previsionnel", utf8_decode("Planning Previsionnel"));
-
 		
 		$tasksTableHeaders = array( utf8_decode("Activités"),  utf8_decode("Date de début"),  utf8_decode("Durée(jour)"));
 		$pdf->printTasksTable($tasksTableHeaders, $this->loadTasksTableData($project));
@@ -413,7 +417,6 @@ class ProjetController
 		    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 		    ->getStartColor()->setARGB('0074D73E');
 
-		
 		//Merging cells
 		$drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
 		$drawing->setName('Logo');
@@ -506,7 +509,141 @@ class ProjetController
 
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('Fiche_Projet.xlsx');
+	}
 
+	function printDoneProjects()
+	{
+		// Retrieves the project id and gets the whole project object from it
+		$pdf = new ProjectsPDF('P');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',12);
+
+		$pdf->Cell(100, 10,  '',0,2);
+
+		$pdf->cell(100, 10, 'Liste des projets finis',0,2);
+		
+		$projectsTableHeaders = array( utf8_decode("Code"),  utf8_decode("Intitulé"),  utf8_decode("Description"),  utf8_decode("Durée (jour)") ,  utf8_decode("Date de démarrage"));
+		
+		
+		$doneProjects = $this->managerContainer->projetManager->getDoneProjects();
+		
+		$data = array();
+		$size = sizeof($doneProjects);
+		//echo $size;
+		for ($i = 0; $i < $size; $i++) {
+			$project = $doneProjects[$i];
+			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+		}
+
+		$pdf->displayProjectsTable($projectsTableHeaders, $data);
+		
+		$pdf->Cell(100, 10, '',0,2);
+		$pdf->Ln();
+
+		$pdf->Output();	
+	}
+
+	function printLateProjects()
+	{
+		// Retrieves the project id and gets the whole project object from it
+		$pdf = new ProjectsPDF('P');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',12);
+
+		$pdf->Cell(100, 10,  '',0,2);
+
+		$pdf->cell(100, 10, 'Liste des projets en retard',0,2);
+		
+		$projectsTableHeaders = array( utf8_decode("Code"),  utf8_decode("Intitulé"),  utf8_decode("Description"),  utf8_decode("Durée (jour)") ,  utf8_decode("Date de démarrage"));
+		
+		$lateProjects = $this->managerContainer->projetManager->getLateProjects();
+		
+		$data = array();
+		$size = sizeof($lateProjects);
+		//echo $size;
+		for ($i = 0; $i < $size; $i++) {
+			$project = $lateProjects[$i];
+			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+		}
+
+		$pdf->displayProjectsTable($projectsTableHeaders, $data);
+		
+		$pdf->Cell(100, 10, '',0,2);
+		$pdf->Ln();
+
+		$pdf->Output();	
+	}
+
+	function printAllProjects()
+	{
+		// Retrieves the project id and gets the whole project object from it
+		$pdf = new ProjectsPDF('P');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',12);
+
+		$pdf->Cell(100, 10,  '',0,2);
+
+		$pdf->cell(100, 10, 'Liste des projets',0,2);
+		
+		$projectsTableHeaders = array( utf8_decode("Code"),  utf8_decode("Intitulé"),  utf8_decode("Description"),  utf8_decode("Durée (jour)") ,  utf8_decode("Date de démarrage"));
+		
+		$lateProjects = $this->managerContainer->projetManager->getLateProjects();
+		
+		$data = array();
+		$size = sizeof($lateProjects);
+		//echo $size;
+		for ($i = 0; $i < $size; $i++) {
+			$project = $lateProjects[$i];
+			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+		}
+
+		$pdf->displayProjectsTable($projectsTableHeaders, $data);
+		
+		$pdf->Cell(100, 10, '',0,2);
+		$pdf->Ln();
+
+		$pdf->Output();	
+	}
+
+	function printProjetsByChefProjet()
+	{
+		$idChefProjet = $_GET['idChefProjet'];
+		$chefProjet = $this->managerContainer->chefProjetManager->getById($idChefProjet);
+		if ($chefProjet == NULL){
+			echo "Chef Projet not found";
+			return;
+		}
+
+		$pdf = new ProjectsPDF('P');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',12);
+
+		$pdf->Ln();
+		$pdf->SetFillColor(255,255,255);
+		$pdf->Cell(100, 10,  utf8_decode(' Nom : '.$chefProjet->getNom()),0,0,'L',true);
+		$pdf->Cell(100, 10,  utf8_decode(' Prénoms : '.$chefProjet->getPrenoms()),0,0,'L',true);
+
+		$pdf->cell(100, 10, '',0,2);
+		$pdf->Ln();
+		$pdf->cell(100, 10, 'Liste des projets',0,2);
+		
+		$projectsTableHeaders = array( utf8_decode("Code"),  utf8_decode("Intitulé"),  utf8_decode("Description"),  utf8_decode("Durée (jour)") ,  utf8_decode("Date de démarrage"));
+		
+		$projects = $this->managerContainer->projetManager->getByChefProjet($chefProjet);
+		
+		$data = array();
+		$size = sizeof($projects);
+		//echo $size;
+		for ($i = 0; $i < $size; $i++) {
+			$project = $projects[$i];
+			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+		}
+		$pdf->displayProjectsTable($projectsTableHeaders, $data);
+		
+		$pdf->Cell(100, 10, '',0,2);
+		$pdf->Ln();
+
+		$pdf->Output();	
 	}
 }
 

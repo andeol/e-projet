@@ -16,6 +16,10 @@ class Router
 		"/checkCPCode" => "projetController/checkCPCode",
 		"/printPDF" => "projetController/printPDF",
 		"/printExcel" => "projetController/printExcel",
+		"/printDoneProjects" => "projetController/printDoneProjects",
+		"/printLateProjects" => "projetController/printLateProjects",
+		"/printAllProjects" => "projetController/printAllProjects",
+		"/projetsByChefProjet" => "projetController/printProjetsByChefProjet",
 		"/tests" => "testController/init"];
 
 	// Functions
