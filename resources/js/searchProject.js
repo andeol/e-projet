@@ -11,6 +11,11 @@ $(document).ready(function(){
 	// Launching the search for a project that fits the criteria
 	$('#searchProjectButton').click(function(e){
 		e.preventDefault();
+
+		//Disabling the statistics button
+		if (!$('#statisticsButton').hasClass('disabled')){
+			$('#statisticsButton').addClass('disabled');
+		}
 		
 		/*
 		alert('http://'+parameters.ROOT_DIR+"searchProject?ajax=true&searchProjCode="
@@ -34,7 +39,8 @@ $(document).ready(function(){
 							+$('#searchDebutPeriode').val()+"&searchFinPeriode="
 							+$('#searchFinPeriode').val()+"&searchMinCost="
 							+($('#searchMinCost').val() == '' ? "0" : $('#searchMinCost').val())+"&searchMaxCost="
-							+($('#searchMaxCost').val() == '' ? "0" : $('#searchMinCost').val()), 
+							+($('#searchMaxCost').val() == '' ? "0" : $('#searchMinCost').val())+"&etatProjet="
+							+$('#projEtatInput').val(), 
 			type 		: "GET", 
 			dataType	: "json",
 
@@ -91,6 +97,15 @@ $(document).ready(function(){
 				break;
 
 			default:
+
+				// Enable the statistics button
+				for (var i = response.length - 1; i >= 0; i--) {
+					if (i == 0)
+						$('#statisticsButton').prop('href', $('#statisticsButton').prop('href')+response[i][0]);
+					else
+						$('#statisticsButton').prop('href', $('#statisticsButton').prop('href')+response[i][0]+';');
+				}
+				$('#statisticsButton').removeClass('disabled');
 
 				correspProjects = response;
 				pageIndex = 0;

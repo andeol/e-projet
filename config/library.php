@@ -50,7 +50,7 @@
 		    $this->SetLineWidth(.3);
 		    $this->SetFont('','B');
 		    // Header
-		    $w = array(70, 70, 70, 70);
+		    $w = array(70, 70, 65, 65);
 		    for($i=0;$i<count($header);$i++)
 		        $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
 		    $this->Ln();
@@ -84,7 +84,7 @@
 		    $this->SetLineWidth(.3);
 		    $this->SetFont('','B');
 		    // Header
-		    $w = array(90, 90, 100);
+		    $w = array(100, 90, 80);
 		    for($i=0;$i<count($header);$i++)
 		        $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
 		    $this->Ln();
@@ -96,14 +96,14 @@
 		    $fill = false;
 		    foreach($data as $row)
 		    {
-		        $this->Cell($w[0],6,$row[0],'LR',0,'L',$fill);
-		        $this->Cell($w[1],6,$row[1],'LR',0,'L',$fill);
-		        $this->Cell($w[2],6,$row[2],'LR',0,'R',$fill);
+		        $this->Cell($w[0],6,$row[0],1,0,'L',$fill);
+		        $this->Cell($w[1],6,$row[1],1,0,'L',$fill);
+		        $this->Cell($w[2],6,$row[2],1,0,'R',$fill);
 		        $this->Ln();
 		        $fill = !$fill;
 		    }
 		    // Closing line
-		    $this->Cell(array_sum($w),0,'','T');
+		    //$this->Cell(array_sum($w),0,'','T');
 		}
 	}
 
@@ -285,6 +285,21 @@
 	    var $sum;
 	    var $NbVal;
 
+	    // Page header
+		function Header()
+		{
+		    // Logo
+		    $this->Image("http://".ROOT_DIR."resources/images/logo_assi.png",10,6,30);
+		    // Arial bold 15
+		    $this->SetFont('Arial','B',15);
+		    // Move to the right
+		    $this->Cell(80);
+		    // Title
+		    $this->Cell(50,10,'e-Projet ',0,0,'C');
+		    // Line break
+		    $this->Ln(20);
+		}
+
 	    function PieChart($w, $h, $data, $format, $colors=null)
 	    {
 	        $this->SetFont('Courier', '', 10);
@@ -335,8 +350,9 @@
 	        }
 	    }
 
-	    function BarDiagram($w, $h, $data, $format, $color=null, $maxVal=0, $nbDiv=4)
+	    function BarDiagram($w, $h, $data, $format, $color=null, $maxVal=0, $nbDiv=100)
 	    {
+
 	        $this->SetFont('Courier', '', 10);
 	        $this->SetLegends($data,$format);
 
@@ -351,6 +367,8 @@
 	            $color=array(155,155,155);
 	        if ($maxVal == 0) {
 	            $maxVal = max($data);
+	            if ($maxVal == 0)
+	            	$maxVal = 100;
 	        }
 	        $valIndRepere = ceil($maxVal / $nbDiv);
 	        $maxVal = $valIndRepere * $nbDiv;
@@ -381,14 +399,18 @@
 	        }
 
 	        //Scales
+	        
 	        for ($i = 0; $i <= $nbDiv; $i++) {
 	            $xpos = $XDiag + $lRepere * $i;
-	            $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
+	            if ($i % 10 == 0)
+	            	$this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
 	            $val = $i * $valIndRepere;
 	            $xpos = $XDiag + $lRepere * $i - $this->GetStringWidth($val) / 2;
 	            $ypos = $YDiag + $hDiag - $margin;
-	            $this->Text($xpos, $ypos, $val);
+	            if ($i % 10 == 0)
+	            	$this->Text($xpos, $ypos, $val);
 	        }
+	        
 	    }
 
 	    function SetLegends($data, $format)
@@ -399,7 +421,8 @@
 	        $this->NbVal=count($data);
 	        foreach($data as $l=>$val)
 	        {
-	            $p=sprintf('%.2f',$val/$this->sum*100).'%';
+	            //$p=sprintf('%.2f',$val/$this->sum*100).'%';
+	            $p=sprintf('%.2f',$val).'%';
 	            $legend=str_replace(array('%l','%v','%p'),array($l,$val,$p),$format);
 	            $this->legends[]=$legend;
 	            $this->wLegend=max($this->GetStringWidth($legend),$this->wLegend);

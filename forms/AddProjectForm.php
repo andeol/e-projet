@@ -14,26 +14,33 @@
 
 		<div class="col-md-4">
 	    	<label for="" > Intitulé</label>
-	      	<input name = "intitule" type="text" class="form-control" placeholder="Intitulé" required>
+	      	<input name = "intitule" type="text" class="form-control" placeholder="Intitulé" value = "<?= ((isset($intitule)) ? $intitule : "")?>"required>
 	    </div>
 
 	</div>
 	<div class="form-row">
 		<div class="col">
 	    	<label for="" >Objet</label>
-	    	<input name = "objet" type="text" class="form-control" placeholder="Objet" required>
+	    	<input name = "objet" type="text" class="form-control" placeholder="Objet" value = "<?= ((isset($objet)) ? $objet : "") ?>" required>
 	    </div>
 	    <div class="col">
 	    	<label for="" >Coût prévisionnel</label>
-	      	<input id = "coutInput" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" required>
+	      	<input id = "coutInput" name = "cout" type="text" value = <?= ((isset($cout)) ? $cout : 0)?> class="form-control" placeholder="Coût prévisionnel" required>
 	    </div>
 	     <div id = "divChefProjetInput" class="col">
 	    	<label for="" >Chef Projet</label>
 	      	<select id = "chefProjetInput" name = "chefProjet" class="form-control" required>
-	      		<option value = "" selected> Sélectionner Chef Projet </option>
-	      		<?php foreach ($chefsProjet as $chefProjet) { ?>
-	      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
-	      		<?php }?>
+	      		<?php if (!isset($chefProjet)) {  ?>
+		      		<option value = "" selected> Sélectionner Chef Projet </option>
+		      		<?php foreach ($chefsProjet as $chefProjet) { ?>
+		      			<option value = "<?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?>"> <?= $chefProjet->getNom().' '.$chefProjet->getPrenoms() ?></option>
+		      		<?php }?>
+		      	<?php } else {?>
+		      		<option value = ""> Sélectionner Chef Projet </option>
+		      		<?php foreach ($chefsProjet as $cProjet) { ?>
+		      			<option value = "<?= $cProjet->getNom().' '.$cProjet->getPrenoms() ?>" <?php if ($cProjet->getNom() == $chefProjet->getNom() && $cProjet->getPrenoms() == $chefProjet->getPrenoms()) echo "selected"; ?>> <?= $cProjet->getNom().' '.$cProjet->getPrenoms() ?></option>
+		      		<?php }?>
+		      	<?php }?>
 	      	</select>
 	    </div>
   	</div>
@@ -41,15 +48,15 @@
   	<div class="form-row mt-2">
 	    <div id = "divDateDemarrageInput" class="col">
 	    	<label for="" >Date de démarrage</label>
-	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" placeholder="JJ/MM/AAAA" required>
+	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" value = <?= ((isset($dateDemarrage)) ? "'".$dateDemarrage."'" : "")?> required>
 	    </div>
 	    <div id = "divDateFinInput" class="col-md-4">
 	    	<label for="" > Date de fin </label>
-	      	<input id = "dateFinInput" name = "dateFin" type="date" class="form-control" style = "background-color:white;" placeholder="Date de fin" required>
+	      	<input id = "dateFinInput" name = "dateFin" type="date" class="form-control" style = "background-color:white;" value = <?= ((isset($dateFin)) ? "'".$dateFin."'" : "")?> required>
 	    </div>
 	    <div class="col">
-	    	<label for="" >Durée</label>
-	      	<input id = "dureeInput" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" readonly>
+	    	<label for="" >Durée (en jours)</label>
+	      	<input id = "dureeInput" name = "duree" type="number" value = <?= ((isset($duree)) ? $duree : 0)?> class="form-control" placeholder="Nombre de jours" readonly>
 	    </div>
   	</div>
 
@@ -58,9 +65,16 @@
 	    	<label for="" >Couche SI</label>
 	    	<div class = "input-group">
 		      	<select id = "coucheSiInput" name = "coucheSI" class="form-control" required> 
-		      		<option value = "" selected> Sélectionner Couche SI </option>
-		      		<?php foreach ($couchesSI as $coucheSI) { ?>
-		      			<option value = "<?= $coucheSI->getLibelle() ?>"> <?= $coucheSI->getLibelle() ?> </option>
+		      		<?php if (!isset($coucheSI)) { ?>
+			      		<option value = "" selected> Sélectionner Couche SI </option>
+			      		<?php foreach ($couchesSI as $coucheSI) { ?>
+			      			<option value = "<?= $coucheSI->getLibelle() ?>"> <?= $coucheSI->getLibelle() ?> </option>
+			      		<?php }?>
+		      		<?php } else {?>
+		      			<option value = ""> Sélectionner Couche SI </option>
+			      		<?php foreach ($couchesSI as $cSI) { ?>
+			      			<option value = "<?= $cSI->getLibelle() ?>" <?php if ($cSI->getLibelle() == $coucheSI->getLibelle()) echo "selected"; ?> > <?= $cSI->getLibelle() ?> </option>
+			      		<?php }?>
 		      		<?php }?>
 		      	</select>
 		      	<a id = "addCoucheSIButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addCoucheSIModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
@@ -70,9 +84,16 @@
 	    	<label for="" >Maîtrise d'Oeuvre</label>
 	    	<div  class = "input-group">
 		      	<select id = "moInput" name = "maitriseOeuvre" class="form-control" required>
-		      		<option value = "" selected > Sélectionner Maitrise d'Oeuvre </option> 
-		      		<?php foreach ($maitrisesOeuvre as $maitriseOeuvre) { ?>
-		      			<option value = "<?= $maitriseOeuvre->getLibelle() ?>"> <?= $maitriseOeuvre->getLibelle() ?> </option>
+		      		<?php if (!isset($maitriseOeuvre)) {?>
+			      		<option value = "" selected > Sélectionner Maitrise d'Oeuvre </option> 
+			      		<?php foreach ($maitrisesOeuvre as $maitriseOeuvre) { ?>
+			      			<option value = "<?= $maitriseOeuvre->getLibelle() ?>"> <?= $maitriseOeuvre->getLibelle() ?> </option>
+			      		<?php }?>
+		      		<?php } else{?>
+		      			<option value = ""> Sélectionner Maitrise d'Oeuvre </option> 
+			      		<?php foreach ($maitrisesOeuvre as $mO) { ?>
+			      			<option value = "<?= $mO->getLibelle() ?>" <?php if ($mO->getLibelle() == $maitriseOeuvre->getLibelle()) echo "selected";?> > <?= $mO->getLibelle() ?> </option>
+			      		<?php }?>
 		      		<?php }?>
 		      	</select>
 		      	<a id = "addMaitriseOeuvreButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addMaitriseOeuvreModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
@@ -82,9 +103,16 @@
 	    	<label for="" >Source de financement</label>
 	    	<div class = "input-group">
 	      		<select id = "srcFinInput" name = "sourceFinancement" class="form-control" required> 
-	      			<option value = "" selected> Sélectionner Source de Financement </option>
-		      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
-		      			<option value = "<?= $sourceFinancement->getLibelle() ?>"> <?= $sourceFinancement->getLibelle() ?> </option>
+	      			<?php if (!isset($sourceFinancement)) {?>
+		      			<option value = "" selected> Sélectionner Source de Financement </option>
+			      		<?php foreach ($sourcesFinancement as $sourceFinancement) { ?>
+			      			<option value = "<?= $sourceFinancement->getLibelle() ?>"> <?= $sourceFinancement->getLibelle() ?> </option>
+			      		<?php }?>
+		      		<?php } else{?>
+		      			<option value = ""> Sélectionner Source de Financement </option>
+			      		<?php foreach ($sourcesFinancement as $srcFin) { ?>
+			      			<option value = "<?= $srcFin->getLibelle() ?>" <?php if ($sourceFinancement->getLibelle() == $srcFin->getLibelle()) echo "selected"?>> <?= $srcFin->getLibelle() ?> </option>
+			      		<?php }?>
 		      		<?php }?>
 		      	</select>
 	      		<a id ="addSrcFinButton" class = "btn btn-secondary input-group-addon" data-toggle="modal" data-target="#addSrcFinModal"><img class = "img-fluid" style = "width:17px;height:17px;" src = "http://<?= ROOT_DIR ?>/resources/images/glyphicons/glyphicons-191-plus-sign.png"/></a>
@@ -95,7 +123,7 @@
   	<div class="form-row mt-2">
 	    <div class="col">
 	    	<label for="" >Description</label>
-		    <textarea name = "description" type="text" class="form-control" placeholder="Description" required></textarea>
+		    <textarea name = "description" type="text" class="form-control" placeholder="Description" required> <?= ((isset($description)) ? $description : "") ?> </textarea>
 	    </div>
   	</div>
 
@@ -112,7 +140,7 @@
 	<h3 class = "font-weight-light mt-5"> Perspectives </h3>
 	<hr/>
 	<div class="form-row mt-2 w-">
-		<textarea name = "perspectives" type="text" class="form-control" placeholder="Perspectives" required></textarea>
+		<textarea name = "perspectives" type="text" class="form-control" placeholder="Perspectives" required> <?= ((isset($perspectives)) ? $perspectives : "")?></textarea>
   	</div>
 
 	<div class="text-center">

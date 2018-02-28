@@ -9,13 +9,26 @@
     </tr>
   </thead>
   <tbody id = "table_detail_body">
-    <tr>
-      <td><textarea id = "objectif_0" type = "text" class = "form-control" required ></textarea></td>
-      <td><textarea id = "resultat_0" type = "text" class = "form-control" required ></textarea></td>
-      <td><textarea id = "indicateur_0" type = "text" class = "form-control" required ></textarea></td>
-      <td><textarea id = "risque_0" type = "text" class = "form-control" required ></textarea></td>
-      <td></td>
-    </tr>
+    <?php
+      if (isset($objectifs)){
+        for($i = 0; $i < sizeof($objectifs); $i++) {
+          echo '<tr>
+          <td><textarea id = "objectif_'.($i).'" type = "text" class = "form-control" required >'.$liste_objectifs[$i]->getLibelle().'</textarea></td>
+          <td><textarea id = "resultat_'.($i).'" type = "text" class = "form-control" required >'.$liste_resultats[$i]->getLibelle().'</textarea></td>
+          <td><textarea id = "indicateur_'.($i).'" type = "text" class = "form-control" required >'.$liste_resultats[$i]->getIndicateurs().'</textarea></td>
+          <td><textarea id = "risque_'.($i).'" type = "text" class = "form-control" required >'.$liste_risques[$i]->getLibelle().'</textarea></td>
+        </tr>';
+        }
+      }
+      else{ ?>
+        <tr>
+          <td><textarea id = "objectif_0" type = "text" class = "form-control" required ></textarea></td>
+          <td><textarea id = "resultat_0" type = "text" class = "form-control" required ></textarea></td>
+          <td><textarea id = "indicateur_0" type = "text" class = "form-control" required ></textarea></td>
+          <td><textarea id = "risque_0" type = "text" class = "form-control" required ></textarea></td>
+          <td></td>
+        </tr>
+      <?php }?>
   </tbody>
 </table>
 

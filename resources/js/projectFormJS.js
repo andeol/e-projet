@@ -15,6 +15,13 @@ $(document).ready(function(){
         }
 	});
 
+	$('#tauxExecutionInput').keypress(function(e){
+		var key = e.which || e.keyCode;
+		if(key != 8 && isNaN(String.fromCharCode(key))){
+           	e.preventDefault();
+        }
+	});
+
 	$('#coutInput').keypress(function(e){
 		var key = e.which || e.keyCode;
 		if(key != 8 && isNaN(String.fromCharCode(key))){
@@ -380,6 +387,9 @@ $(document).ready(function(){
 			$('#addCoucheSIButton').removeClass('disabled');
 			$('#addMaitriseOeuvreButton').removeClass('disabled');
 			$('#addSrcFinButton').removeClass('disabled');
+			if (parameters.PROJ_STATUS != "Terminés"){
+				$('#tauxExecutionInput').prop('readonly', false);
+			}
 
 			//enabling project's task input
 			$('#activite_libelle_0').prop('readonly', false);
@@ -542,6 +552,65 @@ $(document).ready(function(){
 			return;
 		}
 
+	});
+
+	// Once the cap of 100% of "tauxExecution" is hit, the button "Terminer is unlocked"
+	$('#tauxExecutionInput').keyup(function(){
+		//alert($(this).val());
+		if ($(this).val() == "100"){
+			$('#endProjectButton').prop('disabled', false);
+		}
+		else{
+			$('#endProjectButton').prop('disabled', true);
+		}
+	});
+
+	$('#tauxExecutionInput').change(function(){
+		//alert($(this).val());
+		if ($(this).val() == "100"){
+			$('#endProjectButton').prop('disabled', false);
+		}
+		else{
+			$('#endProjectButton').prop('disabled', true);
+		}
+	});
+
+	$('#endProjectButton').click(function(e){
+		e.preventDefault();
+	});
+
+	$('#endProjectModalButton').click(function(e){
+		e.preventDefault();
+		$('#endProjectModal').modal('hide');
+		// sending an ajax request to turn the projet into a "ended" status
+		// alert('http://'+parameters.ROOT_DIR+"endProject?projectId="
+		// 					+$('#projetId').val());
+
+		$.ajax({
+
+			url			: 'http://'+parameters.ROOT_DIR+"endProject?projectId="
+							+$('#projetId').val(), 
+			type 		: "POST", 
+
+			dataType	: "json",
+
+			success 	: function(response, status){
+							if (response != null){
+								alert("Projet terminé !");
+							}
+							else
+								alert("A problem occured when marking the project as finished! ");
+			},
+
+			error 		: function(response, status, error){
+							alert("error");
+			},
+
+			complete	: function(response, status){
+							//alert("complete");
+			}
+
+		});
 	});
 
 });

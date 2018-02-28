@@ -3,7 +3,7 @@
 	<input id = "projetId"  name = "projetId" value = "<?= $projet->getId() ?>" hidden>
 	<h3 class = "font-weight-light"> Infos projet 
 		<a id = "checkCPCodeButton" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#getCPCodeModal">Modifier</a> 
-		<a id = "printProjButton" href = "http://<?= ROOT_DIR ?>printPDF?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Imprimer</a> 
+		<a id = "printProjButton" href = "http://<?= ROOT_DIR ?>printPDF?projectCode=<?= $projet->getCode() ?>" class="btn btn-outline-primary btn-sm">Imprimer</a> 
 		<a id = "printExcelButton" href = "http://<?= ROOT_DIR ?>printExcel?idProject=<?= $projet->getId() ?>" class="btn btn-outline-primary btn-sm">Excel</a> 
 	</h3>
 
@@ -19,6 +19,11 @@
 	      	<input id = "intituleInput" name = "intitule" type="text" class="form-control" placeholder="Intitulé" value = "<?php if (isset($projet)) echo $projet->getIntitule(); ?>" readonly required>
 	    </div>
 
+	    <div class="col-md-4">
+	    	<label for="" > Taux d'exécution </label>
+	      	<input id = "tauxExecutionInput" name = "tauxExecution" type="number" class="form-control" placeholder="tauxExecution" value = "<?php if (isset($projet)) echo $projet->getTauxExecution(); ?>" readonly required>
+	    </div>
+
 	</div>
 	<div class="form-row">
 		<div class="col">
@@ -27,7 +32,7 @@
 	    </div>
 	    <div class="col">
 	    	<label for="" >Coût prévisionnel</label>
-	      	<input id = "coutInput" name = "cout" type="text" value = '0' class="form-control" placeholder="Coût prévisionnel" value = "<?php if (isset($projet)) echo $projet->getCout(); ?>" readonly required>
+	      	<input id = "coutInput" name = "cout" type="text" class="form-control" placeholder="Coût prévisionnel" value = "<?php if (isset($projet)) echo $projet->getCout(); ?>" readonly required>
 	    </div>
 	     <div class="col">
 	    	<label for="" >Chef Projet</label>
@@ -48,8 +53,8 @@
 	      	<input id = "dateDemarrageInput" name = "dateDemarrage" type="date" class="form-control" value = "<?php if (isset($projet)) echo $projet->getDateDemarrage(); ?>" readonly required>
 	    </div>
 	    <div class="col">
-	    	<label for="" >Durée</label>
-	      	<input id = "dureeInput" name = "duree" type="number" value = '0' class="form-control" placeholder="Nombre de jours" value = "<?php if (isset($projet)) echo $projet->getDuree(); ?>" readonly required>
+	    	<label for="" >Durée (en jours)</label>
+	      	<input id = "dureeInput" name = "duree" type="number" class="form-control" placeholder="Nombre de jours" value = "<?php if (isset($projet)) echo $projet->getDuree(); ?>" readonly required>
 	    </div>
 	    <div class="col-md-4">
 	    	<label for="" > Date de fin</label>
@@ -132,6 +137,7 @@
   	</div>
 
 	<div class="text-center">
+		<button id = "endProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#endProjectModal" disabled><?= (($projet->getEtat() == PROJ_CAT_2) ? "Terminé" : "Terminer") ?></button>
   		<button id = "updateProjectButton" class="btn btn-primary mt-3" data-toggle="modal" data-target="#exampleModal" disabled>Sauvegarder</button>
   	</div>
 
@@ -247,6 +253,26 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button id = "getCPCodeModalButton" class="btn btn-success">Vérifier</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade font-weight-light" id="endProjectModal" tabindex="-1" role="dialog" aria-labelledby="endProjectModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="endProjectModalLabel">Confirmation</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+
+	      <div id = "endProjectModalBody" class="modal-body">
+	      	Etes-vous sûr de vouloir terminer le projet?			
+	      </div>
+	      <div class="modal-footer">
+	        <button id = "endProjectModalButton" class="btn btn-success">Oui</button>
 	      </div>
 	    </div>
 	  </div>

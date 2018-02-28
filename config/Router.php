@@ -20,6 +20,11 @@ class Router
 		"/printLateProjects" => "projetController/printLateProjects",
 		"/printAllProjects" => "projetController/printAllProjects",
 		"/projetsByChefProjet" => "projetController/printProjetsByChefProjet",
+		"/printSearchStats" => "projetController/printSearchStats",
+		"/endProject" => "projetController/endProject", 
+		"/printStatsSubMenu1" => "projetController/printStatsSubMenu1",
+		"/printStatsSubMenu2" => "projetController/printStatsSubMenu2",
+		"/printStatsSubMenu3" => "projetController/printStatsSubMenu3",
 		"/tests" => "testController/init"];
 
 	// Functions

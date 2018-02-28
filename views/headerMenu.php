@@ -20,7 +20,7 @@
           Etats
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Fiche Projet</a>
+          <a class="dropdown-item" href="http://<?= ROOT_DIR ?>printPDF">Fiche Projet</a>
           <a class="dropdown-item" href="http://<?= ROOT_DIR ?>printAllProjects">Tous les projets</a>
           <a class="dropdown-item" href="#">Projets par chef projet</a>
           <div class="dropdown-divider"></div>
@@ -33,7 +33,9 @@
           Statistiques
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Test</a>
+          <a class="dropdown-item" href="http://<?= ROOT_DIR ?>printStatsSubMenu1">taux d'exécution</a>
+          <a class="dropdown-item" href="http://<?= ROOT_DIR ?>printStatsSubMenu2">état projet</a>
+          <a class="dropdown-item" href="http://<?= ROOT_DIR ?>printStatsSubMenu3">en retard et en cours</a>
         </div>
       </li>
     </ul>

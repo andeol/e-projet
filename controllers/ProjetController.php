@@ -16,6 +16,10 @@ class ProjetController
 
 	function addProject()
 	{
+		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
+		$sourcesFinancement = $this->managerContainer->sourceFinancementManager->getAll();
+		$couchesSI = $this->managerContainer->coucheSIManager->getAll();
+		$maitrisesOeuvre = $this->managerContainer->maitriseOeuvreManager->getAll();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -23,17 +27,26 @@ class ProjetController
 			// Retrieving variables from posts parameters
 			$intitule = htmlspecialchars($_POST['intitule']);
 			$duree = htmlspecialchars($_POST['duree']);
-			$maitriseOeuvre = htmlspecialchars($_POST['maitriseOeuvre']);
+			$maitriseOeuvre = new MaitriseOeuvre(0, htmlspecialchars($_POST['maitriseOeuvre']));
 			$objet = htmlspecialchars($_POST['objet']);
 			$dateDemarrage = htmlspecialchars($_POST['dateDemarrage']);
-			$coucheSI = htmlspecialchars($_POST['coucheSI']);
+			$coucheSI = new CoucheSI(0, htmlspecialchars($_POST['coucheSI']));
 			$cout = htmlspecialchars($_POST['cout']);
-			$sourceFinancement = htmlspecialchars($_POST['sourceFinancement']);
+			$sourceFinancement = new SourceFinancement(0, htmlspecialchars($_POST['sourceFinancement']));
 			$description = htmlspecialchars($_POST['description']);
 			$perspectives = htmlspecialchars($_POST['perspectives']);
 			$code = htmlspecialchars($_POST['prjcde']);
 			$codeChefProjet = htmlspecialchars($_POST['codeChefProjet']);
 			$dateFin = htmlspecialchars($_POST['dateFin']);
+
+			$objectifs = explode(';', htmlspecialchars($_POST['objectifs']));	
+			$resultats = explode(';', htmlspecialchars($_POST['resultats']));	
+			$indicateurs = explode(';', htmlspecialchars($_POST['indicateurs']));
+			$risques = explode(';', htmlspecialchars($_POST['risques']));
+
+			$activite_libelles = explode(';', htmlspecialchars($_POST['activite_libelles']));	
+			$activite_dates = explode(';', htmlspecialchars($_POST['activite_dates']));
+			$activite_durees = explode(';', htmlspecialchars($_POST['activite_durees']));
 
 			//echo "code : ".$code;
 
@@ -42,6 +55,22 @@ class ProjetController
 			$chefProjet = $this->managerContainer->chefProjetManager->getOneBy($chefProjet[0], $chefProjet[1]);
 
 			if ($codeChefProjet != $chefProjet->getCode()){
+				$codeProjet = $code;
+
+				for ($i = 0; $i < sizeof($activite_libelles); $i++){
+					$activites[] = new Activite(0, $activite_libelles[$i], $activite_dates[$i], $activite_durees[$i], new Projet());
+					//echo $activites[$i]->getLibelle().' '. $activites[$i]->getDateDebut().' '.$activites[$i]->getDuree().'\n';
+				}	
+
+				for ($i = 0; $i < sizeof($objectifs); $i++){
+					$liste_objectifs[] = new Objectif(0, $objectifs[$i], new Projet());
+					//echo $liste_objectifs[$i]->getLibelle()."/";
+					$liste_resultats[] = new Resultat(0, $resultats[$i], $indicateurs[$i], new Projet());
+					//echo $liste_resultats[$i]->getLibelle().':'.$liste_resultats[$i]->getIndicateurs().'/';
+					$liste_risques[] = new Risque(0, $risques[$i], new Projet());
+					//echo $liste_risques[$i]->getLibelle()."/";
+				}	
+
 				$message = "Code du chef Projet erroné ! ";
 				include_once(dirname(__DIR__)."/views/AddProjectView.php");
 				return;
@@ -61,25 +90,26 @@ class ProjetController
 			$projet->setChefProjet($chefProjet);
 			$projet->setDateFin($dateFin);
 
-			$projet->setMaitriseOeuvre(new MaitriseOeuvre(0, $maitriseOeuvre));
-			$projet->setSourceFinancement(new SourceFinancement(0, $sourceFinancement));
-			$projet->setCoucheSI(new CoucheSI(0, $coucheSI));
+			$projet->setMaitriseOeuvre($maitriseOeuvre);
+			$projet->setSourceFinancement($sourceFinancement);
+			$projet->setCoucheSI($coucheSI);
+
+			// setting the status of a project
+			if ($dateDemarrage == date("Y-m-d"))
+				// projet en cours
+				$projet->setEtat(PROJ_CAT_1); 
+			else
+				// projet nen attente (non encore initié)
+				$projet->setEtat(PROJ_CAT_0);
+
 
 			$projet = $this->managerContainer->add($projet);
 
-			$activite_libelles = explode(';', htmlspecialchars($_POST['activite_libelles']));	
-			$activite_dates = explode(';', htmlspecialchars($_POST['activite_dates']));
-			$activite_durees = explode(';', htmlspecialchars($_POST['activite_durees']));
 
 			for ($i = 0; $i < sizeof($activite_libelles); $i++){
 				$activites[] = new Activite(0, $activite_libelles[$i], $activite_dates[$i], $activite_durees[$i], $projet);
 				//echo $activites[$i]->getLibelle().' '. $activites[$i]->getDateDebut().' '.$activites[$i]->getDuree().'\n';
-			}
-
-			$objectifs = explode(';', htmlspecialchars($_POST['objectifs']));	
-			$resultats = explode(';', htmlspecialchars($_POST['resultats']));	
-			$indicateurs = explode(';', htmlspecialchars($_POST['indicateurs']));
-			$risques = explode(';', htmlspecialchars($_POST['risques']));	
+			}	
 
 			for ($i = 0; $i < sizeof($objectifs); $i++){
 				$liste_objectifs[] = new Objectif(0, $objectifs[$i], $projet);
@@ -118,10 +148,6 @@ class ProjetController
 			
 		}
 
-		$chefsProjet = $this->managerContainer->chefProjetManager->getAll();
-		$sourcesFinancement = $this->managerContainer->sourceFinancementManager->getAll();
-		$couchesSI = $this->managerContainer->coucheSIManager->getAll();
-		$maitrisesOeuvre = $this->managerContainer->maitriseOeuvreManager->getAll();
 		$codeProjet = $this->managerContainer->projetManager->getNextCode();
 
 		include_once(dirname(__DIR__)."/views/AddProjectView.php");
@@ -138,12 +164,19 @@ class ProjetController
 
 		if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 
-			$projectId = $_GET['projectId'];
+			if (isset($_GET['projectCode'])){
+				$projectCode = $_GET['projectCode'];
+			}
+			else{
+				// we ask the user to enter it
+				$target = "updateProject";
+				include_once(dirname(__DIR__)."/views/AskProjectCodeView.php");
+				return;
+			}
 
-			$projet = $this->managerContainer->projetManager->getById($projectId);
-
+			$projet = $this->managerContainer->projetManager->getByCode($projectCode);
 			if ($projet == NULL){
-				echo "Wrong project id";
+				echo "Wrong project code";
 				return;
 			}
 
@@ -249,12 +282,10 @@ class ProjetController
 		}
 
 		// After getting the whole project object, we do the same with all the stuff like "objectifs", "resultats" etc.
-		if ($projet == NULL){
-			$objectifs = $this->managerContainer->getObjectifsByProjet($projet);
-			$resultats = $this->managerContainer->getResultatsByProjet($projet);
-			$risques = $this->managerContainer->getRisquesByProjet($projet);
-			$activites = $this->managerContainer->getActivitesByProjet($projet);
-		}
+		$objectifs = $this->managerContainer->getObjectifsByProjet($projet);
+		$resultats = $this->managerContainer->getResultatsByProjet($projet);
+		$risques = $this->managerContainer->getRisquesByProjet($projet);
+		$activites = $this->managerContainer->getActivitesByProjet($projet);
 		include_once(dirname(__DIR__)."/views/UpdateProjectView.php");
 	}
 
@@ -268,6 +299,7 @@ class ProjetController
 			$sourceFinancement = $_GET['sourceFinancement'];
 			$periodes = array($_GET['searchDebutPeriode'],$_GET['searchFinPeriode']);
 			$costs = array($_GET['searchMinCost'], $_GET['searchMaxCost']);
+			$status = $_GET['etatProjet'];
 
 			if ($chefProjet != "none"){
 				$chefProjet = explode(' ', $chefProjet);
@@ -276,7 +308,7 @@ class ProjetController
 
 			// Searching the specified project
 			// $response = $this->managerContainer->projetManager->getBy($code, $dateDemarrage, $chefProjet, "table");
-			$response = $this->managerContainer->projetManager->getBy($code, $chefProjet, $sourceFinancement, $periodes, $costs, "table");
+			$response = $this->managerContainer->projetManager->getBy($code, $chefProjet, $sourceFinancement, $periodes, $costs, $status,"table");
 			
 			echo json_encode($response);
 		}
@@ -291,9 +323,16 @@ class ProjetController
 
 	function printPDF()
 	{
-		$project = $this->managerContainer->projetManager->getById($_GET['idProject']);
+		if (!isset($_GET['projectCode'])){
+			// we ask the user to enter it
+			$target = "printPDF";
+			include_once(dirname(__DIR__)."/views/AskProjectCodeView.php");
+			return;
+		}
+
+		$project = $this->managerContainer->projetManager->getByCode($_GET['projectCode']);
 		if ($project == NULL){
-			echo "Wrong project ID";
+			echo "Wrong project code";
 			return;
 		}
 
@@ -304,35 +343,31 @@ class ProjetController
 		$pdf->SetFont('Arial','B',16);
 
 		$pdf->Ln();
-		$pdf->SetFillColor(0,255,0);
-		$pdf->Cell(100, 10,  utf8_decode(' Intitulé : '.$project->getIntitule()),0,0,'L',true);
-		$pdf->Cell(100, 10,  utf8_decode(' Durée : '.$project->getDuree().' jours'),0,0,'L',true);
-		$pdf->Cell(85, 10,  utf8_decode(' Maîtrise d\'oeuvre : '.$project->getMaitriseOeuvre()->getLibelle()),0,0,'L',true);
+		$pdf->SetFillColor(154,205,50);
+		$pdf->Cell(100, 10,  utf8_decode(' Intitulé : '.$project->getIntitule()),1,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Durée : '.$project->getDuree().' jours'),1,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Maîtrise d\'oeuvre : '.$project->getMaitriseOeuvre()->getLibelle()),1,0,'L',true);
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Objet : '.$project->getObjet()), 0, 0, 'L', true);
-		$pdf->Cell(100, 10,  utf8_decode(' Date de démarrage : '.getDateFrFormat($project->getDateDemarrage())),0,0,'L',true);
-		$pdf->Cell(85, 10,  utf8_decode(' Couche du SI : '.$project->getCoucheSI()->getLibelle()),0,0,'L',true);
+		$pdf->Cell(100, 10,  utf8_decode(' Objet : '.$project->getObjet()), 1, 0, 'L', true);
+		$pdf->Cell(85, 10,  utf8_decode(' Date de démarrage : '.getDateFrFormat($project->getDateDemarrage())),1,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Couche du SI : '.$project->getCoucheSI()->getLibelle()),1,0,'L',true);
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Chef Projet : '.$project->getChefProjet()->getNom()." ".$project->getChefProjet()->getPrenoms()),0,0,'L',true);
-		$pdf->Cell(100, 10,  utf8_decode(' Coût prévisionnel : '.$project->getCout()),0,0,'L',true);
-		$pdf->Cell(85, 10,  utf8_decode(' Source de Financement : '.$project->getSourceFinancement()->getLibelle()),0,0,'L',true);
+		$pdf->Cell(100, 10,  utf8_decode(' Chef Projet : '.$project->getChefProjet()->getNom()." ".$project->getChefProjet()->getPrenoms()),1,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Coût prévisionnel : '.$project->getCout()),1,0,'L',true);
+		$pdf->Cell(85, 10,  utf8_decode(' Source de Financement : '.$project->getSourceFinancement()->getLibelle()),1,0,'L',true);
 		$pdf->Ln();
-		$pdf->Cell(100, 10,  utf8_decode(' Description : '.$project->getDescription()),0,0);
-		$pdf->Ln();
-		$pdf->Cell(100, 10,  '',0,2);
-		$detailsTableHeaders = array("Objectifs",  utf8_decode("Résultats"), "Indicateurs", "Contraintes");
+		//$pdf->Rect(20,20,40,40,'Description: '.$project->getDescription()),0,0);
+		$pdf->Cell(270, 10,  utf8_decode(' Description : '.$project->getDescription()),1,1,'L');
+		$detailsTableHeaders = array("Objectifs du projet",  utf8_decode("Résultats"), "Indicateurs", "Contraintes");
 		$pdf->printDetailsTable($detailsTableHeaders, $this->loadDetailsTableData($project));
-		$pdf->Ln();
-		$pdf->Cell(100, 10,  '',0,2);
-		$pdf->cell(100, 10, 'Planning Provisionnel',0,2);
+		
+		
+		$pdf->cell(270, 10, 'Planning Provisionnel',1,1,'L');
 		
 		$tasksTableHeaders = array( utf8_decode("Activités"),  utf8_decode("Date de début"),  utf8_decode("Durée(jour)"));
 		$pdf->printTasksTable($tasksTableHeaders, $this->loadTasksTableData($project));
 		
-		$pdf->Cell(100, 10,  '',0,2);
-		$pdf->Ln();
-
-		$pdf->Cell(100, 10, utf8_decode(' Perspsectives : '.$project->getPerspectives()), 0, 0);
+		$pdf->Cell(270, 10, utf8_decode(' Perspsectives : '.$project->getPerspectives()), 1,1,'L');
 
 		$pdf->Output();	
 	}
@@ -345,7 +380,7 @@ class ProjetController
 		$risques = $this->managerContainer->getRisquesByProjet($projet);
 
 		for($i = 0; $i < sizeof($objectifs); $i++){
-			$record[] = array($objectifs[$i]->getLibelle(), $resultats[$i]->getLibelle(), $resultats[$i]->getIndicateurs(), $risques[$i]->getLibelle());
+			$record[] = array(utf8_decode($objectifs[$i]->getLibelle()), utf8_decode($resultats[$i]->getLibelle()), utf8_decode($resultats[$i]->getIndicateurs()), utf8_decode($risques[$i]->getLibelle()));
 		}
 		return $record;
 	}
@@ -355,7 +390,7 @@ class ProjetController
 		$record = array();
 		$activites = $this->managerContainer->getActivitesByProjet($projet);
 		for($i = 0; $i < sizeof($activites); $i++){
-			$record[] = array($activites[$i]->getLibelle(), getDateFrFormat($activites[$i]->getDateDebut()), $activites[$i]->getDuree());
+			$record[] = array(utf8_decode($activites[$i]->getLibelle()), utf8_decode(getDateFrFormat($activites[$i]->getDateDebut())), utf8_decode($activites[$i]->getDuree()));
 		}
 		return $record;
 	}
@@ -532,7 +567,7 @@ class ProjetController
 		//echo $size;
 		for ($i = 0; $i < $size; $i++) {
 			$project = $doneProjects[$i];
-			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+			$data[] = array(utf8_decode($project->getCode()), utf8_decode($project->getIntitule()), utf8_decode($project->getDescription()), utf8_decode($project->getDuree()), utf8_decode($project->getDateDemarrage()));
 		}
 
 		$pdf->displayProjectsTable($projectsTableHeaders, $data);
@@ -563,7 +598,7 @@ class ProjetController
 		//echo $size;
 		for ($i = 0; $i < $size; $i++) {
 			$project = $lateProjects[$i];
-			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+			$data[] = array(utf8_decode($project->getCode()), utf8_decode($project->getIntitule()), utf8_decode($project->getDescription()), utf8_decode($project->getDuree()), utf8_decode($project->getDateDemarrage()));
 		}
 
 		$pdf->displayProjectsTable($projectsTableHeaders, $data);
@@ -594,7 +629,7 @@ class ProjetController
 		//echo $size;
 		for ($i = 0; $i < $size; $i++) {
 			$project = $lateProjects[$i];
-			$data[] = array($project->getCode(), $project->getIntitule(), $project->getDescription(), $project->getDuree(), $project->getDateDemarrage());
+			$data[] = array(utf8_decode($project->getCode()), utf8_decode($project->getIntitule()), utf8_decode($project->getDescription()), utf8_decode($project->getDuree()), utf8_decode($project->getDateDemarrage()));
 		}
 
 		$pdf->displayProjectsTable($projectsTableHeaders, $data);
@@ -644,6 +679,201 @@ class ProjetController
 		$pdf->Ln();
 
 		$pdf->Output();	
+	}
+
+	/**
+	* @brief 
+	* @param 
+	* @return
+	*/
+	function printSearchStats()
+	{
+		$ids = $_GET["projectIds"];
+		$ids = explode(';', $ids);
+
+		$pdf = new PDF_Diag();
+		$pdf->AddPage();
+		
+		$data = array();
+		foreach ($ids as $id) {
+			$project = $this->managerContainer->projetManager->getById($id);
+			$data[utf8_decode($project->getCode())] = utf8_decode($project->getTauxExecution()); 
+		}
+		//print_r($data);
+
+		
+		//Pie chart		
+		$pdf->SetFont('Arial', 'BIU', 12);
+		$pdf->Cell(0, 5, '1 - Diagramme circulaire des projets', 0, 1);
+		$pdf->Ln(8);
+
+		$pdf->SetFont('Arial', '', 10);
+		$valX = $pdf->GetX();
+		$valY = $pdf->GetY();
+		/*
+		foreach($data as $key=>$value){
+			$pdf->Ln();
+			$pdf->Cell(30, 5, 'Pourcentage '.$key.':');
+			$pdf->Cell(15, 5, $data[$key], 0, 0, 'R');
+		}
+		*/
+		$pdf->Ln();
+		$pdf->Ln(8);
+
+		$pdf->SetXY(50, $valY);
+		$col1=array(100,100,255);
+		$col2=array(255,100,100);
+		$col3=array(255,255,100);
+		$pdf->PieChart(100, 35, $data, '%l (%p)', array($col1,$col2,$col3));
+		$pdf->SetXY($valX, $valY + 40);
+		
+
+		//Bar diagram
+		$pdf->SetFont('Arial', 'BIU', 12);
+		$pdf->Cell(0, 5, utf8_decode('Diagramme en bâton des projets'), 0, 1);
+		$pdf->Ln(8);
+		$valX = $pdf->GetX();
+		$valY = $pdf->GetY();
+		$pdf->BarDiagram(200, 70, $data, '%l : %v (%p)', array(255,175,100));
+		$pdf->SetXY($valX, $valY + 80);
+
+		$pdf->Output();
+	}
+
+	function endProject()
+	{
+		// Getting parameters sent
+		$projectId = $_GET['projectId'];
+		$response = $this->managerContainer->projetManager->endProject($projectId);
+		echo json_encode($response);
+	}
+
+	function printStatsSubMenu1()
+	{
+		$projects = $this->managerContainer->projetManager->getAll();
+
+		$pdf = new PDF_Diag();
+		$pdf->AddPage();
+		
+		$data = array();
+		foreach ($projects as $project) {
+			$data[utf8_decode($project->getCode())] = utf8_decode($project->getTauxExecution()); 
+		}		
+
+		//Bar diagram
+		$pdf->Ln();
+		$pdf->SetFont('Arial', 'BIU', 12);
+		$pdf->Cell(0, 5, utf8_decode('Diagramme en bâton de tous les projets (suivant le taux d\'exécution)'), 0, 1);
+		$pdf->Ln(8);
+		$valX = $pdf->GetX();
+		$valY = $pdf->GetY();
+		$pdf->BarDiagram(200, 70, $data, '%l : %v (%p)', array(255,175,100));
+		$pdf->SetXY($valX, $valY + 80);
+
+		$pdf->Output();
+	}
+
+	function printStatsSubMenu2()
+	{
+		$projects = $this->managerContainer->projetManager->getAll();		
+
+		$pdf = new PDF_Diag();
+		$pdf->AddPage();
+		
+		$data = array(utf8_decode(PROJ_CAT_0) => 0, utf8_decode(PROJ_CAT_1) => 0, utf8_decode(PROJ_CAT_2) => 0);
+		foreach ($projects as $project) {
+
+			switch ($project->getEtat()) {
+				case PROJ_CAT_0:
+					$data[PROJ_CAT_0]++;
+					break;
+
+				case PROJ_CAT_1:
+					$data[PROJ_CAT_1]++;
+					break;
+
+				case PROJ_CAT_2:
+					$data[PROJ_CAT_2]++;
+					break;
+				
+				default:
+					# code...
+					break;
+			} 
+		}
+		//print_r($data);
+
+		
+		//Pie chart		
+		$pdf->Ln();
+		$pdf->SetFont('Arial', 'BIU', 12);
+		$pdf->Cell(0, 5, utf8_decode('Diagramme circulaire de tous les projets (suivant leur état)'), 0, 1);
+		$pdf->Ln(8);
+
+		$pdf->SetFont('Arial', '', 10);
+		$valX = $pdf->GetX();
+		$valY = $pdf->GetY();
+	
+		foreach($data as $key=>$value){
+			$pdf->Ln();
+			$pdf->Cell(30, 5, 'Pourcentage '.$key.':');
+			$pdf->Cell(15, 5, $data[$key], 0, 0, 'R');
+		}
+		
+		$pdf->Ln();
+		$pdf->Ln(8);
+
+		$pdf->SetXY(70, $valY);
+		$col1=array(100,100,255);
+		$col2=array(255,100,100);
+		$col3=array(255,255,100);
+		$pdf->PieChart(100, 35, $data, '%l (%p)', array($col1,$col2,$col3));
+		$pdf->SetXY($valX, $valY + 40);
+
+		$pdf->Output();
+	}
+
+	function printStatsSubMenu3()
+	{
+		$lateProjects = $this->managerContainer->projetManager->getLateProjects();
+		$currentProjects = $this->managerContainer->projetManager->getCurrentProjects();
+		$cat1 = "En cours";
+		$cat2 = "En retard";		
+
+		$pdf = new PDF_Diag();
+		$pdf->AddPage();
+		
+		$data = array(utf8_decode($cat1) => sizeof($currentProjects), utf8_decode($cat2) => sizeof($lateProjects));
+		//print_r($data);
+
+		
+		//Pie chart		
+		$pdf->Ln();
+		$pdf->SetFont('Arial', 'BIU', 12);
+		$pdf->Cell(0, 5, utf8_decode('Diagramme circulaire de tous les projets (en cours ou en retard)'), 0, 1);
+		$pdf->Ln(8);
+
+		$pdf->SetFont('Arial', '', 10);
+		$valX = $pdf->GetX();
+		$valY = $pdf->GetY();
+	
+		foreach($data as $key=>$value){
+			$pdf->Ln();
+			$pdf->Cell(30, 5, 'Pourcentage '.$key.':');
+			$pdf->Cell(15, 5, $data[$key], 0, 0, 'R');
+		}
+		
+		$pdf->Ln();
+		$pdf->Ln(8);
+
+		$pdf->SetXY(70, $valY);
+		$col1=array(100,100,255);
+		$col2=array(255,100,100);
+		$col3=array(255,255,100);
+		$pdf->PieChart(100, 35, $data, '%l (%p)', array($col1,$col2,$col3));
+		$pdf->SetXY($valX, $valY + 40);
+
+		$pdf->Output();
 	}
 }
 

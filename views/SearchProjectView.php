@@ -10,6 +10,9 @@
 
 	</head>
 	<body style = "background-color: #eee;">
+
+		<?php include_once(dirname(__DIR__)."/views/headerMenu.php"); ?>
+		
 		<div class = "container">
 			<div class = "row">
 				<div class = "w-25 text-center">
@@ -84,6 +87,18 @@
 				      	</select>
 			      	</div>
 			    </div>
+
+			    <div class="col">
+			    	<label for="" style = "font-size:.6em;">Etat</label>
+			    	<div class = "input-group">
+				    	<select id ="projEtatInput" name = "etatProjet" class="form-control">
+				    		<option value = "none">Sélectionner l'état</option>
+				    		<option value ="<?= PROJ_CAT_0 ?>"><?= PROJ_CAT_0 ?></option>
+				    		<option value ="<?= PROJ_CAT_1 ?>"><?= PROJ_CAT_1 ?></option>
+				    		<option value ="<?= PROJ_CAT_2 ?>"><?= PROJ_CAT_2 ?></option>
+				    	</select>
+				    </div>
+			    </div>
 			</div>
 
 			<div class = "row mt-3 ml-1">
@@ -91,9 +106,9 @@
 				<button id = "resetFieldsButton" class="btn btn-primary btn-sm offset-sm-8 col-sm-2">Reinitialiser</button>
 			</div>
 
-			<h3 class = "font-weight-light mt-5"> Résultats <h3>
+			<h3 class = "font-weight-light mt-5"> Résultats <a id = "statisticsButton" class="btn btn-outline-primary btn-sm disabled" href = "http://<?= ROOT_DIR ?>printSearchStats?projectIds=">Voir Statistiques</a></h3>
 			<hr/>
-			<table class="table table-striped" style = "font-size:0.6em;  background-color: white;">
+			<table class="table table-striped" style = "background-color: white;">
 			  <thead>
 			    <tr>
 			      <th scope="col">#</th>

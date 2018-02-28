@@ -10,6 +10,9 @@
 
 	</head>
 	<body style = "background-color: #eee;">
+
+		<?php include_once(dirname(__DIR__)."/views/headerMenu.php"); ?>
+		
 		<div class = "container">
 			<div class = "row">
 				<div class = "w-25 text-center">
@@ -39,7 +42,8 @@
 	<script type = "text/javascript">
 
 		var parameters = {
-			ROOT_DIR: '<?= ROOT_DIR ?>'
+			ROOT_DIR: '<?= ROOT_DIR ?>',
+			PROJ_STATUS: <?= ((isset($projet)) ? "'".$projet->getEtat()."'" : 'None')?>
 		};
 
 	</script>

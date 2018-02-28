@@ -18,7 +18,7 @@
             <th scope="row">'.$i.'</th>
             <td><input id = "activite_libelle_'.$i.'" type = "text" class = "form-control" value = "'.$activite->getLibelle().' " readonly required /></td>
             <td><input id = "activite_date_'.$i.'" type = "date" class = "form-control" value = "'.$activite->getDateDebut().'" readonly required/></td>
-            <td><input id = "activite_duree_'.$i.'" type = "number" value = 0 class = "form-control" value = "'.$activite->getDuree().'" readonly required /></td>
+            <td><input id = "activite_duree_'.$i.'" type = "number" class = "form-control" value = "'.$activite->getDuree().'" readonly required /></td>
           </tr>';
           $i++;
         }
